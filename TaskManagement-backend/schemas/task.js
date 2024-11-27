@@ -7,20 +7,21 @@ const { ObjectId } = Schema.Types //usar en el usuario. EJ: role: { type: Object
 
 // Definir el esquema de la tarea (task)
 const taskSchema = new Schema({
-    title: {
+    title: { //modificable
     type: String,
     required: true
     },
-    assigned_team: {
+    assigned_team: { //modificable
       type: ObjectId,  // Array de equipos asignados
+    ref: 'tm-team', 
+    required: false
+    },
+    assigned_user: { //modificable
+    type: ObjectId,// Usuario asignado (puedes referenciar un usuario por su ID si prefieres)
     ref: 'tm-user', 
     required: false
     },
-    assigned_user: {
-    type: String,  // Usuario asignado (puedes referenciar un usuario por su ID si prefieres)
-    required: true
-    },
-    status: {
+    status: { //modificable
     type: String,
     required: true,
     enum: ['Nuevo', 'En progreso', 'Completado'], // Enum para los posibles estados
@@ -34,15 +35,16 @@ const taskSchema = new Schema({
     type: Date,
       required: true  // Fecha de vencimiento de la tarea
     },
-    completed_at: {
+    completed_at: { //modificable
     type: Date,
       default: null  // Fecha de finalización, por defecto es null si la tarea no ha sido completada
     },
     comments: [
     {
-        author: {
-        type: String,  // Autor del comentario
-        required: true
+        author: { 
+          type: ObjectId, 
+          ref: 'tm-user', 
+          required: true
         },
         message: {
           type: String,  // Mensaje del comentario
@@ -59,10 +61,11 @@ const taskSchema = new Schema({
       required: true
     },
     authorized_by: {
-      type: String,  // Usuario que autoriza la tarea
-      required: true
+      type: ObjectId, 
+      ref: 'tm-user', // Usuario que autoriza la tarea
+      required: false
     },
-    observations: {
+    observations: { //modificable
       type: String,
       default: ''  // Observaciones adicionales (puede ser vacío por defecto)
     }
