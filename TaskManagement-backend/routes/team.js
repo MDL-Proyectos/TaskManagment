@@ -8,7 +8,7 @@ const router = express.Router()
 router.get('/', getAllTeams)
 //router.get('/:id', getTaskById)
 router.post('/', createTeam)
-//router.put('/:id', updateTask)
+router.put('/:id', updateTeam)
 //router.delete('/:id', deleteTask)
 
 async function getAllTeams(req, res, next) {
@@ -36,28 +36,41 @@ async function createTeam(req, res, next) {
         next(err)
       }
   }
-
-  async function createUser(req, res, next) {
-    console.log('createUser: ', req.body)
+  async function updateTeam(req, res, next) {
+    console.log('updateTeam with id: ', req.params.id)
   
-    const user = req.body
+    if (!req.params.id) {
+      return res.status(404).send('Parameter id not found')
+    }
+    
+  
+    //if (!req.isAdmin() && req.params.id != req.user._id) {
+    // return res.status(403).send('Unauthorized')
+    //}      
   
     try {
-      const role = await Role.findOne({ name: user.role })
-      if (!role) {
-        res.status(404).send('Role not found')
+      const teamToUpdate = await Team.findById(req.params.id)
+      const teamNewData = req.body
+      if (!teamToUpdate) {
+        console.error('Team not found')
+        return res.status(404).send('Team not found')
       }
+
+      if (teamToUpdate.idTeam) {
+        const teamSelected = await Team.findOne({ idTeam: teamNewData.idTeam })
   
-      //const passEncrypted = await bcrypt.hash(user.password, 10)
+        if (!teamSelected) {
+          console.info('teamSelected not found.')
+          return res.status(400).end()
+        }
+        req.body.id = teamSelected._id
+      }
+    
   
-      const userCreated = await User.create({
-        ...user,
-        bornDate: toDate(user.bornDate),
-        password: user.password, //descativado el bcrypt
-        role: role._id,
-      })
-  
-      res.send(userCreated)
+      await teamToUpdate.updateOne(req.body)
+      console.log(teamToUpdate)
+      res.send(teamToUpdate)
+
     } catch (err) {
       next(err)
     }
