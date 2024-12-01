@@ -1,58 +1,55 @@
-import { useState, useEffect } from 'react'
-import { Outlet, Link, useNavigate } from 'react-router-dom'
-import USERAPI from '../routes/UserServices.tsx';
+import React, { useState, useEffect } from 'react';
+import { Avatar, Button, List, Skeleton } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
-import User from '../components/User.tsx'
-import { Button } from 'antd'
-import { ObjectId } from 'mongoose';
 import { UsuarioData } from '../components/User.tsx';
 
- 
-  function Users() {
-    // Tipar el estado de 'usuarios' como un array de 'UsuarioData'
-    const [isFiltered, setIsFiltered] = useState(false);
-    const [usuarios, setUsuarios] = useState<UsuarioData[]>([]);  // Definir el tipo como array de 'UsuarioData'
-    const navigate = useNavigate();        
+const count = 3; // Número de usuarios por "página"
 
-        const fetchUsers = async () => {
-          try {
-            const data = await UserServices.getUsers(); // Llama directamente al método del servicio
-            setUsuarios(data); // Actualiza el estado con los datos recibidos
-            console.log(await UserServices.getUsers());
-          } catch (error) {
-            console.error('Error fetching users:', error);
-          }
-        };
+const Users: React.FC = () => {
+  const [initLoading, setInitLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<UsuarioData[]>([]);
+  const [list, setList] = useState<UsuarioData[]>([]);
+  const navigate = useNavigate();
 
-    // Usar useEffect para ejecutar fetchUsers cuando el componente se monta
-    useEffect(() => {
-      fetchUsers(); // Llama a fetchUsers cuando el componente se monta
-    }, []); // El array vacío asegura que solo se ejecute una vez (al montar)
+  // Función para obtener los usuarios desde el backend
+  const fetchUsers = async () => {
+    try {
+      const response = await UserServices.getUsers(); // Llama al servicio para obtener los usuarios
+      setInitLoading(false);
+      setData(response); // Los datos de los usuarios
+      setList(response); // Los datos que se mostrarán en la lista
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
-    // Función que se ejecutará al hacer clic en el botón
-    const goToUsersPage = () => {
-      navigate('/teams')  // Redirige a la ruta '/users'
-    }        
+  // Ejecutar fetchUsers cuando el componente se monta
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-    return (
-      <>
-        <h1>Listado de Usuarios</h1>
-        {usuarios.length === 0 ? (
-          <p>...</p>
-        ) : (
-          <>
-            <ul>
-              {usuarios.map((a) => (
-                //<User key={a.first_name} {...a} />
-                <User key={a.first_name} {...a} />
-              ))}
-            </ul>
-            <p>Cantidad total de usuarios: {usuarios.length}</p>
-            <button onClick={goToUsersPage}>+ Usuario</button>  
-          </>
+  return (
+    <div>
+      <h1>Listado de Usuarios</h1>
+
+      <List
+        itemLayout="horizontal"
+        loading={initLoading}
+        dataSource={list}
+        renderItem={(user, index) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
+              title={<a href={`/users/${user.email}`}>{user?.first_name} {user?.last_name}</a>}
+              description={`Email: ${user.email}`}
+            />
+          </List.Item>
         )}
-      </>
-    );
-  }
-  
-  export default Users;
+      />
+    </div>
+  );
+};
+
+export default Users;
