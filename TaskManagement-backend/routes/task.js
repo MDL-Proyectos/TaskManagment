@@ -18,6 +18,9 @@ async function getAllTasks(req, res, next) {
     try {
       console.log('getAllTasks')
       const task = await Task.find({})
+      .populate('assigned_team')
+      .populate('assigned_user')
+      .populate('authorized_by')
       res.send(task)
     } catch (err) {
       next(err)

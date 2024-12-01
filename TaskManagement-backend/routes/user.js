@@ -22,7 +22,7 @@ async function getAllUsers(req, res, next) {
   //console.log('getAllUsers by user ', req.user._id)
   try {
     console.log('getAllUsers by user ')
-    const users = await User.find({})
+    const users = await User.find({}).populate('role').populate('team')
     res.send(users)
   } catch (err) {
     next(err)

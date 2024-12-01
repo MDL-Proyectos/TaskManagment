@@ -15,7 +15,7 @@ async function getAllTeams(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     try {
       console.log('getAllTeams')
-      const teams = await Team.find({})
+      const teams = await Team.find({}).populate('liderTeam')
       res.send(teams)
     } catch (err) {
       next(err)
