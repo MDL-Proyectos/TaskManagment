@@ -3,6 +3,7 @@ import Team, { TeamData } from '../components/Team';
 import { useNavigate } from 'react-router-dom';
 import TeamService from '../routes/TeamServices';
 //import userService from '../../services/users'
+import { Card, List } from 'antd';
 
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);
@@ -30,22 +31,29 @@ function Teams() {
 
   return (
     <>
-      <h1>Hola, Equipo!</h1>
-      {team.length === 0 ? (
+      <h1>Hola, Lider!</h1>
+        {team.length === 0 ? (
           <p>...</p>
-        ) : (
-          <>
-            <ul>
-              {team.map((t) => (           
-                <Team key={t.idTeam} {...t} />
-              ))}
-            </ul>
-            <p>Cantidad total de Tareas: {team.length}</p>
-            <button onClick={goToUsersPage}>Nuevo Equipo</button>  
-          </>
-        )}
-        </>
-    )
-  }
-
+          ) : (
+          <List
+            grid={{ gutter: 20, column: 2 }}
+            dataSource={team}
+            renderItem={(item) => (
+              <List.Item
+              actions={[
+                <a key="edit">Editar</a>
+              ]}>
+                <Card title={item.name.toUpperCase()}>
+                  IdTeam: {item.idTeam},
+                  Lider: {item.liderTeam?.toString() || "Sin Asignación"}
+                  </Card>
+              </List.Item>
+            )}
+          />
+          )
+        }
+    </>
+  )
+}
+  
 export default Teams
