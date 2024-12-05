@@ -1,6 +1,4 @@
 import api from './ApiRoute';
-import { AxiosResponse } from 'axios';
-import { ObjectId } from 'mongoose';
 import { TeamData } from '../components/Team';
  
 const TeamService = {

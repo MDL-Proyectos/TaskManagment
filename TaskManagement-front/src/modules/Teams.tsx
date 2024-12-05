@@ -25,9 +25,9 @@ function Teams() {
   }, []); // El array vacío asegura que solo se ejecute una vez (al cargar)
 
   // Función que se ejecutará al hacer clic en el botón
-  const goToUsersPage = () => {
-    navigate('/users')  // Redirige a la ruta '/users'
-  }    
+  const handleEdit = (idTeam: string) => {
+    navigate(`/teams/${idTeam}`); // Redirige a la ruta de edición con el ID del usuario
+  }; 
 
   return (
     <>
@@ -41,7 +41,7 @@ function Teams() {
             renderItem={(item) => (
               <List.Item
               actions={[
-                <a key="edit">Editar</a>
+                <a key="edit" onClick={() => handleEdit(item.idTeam)}>Editar</a>,
               ]}>
                 <Card title={item.name.toUpperCase()}>
                   IdTeam: {item.idTeam},

@@ -6,7 +6,7 @@ import Team from '../schemas/team.js'
 const router = express.Router()
 
 router.get('/', getAllTeams)
-//router.get('/:id', getTaskById)
+router.get('/:id', getTeamById)
 router.post('/', createTeam)
 router.put('/:id', updateTeam)
 //router.delete('/:id', deleteTask)
@@ -21,6 +21,22 @@ async function getAllTeams(req, res, next) {
       next(err)
     }
   }
+
+  async function getTeamById(req, res, next) {
+    console.log('getTeamByID by team ', req.params)
+
+    if (!req.params.id) {
+      return res.status(404).send('Parameter id not found')
+    }
+
+    try {
+      console.log('getTeamByID')
+      const teamSelected = await Team.findOne({ idTeam: req.params.id })//.populate('liderTeam')
+      res.send(teamSelected)
+    } catch (err) {
+      next(err)
+    }
+  }  
 
 async function createTeam(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
