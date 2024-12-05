@@ -7,17 +7,18 @@ import { TaskData } from '../components/Task.tsx';
 
 function Tasks() {
   const [tasks, setTasks] = useState<TaskData[]>([]); 
-  const [loading, setLoading] = useState(true); // Estado para controlar el loading
+  const [initLoading, setInitLoading] = useState(true);// Estado para controlar el loading
   const navigate = useNavigate();
 
   const fetchTasks = async () => {
     try {
       const data = await TaskServices.getAllTask();
+
       setTasks(data); // Actualizar tareas
     } catch (error) {
       console.error('Error fetching tasks:', error);
     } finally {
-      setLoading(false); // Desactivar loading
+      setInitLoading(false);// Desactivar loading
     }
   };
 
@@ -29,10 +30,15 @@ function Tasks() {
     navigate('/users'); // Redirige a la página de creación de usuarios
   };
 
+  // Función que se ejecutará al hacer clic en el botón
+  const handleEdit = (idTask: string) => {
+    navigate(`/tasks/${idTask}`); // Redirige a la ruta de edición
+  }; 
+
   return (
     <>
       <h1>Listado de Tareas</h1>
-      {loading ? (
+      {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : tasks.length === 0 ? (
         <p>No hay tareas disponibles.</p>
@@ -44,11 +50,11 @@ function Tasks() {
             renderItem={(task) => (
               <List.Item
                 actions={[
-                  <a key="edit">Editar</a>,
+                  <a key="edit" onClick={() => handleEdit(task._id)}>Editar</a>,
                   <a key="delete">Eliminar</a>,
                 ]}
               >
-                <Skeleton avatar title={false} loading={loading} active>
+                <Skeleton avatar title={false} loading={initLoading} active>
                   <Task {...task} />
                 </Skeleton>
               </List.Item>

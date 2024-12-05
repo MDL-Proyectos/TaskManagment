@@ -8,7 +8,7 @@ import User from '../schemas/user.js'
 const router = express.Router()
 
 router.get('/', getAllTasks)
-//router.get('/:id', getTaskById)
+router.get('/:id', getTaskById)
 router.post('/', createTask)
 router.put('/:id', updateTask)
 //router.delete('/:id', deleteTask)
@@ -18,6 +18,24 @@ async function getAllTasks(req, res, next) {
     try {
       console.log('getAllTasks')
       const task = await Task.find({})
+      .populate('assigned_team')
+      .populate('assigned_user')
+      .populate('authorized_by')
+      res.send(task)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async function getTaskById(req, res, next) {
+    console.log('getTask with id: ', req.params.id)
+
+  if (!req.params.id) {
+    res.status(500).send('The param id is not defined')
+  }
+    try {
+      console.log('getTaskById')
+      const task = await Task.findById(req.params.id)
       .populate('assigned_team')
       .populate('assigned_user')
       .populate('authorized_by')

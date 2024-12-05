@@ -1,6 +1,4 @@
 import api from './ApiRoute';
-import { AxiosResponse } from 'axios';
-import { ObjectId } from 'mongoose';
 import { TaskData } from '../components/Task';
  
 const userService = {

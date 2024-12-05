@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 export interface TaskData {
+  _id: string;
   title: string; // Título de la tarea (obligatorio)
   assigned_team?: {idTeam: string; name: string}; // Equipo asignado (opcional)
   assigned_user?: {_id: string; first_name: string; last_name: string}; // Usuario asignado (opcional)
