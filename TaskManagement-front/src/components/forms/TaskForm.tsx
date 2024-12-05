@@ -1,38 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Input,
-  message,
-  Select
-} from 'antd';
+import { Button, DatePicker, Form, Input, message, Select } from 'antd';
 import TaskServices from '../../routes/TaskServices.tsx';
+import dayjs from 'dayjs'; //esto me permite ajutar los formatos de fechas y corregirlos en el momento de visualizarlo
 
-type SizeType = Parameters<typeof Form>[0]['size'];
+type SizeType = Parameters<typeof Form>[0]['size']; 
 
 const TaskForm: React.FC = () => {
   const { idTask } = useParams<{ idTask: string }>(); // ID desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
-  const [form] = Form.useForm(); // Instancia del formulario
+  const [form] = Form.useForm();
   const navigate = useNavigate();
-    console.log('Ingresa 1')
+
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
 
-  // Función para obtener los datos del usuario desde el backend
+  // Función para obtener los datos de la tarea desde el backend
   const fetchTask = async () => {
     try {
-        console.log('ingresa 2')
       const response = await TaskServices.getTaskById(idTask as string); // Llama al servicio para obtener los datos
-      console.log('Datos del equipo obtenidos:', response);
       const mappedData = {
         ...response,
-        assigned_team: response.assigned_team?.name || '', 
-        assigned_user: response.assigned_user?.first_name || '',
-        authorized_by: response.authorized_by?.first_name || '',
-
+        created_at: response.created_at ? dayjs(response.created_at) : null,
+        due_date: response.due_date ? dayjs(response.due_date) : null,
+        completed_at: response.completed_at ? dayjs(response.completed_at) : null,
+        comments: response.comments?.map((comment: any) => ({
+          ...comment,
+          created_at: comment.created_at ? dayjs(comment.created_at) : null,
+        })),
       };
 
       // Actualiza los campos del formulario con los datos recibidos
@@ -43,26 +39,40 @@ const TaskForm: React.FC = () => {
     }
   };
 
-  // Ejecutar fetchTeam cuando el componente se monta
+  // Ejecutar fetchTask cuando el componente carga
   useEffect(() => {
     if (idTask) {
-        fetchTask();
-        console.log(idTask);
+      fetchTask();
     }
   }, [idTask, form]);
 
-  // Función para manejar la actualización del usuario
- /* const handleUpdate = async (values: UsuarioData) => {
+ 
+  const handleFinish = async (values: any) => {
     try {
-      console.log('Valores enviados para actualizar:', values);
-      await UserServices.updateUser(userid as string, values); // Llama a tu endpoint de actualización
-      message.success('Usuario actualizado correctamente');
-      navigate('/'); // Redirige al listado de usuarios
+      // Convierte las fechas a strings 
+      const formattedValues = {
+        ...values,
+        created_at: values.created_at ? values.created_at.format('YYYY-MM-DD') : null, //el null es para evitar problemas si el registro no posee fecha
+        due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : null,
+        completed_at: values.completed_at ? values.completed_at.format('YYYY-MM-DD') : null,
+        comments: values.comments?.map((comment: any) => ({
+          ...comment,
+          created_at: comment.created_at ? comment.created_at.format('YYYY-MM-DD') : null,
+        })),
+      };
+
+      console.log('Datos enviados:', formattedValues);
+
+      // Aquí puedes llamar al servicio de actualización
+      // await TaskServices.updateTask(idTask, formattedValues);
+
+      message.success('Tarea actualizada correctamente');
+      navigate('/');
     } catch (error) {
-      console.error('Error al actualizar el usuario:', error);
-      message.error('No se pudo actualizar el usuario.');
+      console.error('Error al actualizar la tarea:', error);
+      message.error('No se pudo actualizar la tarea.');
     }
-  };*/
+  };
 
   return (
     <Form
@@ -71,21 +81,22 @@ const TaskForm: React.FC = () => {
       wrapperCol={{ span: 14 }}
       layout="horizontal"
       onValuesChange={onFormLayoutChange}
+      onFinish={handleFinish}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
-     // onFinish={handleUpdate} // Maneja el envío del formulario
     >
       <Form.Item
         label="Titulo"
         name="title"
-        rules={[{ required: true, message: 'Por favor, ingresa el titulo' }]}
-      > 
-        <Input placeholder="Titulo" disabled={false}/>
+        rules={[{ required: true, message: 'Por favor, ingresa el título' }]}
+      >
+        <Input placeholder="Título" />
       </Form.Item>
+
       <Form.Item
         label="Status"
         name="status"
-        rules={[{ required: true, message: 'Por favor, ingresa un status' }]}
+        rules={[{ required: true, message: 'Por favor, selecciona un estado' }]}
       >
         <Select>
           <Select.Option value="Nuevo">Nuevo</Select.Option>
@@ -93,34 +104,34 @@ const TaskForm: React.FC = () => {
           <Select.Option value="Completado">Completado</Select.Option>
         </Select>
       </Form.Item>
+
       <Form.Item
         label="Fecha de Creación"
         name="created_at"
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: 'Por favor, selecciona la fecha de creación' }]}
       >
-        <Input placeholder="Lider" />
+        <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
       </Form.Item>
 
       <Form.Item
         label="Fecha de Vencimiento"
         name="due_date"
-        rules={[{ required: false, message: 'Por favor, ingresa el vencimiento' }]}
+        rules={[{ required: true, message: 'Por favor, selecciona la fecha de vencimiento' }]}
       >
-        <Input placeholder="Vencimiento" />
+        <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
       </Form.Item>
 
       <Form.Item
         label="Fecha de Finalización"
         name="completed_at"
-        rules={[{ required: false, message: 'Por favor, ingresa la finalización' }]}
       >
-        <Input placeholder="Finalización" />
+        <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
       </Form.Item>
 
       <Form.Item
         label="Proyecto"
         name="project"
-        rules={[{ required: false, message: 'Por favor, ingresa el Proyecto' }]}
+        rules={[{ required: true, message: 'Por favor, ingresa el proyecto' }]}
       >
         <Input placeholder="Proyecto" />
       </Form.Item>
@@ -128,70 +139,46 @@ const TaskForm: React.FC = () => {
       <Form.Item
         label="Observaciones"
         name="observations"
-        rules={[{ required: false }]}
       >
-        <Input placeholder="Observaciones" />
+        <Input.TextArea placeholder="Observaciones" />
       </Form.Item>
 
       <Form.List name="comments">
-  {(fields, { add, remove }) => (
-    <div>
-      <h3>Comentarios</h3>
-      {fields.map(({ key, name, ...restField }) => (
-        <div key={key} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
-          <Form.Item
-            {...restField}
-            label="Autor"
-            name={[name, 'author', '_id']}
-            rules={[{ required: true, message: 'Por favor, ingresa el autor' }]}
-          >
-            <Input placeholder="ID del autor" />
-          </Form.Item>
-          <Form.Item
-            {...restField}
-            label="Nombre del autor"
-            name={[name, 'author', 'first_name']}
-            rules={[{ required: true, message: 'Por favor, ingresa el nombre del autor' }]}
-          >
-            <Input placeholder="Nombre del autor" />
-          </Form.Item>
-          <Form.Item
-            {...restField}
-            label="Apellido del autor"
-            name={[name, 'author', 'last_name']}
-            rules={[{ required: true, message: 'Por favor, ingresa el apellido del autor' }]}
-          >
-            <Input placeholder="Apellido del autor" />
-          </Form.Item>
-          <Form.Item
-            {...restField}
-            label="Mensaje"
-            name={[name, 'message']}
-            rules={[{ required: true, message: 'Por favor, ingresa el mensaje' }]}
-          >
-            <Input.TextArea placeholder="Mensaje del comentario" />
-          </Form.Item>
-          <Form.Item
-            {...restField}
-            label="Fecha de Creación"
-            name={[name, 'created_at']}
-          >
-            <Input placeholder="Fecha de creación" />
-          </Form.Item>
-          <Button type="link" danger onClick={() => remove(name)}>
-            Eliminar Comentario
-          </Button>
-        </div>
-      ))}
-      <Form.Item>
-        <Button style={{ marginLeft:'60px' }} type="dashed" onClick={() => add()} block>
-          Agregar Comentario
-        </Button>
-      </Form.Item>
-    </div>
-  )}
-</Form.List>
+        {(fields, { add, remove }) => (
+          <div>
+            {fields.map(({ key, name, ...restField }) => (
+              <div key={key} style={{ marginBottom: '20px' }}>
+                <Form.Item
+                  {...restField}
+                  label="Mensaje"
+                  name={[name, 'message']}
+                  rules={[{ required: true, message: 'Por favor, ingresa el mensaje' }]}
+                >
+                  <Input.TextArea placeholder="Mensaje del comentario" />
+                </Form.Item>
 
+                <Form.Item
+                  {...restField}
+                  label="Fecha de Creación"
+                  name={[name, 'created_at']}
+                >
+                  <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Button type="link" danger onClick={() => remove(name)}>
+                  Eliminar Comentario
+                </Button>
+              </div>
+            ))}
+
+            <Form.Item>
+              <Button style={{ marginLeft: '55px' }} type="dashed" onClick={() => add()} block>
+                Agregar Comentario
+              </Button>
+            </Form.Item>
+          </div>
+        )}
+      </Form.List>
 
       <Form.Item wrapperCol={{ span: 24 }}>
         <Button type="primary" htmlType="submit">
