@@ -1,8 +1,7 @@
 import React from 'react';
-import { ObjectId } from 'mongoose';
-
 
 export interface UsuarioData {
+  _id: string;
   first_name: string;         // Nombre del usuario (obligatorio)
   last_name: string;          // Apellido del usuario (obligatorio)
   password: string;           // Contraseña (obligatoria, mínimo 6 caracteres)

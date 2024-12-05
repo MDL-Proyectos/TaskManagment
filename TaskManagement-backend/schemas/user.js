@@ -19,9 +19,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 6  // Validación mínima para la contraseña
   },
-  team: {
-    type: String,  // Puedes cambiarlo a ObjectId si prefieres referenciar un equipo de otra colección
-    required: true
+  team: { 
+    type: ObjectId, 
+    ref: 'tm-team', 
+    required: false   
   },
   role: {
     type: ObjectId,

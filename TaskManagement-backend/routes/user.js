@@ -37,7 +37,7 @@ async function getUserById(req, res, next) {
   }
 
   try {
-    const user = await User.findById(req.params.id).populate('role')
+    const user = await User.findById(req.params.id).populate('role').populate('team')
 
     if (!user || user.length == 0) {
       res.status(404).send('User not found')
