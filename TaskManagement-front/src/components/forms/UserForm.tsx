@@ -36,7 +36,7 @@ const UserForm: React.FC = () => {
       console.log('Datos del usuario obtenidos:', response);
       const mappedData = {
         ...response,
-        team: response.team?.name || '', // Usamos el nombre del equipo
+        team: response.team?.idTeam || '', // Usamos el nombre del equipo
         role: response.role?.name || '', // Usamos el nombre del Rol
       };
 
@@ -99,7 +99,7 @@ const UserForm: React.FC = () => {
       console.log('Valores enviados:', values);
       if (userid) {
         // Editar usuario
-        //await UserServices.updateUser(userid, values);
+        await UserServices.updateUser(userid, values);
         message.success('Usuario actualizado correctamente');
       } else {
         // Crear usuario
@@ -146,7 +146,7 @@ const UserForm: React.FC = () => {
       >
         <Select placeholder="Selecciona un Equipo">
             {teams.map((team) => (
-            <Select.Option key={team.idTeam} value={team.idTeam}>
+            <Select.Option key={team.idTeam} value={team.idTeam} >
                 {team.name} 
             </Select.Option>
             ))}
