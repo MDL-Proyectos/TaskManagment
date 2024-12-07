@@ -6,10 +6,10 @@ import Role from '../schemas/role.js'
 const router = express.Router()
 
 router.get('/', getAllRoles)
-//router.get('/:id', getTaskById)
+router.get('/:name', getTaskByName)
 router.post('/', createRole)
-//router.put('/:id', updateTask)
-//router.delete('/:id', deleteTask)
+router.put('/:name', updateRole)
+router.delete('/:name', deleteRole)
 
 async function getAllRoles(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
@@ -22,16 +22,69 @@ async function getAllRoles(req, res, next) {
     }
 }
 
+async function getTaskByName(req, res, next) {
+  console.log('getTaskByName by name ', req.params.name)
+  try {
+    console.log('getTaskByName')
+    const role = await Role.findOne({ name: req.params.name })
+    res.send(role)
+  } catch (err) {
+    next(err)
+  }
+}
+
 async function createRole(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const role = req.body
     try {
       console.log('CREATE ROLE')
 
-      const roleCreate = await Role.create({
+      const roleCreate = await await Role.create({
         ...role
       })
       res.send(roleCreate)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async function updateRole(req, res, next) {
+    //console.log('getAllUsers by user ', req.user._id)
+    const role = req.params
+    if (!req.params.name) {
+      res.status(500).send('The param id is not defined');
+    }
+  
+    try {
+      console.log(req.params)
+      const roleUpdated = await Role.findOne({name : req.params.name});
+     
+      if (!roleUpdated) {
+        res.status(404).send('Role not found');
+        return res.status(400).send('Role not found');
+      } 
+      await roleUpdated.updateOne(req.body)
+      console.log(roleUpdated)
+  
+    res.send(`Role Updated :  ${req.params.id}`)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async function deleteRole(req, res, next) {
+    //console.log('getAllUsers by user ', req.user._id)
+    const role = req.body
+    console.log('DELETE ROLE')
+    try {
+      console.log('DELETE ROLE')
+
+      const roleDeleted = await Role.findOneAndDelete({name : req.params.name});
+      if (!roleDeleted) {
+        res.status(404).send('Role not found');
+        return res.status(400).send('Role not found');
+      } 
+      res.send(roleDeleted)
     } catch (err) {
       next(err)
     }
