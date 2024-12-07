@@ -56,8 +56,8 @@ const userSchema = new Schema({
   }
 });
 
-// Middleware para encriptar la contraseña antes de guardar el usuario
-userSchema.pre('save', async function(next) {
+// Middleware para encriptar la contraseña antes de guardar el usuario - FUNCIONA
+/*userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {  // Solo encripta la contraseña si ha sido modificada
     try {
       const salt = await bcrypt.genSalt(10);  // Genera un "salt"
@@ -69,7 +69,7 @@ userSchema.pre('save', async function(next) {
   } else {
     next();
   }
-});
+});*/
 
 // Método para comparar contraseñas
 userSchema.methods.comparePassword = async function(candidatePassword) {
