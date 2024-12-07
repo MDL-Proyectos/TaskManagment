@@ -10,6 +10,8 @@ import UserForm from './components/forms/UserForm.tsx'
 import NotFound from './modules/NotFound.tsx'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import TaskForm from './components/forms/TaskForm.tsx'
+import Role from './modules/Role.tsx'
+import RoleForm from './components/forms/RoleForm.tsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -23,7 +25,11 @@ function App() {
             <Route path="Users" element={<Users />} />
             <Route path="teams" element={<Teams />} />
             <Route path="tasks" element={<Tasks />} />
+            <Route path="/users/role/" element={<Role />} />
             <Route path="/users/:userid" element={<UserForm />} />
+            <Route path="/users/role/:name" element={<RoleForm />} />
+            <Route path="/users/create" element={<UserForm />} />
+            <Route path="/users/role/create" element={<RoleForm />} />
             <Route path="/teams/:idTeam" element={<TeamForm />} />
             <Route path="/tasks/:idTask" element={<TaskForm />} />
             <Route path="*" element={<NotFound />} />            
