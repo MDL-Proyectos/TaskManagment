@@ -34,6 +34,11 @@ const Users: React.FC = () => {
     navigate(`/users/${userId}`); // Redirige a la ruta de edición con el ID del usuario
   };
 
+    // Función para manejar la acción de crear
+    const handleCreate = () => {
+      navigate(`/users/create`); // Redirige a la ruta de edición con el ID del usuario
+    };
+
   return (
     <div>
       <h1>Listado de Usuarios</h1>
@@ -43,9 +48,10 @@ const Users: React.FC = () => {
         loading={initLoading}
         dataSource={list}
         renderItem={(user, index) => (
+          
           <List.Item
           actions={[
-            <a key="edit" onClick={() => handleEdit(user._id)}>Editar</a>,
+            <a key="edit" onClick={() => handleEdit(user._id)}>Editar</a>
           ]}>
             <List.Item.Meta
               avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
@@ -54,7 +60,11 @@ const Users: React.FC = () => {
               />
           </List.Item>
         )}
+        
       />
+      <Button type="primary" onClick={() => handleCreate()}>
+        Nuevo Usuario
+      </Button>
     </div>
   );
 };

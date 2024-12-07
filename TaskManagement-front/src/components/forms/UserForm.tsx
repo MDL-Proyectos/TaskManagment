@@ -9,6 +9,11 @@ import {
   message,
 } from 'antd';
 import UserServices from '../../routes/UserServices.tsx';
+//import RoleService from '../../routes/RoleServices.tsx';
+import { RoleData } from '../Role.tsx';
+import TeamService from '../../routes/TeamServices.tsx';
+import RoleServices from '../../routes/RoleServices.tsx';
+import { TeamData } from '../Team.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -17,6 +22,8 @@ const UserForm: React.FC = () => {
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
+  const [roles, setRoles] = useState<RoleData[]>([]); // Estado para almacenar la listlista de usuarios
+  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la listlistlista de usuarios
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
@@ -41,9 +48,34 @@ const UserForm: React.FC = () => {
     }
   };
 
-  // Ejecutar fetchUsers cuando el componente se monta
+  // Función para obtener los datos de los Roles
+  const fetchRoles = async () => {
+    try {
+      const listRoles = await RoleServices.getAllRole(); 
+      setRoles(listRoles); 
+    } catch (error) {
+      console.error('Error al obtener la lista de roles:', error);
+      message.error('Error al cargar la lista de roles.');
+    }
+  };
+
+   // Función para obtener los datos de los equipos
+   const fetchTeams = async () => {
+    try {
+      const listTeams = await TeamService.getAllTeams(); 
+      setTeams(listTeams); 
+    } catch (error) {
+      console.error('Error al obtener la lista de equipos:', error);
+      message.error('Error al cargar la lista de equipos.');
+    }
+  };
+
+  // Ejecutar fetchUsers cuando el componente se carga
   useEffect(() => {
+    fetchRoles();
+    fetchTeams();
     if (userid) {
+     //console.log(userid)
       fetchUsers();
     }
   }, [userid, form]);
@@ -58,8 +90,28 @@ const UserForm: React.FC = () => {
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
       message.error('No se pudo actualizar el usuario.');
-    }
+    }    
   };*/
+
+   // Manejo de creación o edición
+   const handleFinish = async (values: any) => {
+    try {
+      console.log('Valores enviados:', values);
+      if (userid) {
+        // Editar usuario
+        //await UserServices.updateUser(userid, values);
+        message.success('Usuario actualizado correctamente');
+      } else {
+        // Crear usuario
+        await UserServices.createUser(values); // Llama al endpoint de creación
+        message.success('Usuario creado correctamente');
+      }
+      navigate('/users'); // Redirigir tras guardar
+    } catch (error) {
+      console.error('Error al guardar el usuario:', error);
+      message.error('No se pudo guardar el usuario.');
+    }
+  };
 
   return (
     <Form
@@ -71,6 +123,7 @@ const UserForm: React.FC = () => {
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      // onFinish={handleUpdate} // Maneja el envío del formulario
+     onFinish={handleFinish} // Maneja el envío del formulario
     >
       <Form.Item
         label="Nombre"
@@ -91,7 +144,13 @@ const UserForm: React.FC = () => {
         name="team"
         rules={[{ required: false}]}
       >
-        <Input placeholder="Team Asignado" />
+        <Select placeholder="Selecciona un Equipo">
+            {teams.map((team) => (
+            <Select.Option key={team.idTeam} value={team.idTeam}>
+                {team.name} 
+            </Select.Option>
+            ))}
+        </Select>
       </Form.Item>
 
       <Form.Item
@@ -99,9 +158,12 @@ const UserForm: React.FC = () => {
         name="role" // Debe coincidir con el campo en el objeto del backend
         rules={[{ required: true, message: 'Por favor, selecciona un rol' }]}
       >
-        <Select>
-          <Select.Option value="admin">Administrador</Select.Option>
-          <Select.Option value="user">Usuario</Select.Option>
+        <Select placeholder="Selecciona un Equipo">
+            {roles.map((rol) => (
+            <Select.Option key={rol.name} value={rol.name}>
+                {rol.name} 
+            </Select.Option>
+            ))}
         </Select>
       </Form.Item>
 
@@ -110,7 +172,24 @@ const UserForm: React.FC = () => {
         name="observations"
         rules={[{ required: false}]}
       >
-        <Input placeholder="Notas personales.." disabled={true}/>
+       <Input
+        placeholder="Notas personales..."
+        disabled={!!userid} // Habilitado solo si no hay idUser
+      />
+      </Form.Item>
+
+      <Form.Item 
+        label="Password"
+        name="password"
+        rules={[
+          { required: true, message: 'Por favor, ingresa un código' },
+          { pattern: /^[\w\s@#$%^&*()_+=-]+$/, message: 'El código debe tener 6 dígitos' },
+        ]}
+      >
+       <Input.Password
+        placeholder="Password"
+        //disabled={!!userid} // Habilitado solo si no hay idUser
+      />
       </Form.Item>
 
       <Form.Item
@@ -143,7 +222,7 @@ const UserForm: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Guardar Cambios
         </Button>
-        <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/')}>
+        <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/users')}>
           Cancelar
         </Button>
       </Form.Item>
