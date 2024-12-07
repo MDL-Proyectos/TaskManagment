@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import User from '../schemas/user.js'
 import Role from '../schemas/role.js'
 import Team from '../schemas/team.js'
+import Task from '../schemas/task.js'
 
 const router = express.Router()
 
@@ -11,7 +12,8 @@ router.get('/', getAllUsers)
 router.get('/:id', getUserById)
 router.post('/', createUser)
 router.put('/:id', updateUser)
-router.put('/delete/:id', deleteUser)
+router.put('/blockUser/:id', blockUser)
+router.delete('/delete/:id', deleteUser)
 
 function toDate(input) {
   const [day, month, year] = input.split('/')
@@ -70,7 +72,7 @@ async function createUser(req, res, next) {
     const userCreated = await User.create({
       ...user,
       team: team._id,
-      password: user.password, //descativado el bcrypt
+      //password: user.password, //descativado el bcrypt
       role: role._id,
     })
 
@@ -123,10 +125,10 @@ async function updateUser(req, res, next) {
       req.body.team = newTeam._id
     }
 
-    if (req.body.password && false) { //descativado
+    /*if (req.body.password && false) { //descativado
       const passEncrypted = await bcrypt.hash(req.body.password, 10)
       req.body.password = passEncrypted
-    }
+    }*/
 
     // This will return the previous status
     await userToUpdate.updateOne(req.body)
@@ -148,27 +150,59 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function deleteUser(req, res, next) {
-  console.log('deleteUser with id: ', req.params.id)
+async function blockUser(req, res, next) {
+  console.log('BlockUser with id: ', req.params.id)
 
   if (!req.params.id) {
     res.status(500).send('The param id is not defined')
   }
 
   try {
-    const userDeleted = await User.findById(req.params.id)
+    const blockUser = await User.findById(req.params.id)
 
-    if (!userDeleted) {
+    if (!blockUser) {
       res.status(404).send('User not found')
     }
 
    // await User.deleteOne({ _id: user._id })
-   userDeleted.is_deleted = true
-    await userDeleted.updateOne(req.body)
-    console.log(userDeleted)
-    res.send(userDeleted)
+   blockUser.is_deleted = true
+    await blockUser.updateOne(req.body)
+    console.log(blockUser)
+    res.send(blockUser)
 
   //  res.send(`User deleted :  ${req.params.id}`)
+  } catch (err) {
+    next(err)
+  }
+}
+
+async function deleteUser(req, res, next) {
+  console.log('deleteUser with id: ', req.params.id);
+
+  if (!req.params.id) {
+    res.status(500).send('The param id is not defined');
+  }
+
+  try {
+    const userDeleted = await User.findById(req.params.id);
+   
+    if (!userDeleted) {
+      res.status(404).send('User not found');
+      return res.status(400).send('User not found');
+    }
+    const listTask = await Task.find({assigned_user : userDeleted});
+
+    if (listTask.length > 0) {
+      console.log(listTask);
+      return res.status(400).send('The user cannot be deleted. Related tasks exist.');
+    }
+
+   // await User.deleteOne({ _id: user._id })
+   userDeleted.is_deleted = true
+    await userDeleted.deleteOne(req.body)
+    console.log(userDeleted)
+
+  res.send(`User deleted :  ${req.params.id}`)
   } catch (err) {
     next(err)
   }
