@@ -18,7 +18,11 @@ const teamSchema = new Schema({
         type: ObjectId, 
         ref: 'tm-user', 
         required: false   
-    }
+    },
+    is_deleted: {
+      type: Boolean,
+      default: false  // Eliminación lógica, por defecto es "false"
+    },
 })
 
 const Team = mongoose.model('tm-team', teamSchema)

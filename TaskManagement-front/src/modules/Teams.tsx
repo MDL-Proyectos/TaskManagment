@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import Team, { TeamData } from '../components/Team';
+import { TeamData } from '../components/Team';
 import { useNavigate } from 'react-router-dom';
 import TeamService from '../routes/TeamServices';
 //import userService from '../../services/users'
-import { Card, List } from 'antd';
+import { Button, Card, List } from 'antd';
 
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);
@@ -29,6 +29,10 @@ function Teams() {
     navigate(`/teams/${idTeam}`); // Redirige a la ruta de edición con el ID del usuario
   }; 
 
+   const handleCreate = () => {
+    navigate(`/teams/new`); // Redirige a la ruta de edición con el ID del usuario
+  }; 
+
   return (
     <>
       <h1>Hola, Lider!</h1>
@@ -43,15 +47,18 @@ function Teams() {
               actions={[
                 <a key="edit" onClick={() => handleEdit(item.idTeam)}>Editar</a>,
               ]}>
-                <Card title={item.name.toUpperCase()}>
+                 <Card title={item.name.toUpperCase()}>
                   IdTeam: {item.idTeam},
-                  Lider: {item.liderTeam?.toString() || "Sin Asignación"}
+                  Lider: {item.liderTeam?.first_name || "Sin Asignación"} {item.liderTeam?.last_name}
                   </Card>
               </List.Item>
             )}
           />
           )
         }
+         <Button type="primary" onClick={handleCreate}>
+        Nuevo
+      </Button>
     </>
   )
 }

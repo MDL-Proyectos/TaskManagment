@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Home from './modules/Home.tsx'
 import Layout from './modules/Layout.tsx'
@@ -14,7 +13,6 @@ import Role from './modules/Role.tsx'
 import RoleForm from './components/forms/RoleForm.tsx'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="App">
@@ -31,7 +29,9 @@ function App() {
             <Route path="/users/create" element={<UserForm />} />
             <Route path="/users/role/create" element={<RoleForm />} />
             <Route path="/teams/:idTeam" element={<TeamForm />} />
+            <Route path="/teams/new" element={<TeamForm />} />
             <Route path="/tasks/:idTask" element={<TaskForm />} />
+            <Route path="/tasks/new" element={<TaskForm />} />
             <Route path="*" element={<NotFound />} />            
           </Route>
         </Routes>

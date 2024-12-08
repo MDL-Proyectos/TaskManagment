@@ -6,8 +6,13 @@ import {
   Input,
   Switch,
   message,
+  Select
 } from 'antd';
 import TeamServices from '../../routes/TeamServices.tsx';
+import { TeamData } from '../Team.tsx';
+import TeamService from '../../routes/TeamServices.tsx';
+import UserServices from '../../routes/UserServices.tsx';
+import { UsuarioData } from '../User.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -16,22 +21,25 @@ const TeamForm: React.FC = () => {
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
-    console.log('Ingresa 1')
+
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
+  const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
 
   // Función para obtener los datos del usuario desde el backend
   const fetchTeam = async () => {
     try {
-        console.log('ingresa 2')
       const response = await TeamServices.getTeamById(idTeam as string); // Llama al servicio para obtener los datos
-      console.log('Datos del equipo obtenidos:', response);
+      //console.log('Datos del equipo obtenidos:', response);
+      console.log('Lider recibido: ', response.liderTeam);
       const mappedData = {
         ...response,
-        liderTeam: response.liderTeam?.first_name || '' // Usamos el nombre del equipo       
-      };
-
+        liderTeam: response.liderTeam
+        ? { _id: response.liderTeam } // Necesario para que coincida con el name del Form.Item
+        : undefined,
+    };
+    console.log('Datos mapeados para el formulario:', mappedData);
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedData);
     } catch (error) {
@@ -40,26 +48,39 @@ const TeamForm: React.FC = () => {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const listUsers = await UserServices.getUsers(); 
+      const activeUsers = listUsers.filter(user => !user.is_deleted);
+      const usersOfTeam = activeUsers.filter(user => user.team?.idTeam === idTeam);
+      setUsers(usersOfTeam); 
+    } catch (error) {
+      console.error('Error al obtener la lista de usuarios:', error);
+      message.error('Error al cargar la lista de usuarios.');
+    }
+  };
+
   // Ejecutar fetchTeam cuando el componente se monta
   useEffect(() => {
+    fetchUsers();
     if (idTeam) {
         fetchTeam();
-        console.log(idTeam);
+        //console.log(idTeam);
     }
   }, [idTeam, form]);
 
-  // Función para manejar la actualización del usuario
- /* const handleUpdate = async (values: UsuarioData) => {
+  // Función para manejar la actualización 
+  const handleUpdate = async (values: TeamData) => {
     try {
-      console.log('Valores enviados para actualizar:', values);
-      await UserServices.updateUser(userid as string, values); // Llama a tu endpoint de actualización
-      message.success('Usuario actualizado correctamente');
-      navigate('/'); // Redirige al listado de usuarios
+     // console.log('Valores enviados para actualizar:', values);
+      await TeamService.updateTeam(idTeam as string, values); // Llama a tu endpoint de actualización
+      message.success('Team actualizado correctamente');
+      navigate('/teams'); 
     } catch (error) {
-      console.error('Error al actualizar el usuario:', error);
-      message.error('No se pudo actualizar el usuario.');
+      console.error('Error al actualizar el Team:', error);
+      message.error('No se pudo actualizar el Team.');
     }
-  };*/
+  };
 
   return (
     <Form
@@ -70,7 +91,7 @@ const TeamForm: React.FC = () => {
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
-     // onFinish={handleUpdate} // Maneja el envío del formulario
+     onFinish={handleUpdate} // Maneja el envío del formulario
     >
       <Form.Item
         label="Identificación"
@@ -87,12 +108,18 @@ const TeamForm: React.FC = () => {
         <Input placeholder="Nombre" />
       </Form.Item>
       <Form.Item
-        label="Lider"
-        name="liderTeam"
-        rules={[{ required: false, message: 'Por favor, ingresa un usuario con rol de lider' }]}
-      >
-        <Input placeholder="Lider" />
-      </Form.Item>
+        label="Lider del Equipo"
+        name={['liderTeam', '_id']}
+        rules={[{ required: false, message: 'Por favor, selecciona un usuario' }]}
+        >
+        <Select placeholder="Selecciona un usuario">
+            {users.map((user) => (
+            <Select.Option key={user._id} value={user._id}>
+                {user.first_name} {user.last_name}
+            </Select.Option>
+            ))}
+        </Select>
+    </Form.Item>  
 
     <Form.Item
         label="Activo"

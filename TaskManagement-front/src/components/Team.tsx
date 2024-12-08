@@ -1,7 +1,8 @@
 export interface TeamData {
   idTeam: string; // Identificador único del equipo (obligatorio)
   name: string; // Nombre del equipo, único, en minúsculas y sin espacios adicionales (obligatorio)
-  liderTeam?:  { _id: string; first_name: string;  last_name: string }; // Líder del equipo, referencia opcional a un usuario
+  liderTeam?:   {_id: string; first_name: string; last_name: string}; 
+  is_deleted?: boolean;       // Eliminación lógica 
 }
 
 const Team: React.FC<TeamData> = ({idTeam, name,liderTeam}) => {
@@ -9,7 +10,9 @@ const Team: React.FC<TeamData> = ({idTeam, name,liderTeam}) => {
       <li>
         <p>Identificación: {idTeam}</p>
         <p>Nombre: {name}</p>
-        <p>Lider: {typeof liderTeam === 'string' ? liderTeam : 'Referenciado por ID'}</p>        
+        <p>{typeof liderTeam === 'string' 
+        ? 'Referenciado por ID'
+      : `${liderTeam?.first_name} ${liderTeam?.last_name} `}</p>        
       </li>
     );
   };

@@ -2,6 +2,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 
 import Team from '../schemas/team.js'
+import User from '../schemas/user.js'
 
 const router = express.Router()
 
@@ -53,8 +54,7 @@ async function createTeam(req, res, next) {
       }
   }
   async function updateTeam(req, res, next) {
-    console.log('updateTeam with id: ', req.params.id)
-  
+    console.log('put team ', req.body)
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
@@ -65,7 +65,7 @@ async function createTeam(req, res, next) {
     //}      
   
     try {
-      const teamToUpdate = await Team.findById(req.params.id)
+      const teamToUpdate = await  Team.findOne({ idTeam: req.params.id })
       const teamNewData = req.body
       if (!teamToUpdate) {
         console.error('Team not found')
@@ -80,6 +80,23 @@ async function createTeam(req, res, next) {
           return res.status(400).end()
         }
         req.body.id = teamSelected._id
+      }
+     
+      if (teamNewData.liderTeam._id) {
+        console.log('Encontro registro de lider' + teamNewData.liderTeam._id)
+        try{
+          const liderSelected = await User.findById(teamNewData.liderTeam._id);
+          if (!liderSelected) {
+            console.info('teamSelected not found.')
+            return res.status(404).send('LiderTeam not found')
+          }
+            req.body.liderTeam = liderSelected._id;
+        }catch (err) {
+          return res.status(404).send('LiderTeam not found')
+        }
+             
+      }else{
+        delete req.body.liderTeam
       }
     
   
