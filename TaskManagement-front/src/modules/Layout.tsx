@@ -26,8 +26,9 @@ function getItem(label: any, key: any, icon:any, children?: any) {
 const items = [
   getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />),
   //getItem(<Link to="/users"> Usuarios </Link>, '2', <UserOutlined />),
-  getItem(<Link to="/users">Usuarios</Link>, '2', <UserOutlined />, [
-    getItem(<Link to="/users/role">Roles</Link>, '2-1', <IdcardOutlined />)]),  
+  getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />),  
+    getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />)]),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />),
   getItem(<Link to="/tasks"> Tareas </Link>, '4', <BookOutlined />),
   getItem(<Link to="/about"> About </Link>, '7', <QuestionCircleOutlined />),
