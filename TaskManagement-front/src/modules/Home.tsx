@@ -13,10 +13,10 @@ function Home() {
 
   return (
     <>
-      <h1>Hola a la Task-Managment!</h1>
+      <h1>Bienvenido, Usuario</h1>
       {apiInfo && (
         <h3>
-          Hola a la Task-Managment!
+          Gestionemos tus tareas!
         </h3>
       )}
     </>

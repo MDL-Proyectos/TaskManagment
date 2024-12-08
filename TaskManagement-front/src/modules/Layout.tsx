@@ -68,7 +68,7 @@ const App = () => {
             alignItems: 'center',
           }}
         >
-          <h1>Task-Managment</h1>
+          <h2>Task-Management</h2>
         </Header>
         <Content
           style={{
@@ -93,7 +93,7 @@ const App = () => {
             textAlign: 'center',
           }}
         >
-          Task-Managment ©2024 Created by MDL
+          Task-Management ©2024 Created by MDL
         </Footer>
       </Layout>
     </Layout>

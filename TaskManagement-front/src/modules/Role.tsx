@@ -37,10 +37,11 @@ function Role() {
 
   return (
     <div>
-        <h1>Roles en sistema</h1>
+        <h2>Roles en sistema</h2>
       <List
         itemLayout="horizontal"
        // loading={initLoading}
+       grid={{ gutter: 5, column: 1 }}
         dataSource={roles}
         renderItem={(role) => (
           
