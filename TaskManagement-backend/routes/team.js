@@ -42,6 +42,8 @@ async function getAllTeams(req, res, next) {
 async function createTeam(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const team = req.body
+    delete req.body.liderTeam
+    
     try {
     
         const teamCreate = await Team.create({

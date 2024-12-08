@@ -13,5 +13,9 @@ const TeamService = {
       throw error; 
     }
   },
+  createTeam: async (data: any) => {
+    const response = await api.post('/teams', data);
+    return response.data;
+  },
 };
 export default TeamService;

@@ -18,6 +18,7 @@ type SizeType = Parameters<typeof Form>[0]['size'];
 
 const TeamForm: React.FC = () => {
   const { idTeam } = useParams<{ idTeam: string }>(); // ID desde la URL
+  const [isEditMode, setIsEditMode] = useState<boolean>(!!idTeam); // Determina el modo (edición/creación)
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
@@ -70,11 +71,16 @@ const TeamForm: React.FC = () => {
   }, [idTeam, form]);
 
   // Función para manejar la actualización 
-  const handleUpdate = async (values: TeamData) => {
+  const habldeFinish = async (values: TeamData) => {
     try {
+      if (isEditMode) {
      // console.log('Valores enviados para actualizar:', values);
       await TeamService.updateTeam(idTeam as string, values); // Llama a tu endpoint de actualización
       message.success('Team actualizado correctamente');
+      }else{
+        await TeamService.createTeam(values); // Llama a tu endpoint de actualización
+        message.success('Team creado correctamente');
+      }
       navigate('/teams'); 
     } catch (error) {
       console.error('Error al actualizar el Team:', error);
@@ -91,14 +97,17 @@ const TeamForm: React.FC = () => {
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
-     onFinish={handleUpdate} // Maneja el envío del formulario
+     onFinish={habldeFinish} // Maneja el envío del formulario
     >
       <Form.Item
         label="Identificación"
         name="idTeam"
         rules={[{ required: true, message: 'Por favor, ingresa el nombre' }]}
-      > 
-        <Input placeholder="..." disabled={true}/>
+      >
+        <Input
+          placeholder="..."
+          disabled={!!idTeam} // El campo estará deshabilitado si hay un idTeam
+        />
       </Form.Item>
       <Form.Item
         label="Nombre"

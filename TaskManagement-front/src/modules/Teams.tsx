@@ -35,7 +35,7 @@ function Teams() {
 
   return (
     <>
-      <h1>Hola, Lider!</h1>
+      <h2>Equipos!</h2>
         {team.length === 0 ? (
           <p>...</p>
           ) : (
