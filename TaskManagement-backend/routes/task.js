@@ -11,7 +11,7 @@ router.get('/', getAllTasks)
 router.get('/:id', getTaskById)
 router.post('/', createTask)
 router.put('/:id', updateTask)
-//router.delete('/:id', deleteTask)
+router.delete('/delete/:id', deleteTask)
 
 async function getAllTasks(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
@@ -50,7 +50,7 @@ async function createTask(req, res, next) {
     const task = req.body
     try {
       console.log(' task.assigned_team ' + task.assigned_team)
-      const team = await Team.findOne({ idTeam: task.assigned_team })
+      const team = await Team.findOne({ idTeam: task.assigned_team.idTeam })
     if (!team) {
       res.status(404).send('Team not found')
     }
@@ -106,7 +106,8 @@ async function createTask(req, res, next) {
   }  
 
   async function updateTask(req, res, next) {
-    console.log('taskUpdated with id: ', req.params.id)
+    //console.log('taskUpdated with id: ', req.params.id)
+    //console.log(req.body)
   
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
@@ -116,12 +117,11 @@ async function createTask(req, res, next) {
     //if (!req.isAdmin() && req.params.id != req.user._id) {
     // return res.status(403).send('Unauthorized')
     //}      
-    delete req.body.created_at
+    /*delete req.body.created_at
     delete req.body.due_date
     delete req.body.comments.author
     delete req.body.comments.created_at
-    delete req.body.project
-    delete req.body.authorized_by
+    delete req.body.project*/
 
     try {
       //Valido tarea
@@ -134,7 +134,7 @@ async function createTask(req, res, next) {
 
       //Valido grupo
       if (taskNewData.assigned_team) {
-        const teamSelected = await Team.findOne({ idTeam: taskNewData.assigned_team })
+        const teamSelected = await Team.findOne({ idTeam: taskNewData.assigned_team.idTeam })
   
         if (!teamSelected) {
           console.info('teamSelected not found.')
@@ -143,7 +143,6 @@ async function createTask(req, res, next) {
         req.body.assigned_team = teamSelected._id
       }
        
-      console.log(taskNewData.assigned_user)
       //valido el usuario asignado
       if (taskNewData.assigned_user) {
         const newUserAssigned = await User.findById(taskNewData.assigned_user)
@@ -154,6 +153,21 @@ async function createTask(req, res, next) {
         }
         req.body.assigned_user = newUserAssigned._id
       }
+
+      //valido el usuario autorizador
+      console.log("authorized_by " + taskNewData.authorized_by)
+      if (taskNewData.authorized_by) {
+        const userAuthorized = await User.findById(taskNewData.authorized_by)
+  
+        if (!userAuthorized) {
+          console.info('userAuthorized not found.')
+          return res.status(400).end()
+        }
+        req.body.authorized_by = userAuthorized._id
+      }else{
+        console.info('userAuthorized not found.')
+        return res.status(400).end()
+      }
     
   
       await taskToUpdate.updateOne(req.body)
@@ -163,6 +177,24 @@ async function createTask(req, res, next) {
     } catch (err) {
       next(err)
     }
+  }
+
+  async function deleteTask(req, res, next) {
+    if (!req.params.id) {
+      return res.status(404).send('Parameter id not found')
+    }
+    try {
+      //Valido tarea
+      const taskDeleted = await Task.findOneAndDelete(req.params.id);
+      if (!taskDeleted) {
+        res.status(404).send('Task not found');
+        return res.status(400).send('Task not found');
+      } 
+      res.send(taskDeleted)
+    }catch{
+      next(err);
+    }
+
   }
 
   export default router

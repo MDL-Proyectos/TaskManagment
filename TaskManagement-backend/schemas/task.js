@@ -1,6 +1,7 @@
-import mongoose from 'mongoose'
-import validate from 'mongoose-validator'
-import bcrypt from 'bcrypt'
+import mongoose from 'mongoose';
+import validate from 'mongoose-validator';
+import bcrypt from 'bcrypt';
+import dayjs from 'dayjs';
 
 const Schema = mongoose.Schema
 const { ObjectId } = Schema.Types //usar en el usuario. EJ: role: { type: ObjectId, ref: 'Role', required: true },
@@ -28,15 +29,20 @@ const taskSchema = new Schema({
     default: 'Nuevo'  // Si no se proporciona un estado, por defecto será "Nuevo"
     },
     created_at: {
-    type: Date,
-      default: Date.now  // Fecha de creación, por defecto es la fecha actual
+      type: String,
+      default: Date.now,
+      get: (date) => dayjs(date).format('DD-MM-YYYY')  // Fecha de creación, por defecto es la fecha actual
     },
     due_date: {
-    type: Date,
+      type: String,
+      default: Date.now,
+      get: (date) => dayjs(date).format('DD-MM-YYYY'),
       required: true  // Fecha de vencimiento de la tarea
     },
     completed_at: { //modificable
-    type: Date,
+      type: String,
+      default: Date.now,
+      get: (date) => dayjs(date).format('DD-MM-YYYY'),
       default: null  // Fecha de finalización, por defecto es null si la tarea no ha sido completada
     },
     comments: [
@@ -51,8 +57,9 @@ const taskSchema = new Schema({
           required: true
         },
         created_at: {
-          type: Date,
-          default: Date.now  // Fecha de creación del comentario
+          type: String,
+          default: Date.now,
+          get: (date) => dayjs(date).format('DD-MM-YYYY')  // Fecha de creación del comentario
         }
       }
     ],

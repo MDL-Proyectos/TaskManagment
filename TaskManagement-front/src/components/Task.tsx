@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 
 export interface TaskData {
   _id: string;
@@ -19,7 +18,7 @@ export interface TaskData {
   observations?: string; // Observaciones adicionales (opcional, por defecto es una cadena vacía)
 }
 
-const Task: React.FC<TaskData> = ({title, assigned_team,assigned_user,status,created_at,project,authorized_by}) => {
+const Task: React.FC<TaskData> = ({title, assigned_team,assigned_user,status}) => {
     return (
       <li>
         <p>Titulo: {title}</p>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { List, Skeleton, Button } from 'antd';
+import { List, Skeleton, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import Task from '../components/Task.tsx';
 import TaskServices from '../routes/TaskServices.tsx';
@@ -26,14 +26,41 @@ function Tasks() {
     fetchTasks(); // Cargar las tareas cuando el componente se carga
   }, []);
 
-  const goToUsersPage = () => {
-    navigate('/users'); // Redirige a la página de creación de usuarios
+  const handleCreate = () => {
+    navigate('/tasks/new');
   };
 
-  // Función que se ejecutará al hacer clic en el botón
   const handleEdit = (idTask: string) => {
-    navigate(`/tasks/${idTask}`); // Redirige a la ruta de edición
+    navigate(`/tasks/${idTask}`);
   }; 
+
+  const handleDelete = async (id: any) => {
+  
+    try {
+      console.log('Valores enviados:', id);  
+      if (id) {
+        console.log(id)
+        const taskDeleted = await TaskServices.getTaskById(id);
+        if (taskDeleted.status === 'Nuevo'){
+          await TaskServices.deleteTask(id); 
+          message.success('Tarea eliminada correctamente');
+          return;
+        }
+        console.error('La tarea no puede eliminarse:', taskDeleted.status);
+        message.error('La tarea no puede eliminarse: Su estado debe ser "Nuevo"');
+          
+        } else {
+          console.error('No se encuentra ID del elemento.');
+          message.error('No se encuentra ID del elemento');
+          return;
+        }
+        navigate('/tasks/'); // Redirigir después de guardar
+      
+    } catch (error) {
+      console.error('Error eliminar tarea:', error);
+      message.error('No se pudo eliminar la tarea.');
+    }
+  };
 
   return (
     <>
@@ -51,7 +78,7 @@ function Tasks() {
               <List.Item
                 actions={[
                   <a key="edit" onClick={() => handleEdit(task._id)}>Editar</a>,
-                  <a key="delete">Eliminar</a>,
+                  <a key="delete" onClick={() => handleDelete(task._id)}>Eliminar</a>,
                 ]}
               >
                 <Skeleton avatar title={false} loading={initLoading} active>
@@ -63,7 +90,7 @@ function Tasks() {
           <p>Cantidad total de Tareas: {tasks.length}</p>
         </>
       )}
-      <Button type="primary" onClick={goToUsersPage}>
+      <Button type="primary" onClick={handleCreate}>
         Crear Tarea
       </Button>
     </>

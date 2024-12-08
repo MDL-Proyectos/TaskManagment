@@ -7,8 +7,10 @@ import dayjs from 'dayjs'; //esto me permite ajutar los formatos de fechas y cor
 import { UsuarioData } from '../User.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import { TeamData } from '../Team.tsx';
-
+import utc from 'dayjs/plugin/utc';
 type SizeType = Parameters<typeof Form>[0]['size']; 
+
+dayjs.extend(utc);
 
 const TaskForm: React.FC = () => {
   const { idTask } = useParams<{ idTask: string }>(); // ID desde la URL
@@ -28,12 +30,12 @@ const TaskForm: React.FC = () => {
       const response = await TaskServices.getTaskById(idTask as string); // Llama al servicio para obtener los datos
       const mappedData = {
         ...response,
-        created_at: response.created_at ? dayjs(response.created_at) : null,
-        due_date: response.due_date ? dayjs(response.due_date) : null,
-        completed_at: response.completed_at ? dayjs(response.completed_at) : null,
+        created_at: response.created_at ? dayjs(response.created_at, 'DD-MM-YYYY') : null,
+        due_date: response.due_date ? dayjs(response.due_date, 'DD-MM-YYYY') : null,
+        completed_at: response.completed_at ? dayjs(response.completed_at, 'DD-MM-YYYY') : null,
         comments: response.comments?.map((comment: any) => ({
           ...comment,
-          created_at: comment.created_at ? dayjs(comment.created_at) : null,
+          created_at: comment.created_at ? dayjs(comment.created_at, 'DD-MM-YYYY') : null,
         })),
       };
       // Actualiza los campos del formulario con los datos recibidos
@@ -47,7 +49,8 @@ const TaskForm: React.FC = () => {
       const fetchUsers = async () => {
         try {
           const listUsers = await UserServices.getUsers(); 
-          setUsers(listUsers); 
+          const activeUsers = listUsers.filter(user => !user.is_deleted);
+          setUsers(activeUsers); 
         } catch (error) {
           console.error('Error al obtener la lista de usuarios:', error);
           message.error('Error al cargar la lista de usuarios.');
@@ -58,7 +61,8 @@ const TaskForm: React.FC = () => {
        const fetchTeams = async () => {
         try {
           const listTeams = await TeamService.getAllTeams(); 
-          setTeams(listTeams); 
+          const activeTeams = listTeams.filter(team => !team.is_deleted);
+          setTeams(activeTeams); 
         } catch (error) {
           console.error('Error al obtener la lista de equipos:', error);
           message.error('Error al cargar la lista de equipos.');
@@ -67,10 +71,10 @@ const TaskForm: React.FC = () => {
     
   // Ejecutar fetchTask cuando el componente carga
   useEffect(() => {
+    fetchUsers();
+    fetchTeams();
     if (idTask) {
       fetchTask();
-      fetchUsers();
-      fetchTeams();
     }
   }, [idTask, form]);
 
@@ -80,22 +84,27 @@ const TaskForm: React.FC = () => {
       // Convierte las fechas a strings 
       const formattedValues = {
         ...values,
-        created_at: values.created_at ? values.created_at.format('YYYY-MM-DD') : null, //el null es para evitar problemas si el registro no posee fecha
-        due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : null,
-        completed_at: values.completed_at ? values.completed_at.format('YYYY-MM-DD') : null,
+        created_at: values.created_at ? values.created_at.format('DD-MM-YYYY') : null, // Cambiado a DD-MM-YYYY
+        due_date: values.due_date ? values.due_date.format('DD-MM-YYYY') : null,  
+        completed_at: values.completed_at ? values.completed_at.format('DD-MM-YYYY') : null, 
         comments: values.comments?.map((comment: any) => ({
           ...comment,
-          created_at: comment.created_at ? comment.created_at.format('YYYY-MM-DD') : null,
+          created_at: comment.created_at ? comment.created_at.format('DD-MM-YYYY') : null, 
         })),
       };
 
       console.log('Datos enviados:', formattedValues);
-
-      // Aquí puedes llamar al servicio de actualización
-      // await TaskServices.updateTask(idTask, formattedValues);
+      if (idTask) {
+      // Servicio de actualización
+       await TaskServices.updateTask(idTask, formattedValues);
 
       message.success('Tarea actualizada correctamente');
-      navigate('/');
+      }else{
+      // Servicio de Creacion
+       await TaskServices.createTask(formattedValues);
+       message.success('Tarea creada correctamente');
+      }
+      navigate('/tasks');
     } catch (error) {
       console.error('Error al actualizar la tarea:', error);
       message.error('No se pudo actualizar la tarea.');
@@ -153,7 +162,9 @@ const TaskForm: React.FC = () => {
         label="Fecha de Finalización"
         name="completed_at"
       >
-        <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+        <DatePicker 
+        format="DD-MM-YYYY" 
+      />
       </Form.Item>
 
       <Form.Item
@@ -200,7 +211,7 @@ const TaskForm: React.FC = () => {
         <Input.TextArea placeholder="Observaciones" />
       </Form.Item>
       <Form.Item
-        label="Autorizacion"
+        label="Autorizó"
         name={['authorized_by', '_id']}
         rules={[{ required: true, message: 'Por favor, selecciona un usuario' }]}
         >
@@ -211,7 +222,7 @@ const TaskForm: React.FC = () => {
             </Select.Option>
             ))}
         </Select>
-    </Form.Item>
+    </Form.Item>  
 
       <Form.List name="comments">
         {(fields, { add, remove }) => (
@@ -254,7 +265,7 @@ const TaskForm: React.FC = () => {
         <Button type="primary" htmlType="submit">
           Guardar Cambios
         </Button>
-        <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/')}>
+        <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/tasks')}>
           Cancelar
         </Button>
       </Form.Item>
