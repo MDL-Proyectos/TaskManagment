@@ -8,16 +8,15 @@ import {
   message,
 } from 'antd';
 import RoleServices from '../../routes/RoleServices.tsx';
-import { RoleData } from '../Role.tsx';
 import userService from '../../routes/UserServices.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
 const RoleForm: React.FC = () => {
   const { name } = useParams<{ name: string }>(); // ID desde la URL
-  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
+  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default'); //Antd
   const [isEditMode, setIsEditMode] = useState<boolean>(!!name); // Determina el modo (edición/creación)
-  const [form] = Form.useForm(); // Instancia del formulario
+  const [form] = Form.useForm(); // Instancia del formulario Antd
   const navigate = useNavigate();
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
@@ -69,56 +68,6 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
     } catch (error) {
       console.error('Error al validar el nombre del Rol:', error);
       return false;
-    }
-  };
-
-     // Manejo de creación o edición
-const handleEdit = async (values: any) => {
-  
-  try {
-    console.log('Valores enviados:', values);
-
-    if (values.name) {
-      await RoleServices.updateRole(values.id, values); // `id` debe estar incluido en `values`
-      message.success('Rol actualizado correctamente');
-    }
-    // Redirigir después de guardar
-    navigate('/users/role');
-  } catch (error) {
-    console.error('Error al guardar el Rol:', error);
-    message.error('No se pudo guardar el Rol.');
-  }
-};
-
-
-   // Manejo de creación o edición
-const handleCreate = async (values: any) => {
-  
-    try {
-      console.log('Valores enviados:', values);
-  
-      if (values.name) {
-        // Caso de edición
-        //await RoleServices.updateRole(values.id, values); // `id` debe estar incluido en `values`
-        //message.success('Rol actualizado correctamente');
-        // Caso de creación
-        const nombreValido = await validaNombre(values.name);
-  
-        if (nombreValido) {
-          await RoleServices.createRole(values); // Llama al endpoint de creación
-          message.success('Rol creado correctamente');
-        } else {
-          console.error('El Rol ya existe:', values.name);
-          message.error('El Rol ya existe.');
-          return; // Detenemos el flujo en caso de error
-        }
-      }
-  
-      // Redirigir después de guardar
-      navigate('/users/role');
-    } catch (error) {
-      console.error('Error al guardar el Rol:', error);
-      message.error('No se pudo guardar el Rol.');
     }
   };
 

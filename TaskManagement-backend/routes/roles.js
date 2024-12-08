@@ -73,13 +73,9 @@ async function createRole(req, res, next) {
   }
 
   async function deleteRole(req, res, next) {
-    //console.log('getAllUsers by user ', req.user._id)
-    const role = req.body
     console.log('DELETE ROLE')
     try {
-      console.log('DELETE ROLE')
-
-      const roleDeleted = await Role.findOneAndDelete({name : req.params.name});
+     const roleDeleted = await Role.findOneAndDelete({name : req.params.name});
       if (!roleDeleted) {
         res.status(404).send('Role not found');
         return res.status(400).send('Role not found');
