@@ -35,14 +35,14 @@ async function getUserById(req, res, next) {
   console.log('getUser with id: ', req.params.id)
 
   if (!req.params.id) {
-    res.status(500).send('The param id is not defined')
+    return res.status(500).send('The param id is not defined');
   }
 
   try {
     const user = await User.findById(req.params.id).populate('role').populate('team')
 
     if (!user || user.length == 0) {
-      res.status(404).send('User not found')
+      return res.status(404).send('User not found');
     }
 
     res.send(user)
@@ -57,14 +57,21 @@ async function createUser(req, res, next) {
   const user = req.body
 
   try {
+     //valido mail 
+    const isNew = await User.findOne({ email: user.email })
+    if (isNew) {
+      console.log('El usuario ya existe.');
+      return res.status(404).send('El usuario ya existe.');
+    }
+
     const role = await Role.findOne({ name: user.role })
     if (!role) {
-      res.status(404).send('Role not found')
+      return res.status(404).send('Role not found');
     }
 
     const team = await Team.findOne({ idTeam: user.team })
     if (!team) {
-      res.status(404).send('Team not found')
+      return res.status(404).send('Team not found');
     }
 
     //const passEncrypted = await bcrypt.hash(user.password, 10)
@@ -82,6 +89,16 @@ async function createUser(req, res, next) {
   }
 }
 
+const getUserByField = async (fieldSearch, value) => {
+  try {
+    const user = await User.findOne({ [fieldSearch]: value });
+    return user; 
+  } catch (error) {
+    console.error('Error al buscar el usuario', error);
+    throw error;  // Si ocurre un error, lo lanzamos
+  }
+};
+
 async function updateUser(req, res, next) {
   console.log('updateUser with id: ', req.params.id)
 
@@ -94,7 +111,7 @@ async function updateUser(req, res, next) {
   //}
 
   // The email can't be updated
-  delete req.body.email
+  //delete req.body.email
 
   try {
     const userToUpdate = await User.findById(req.params.id)

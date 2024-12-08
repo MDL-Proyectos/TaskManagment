@@ -75,7 +75,6 @@ const UserForm: React.FC = () => {
     fetchRoles();
     fetchTeams();
     if (userid) {
-     //console.log(userid)
       fetchUsers();
     }
   }, [userid, form]);
@@ -101,12 +100,18 @@ const UserForm: React.FC = () => {
         // Editar usuario
         await UserServices.updateUser(userid, values);
         message.success('Usuario actualizado correctamente');
+        navigate('/users'); // Redirigir tras guardar
       } else {
         // Crear usuario
-        await UserServices.createUser(values); // Llama al endpoint de creación
-        message.success('Usuario creado correctamente');
+        const isNew = await UserServices.getUsers();
+        const existingUser = isNew.find(user => user.email === values.email);
+        if(!existingUser) {
+          await UserServices.createUser(values); // Llama al endpoint de creación
+          message.success('Usuario creado correctamente');
+          return navigate('/users'); // Redirigir tras guardars
+        }
+        message.error('El correo ya se encuentra registrado.');        
       }
-      navigate('/users'); // Redirigir tras guardar
     } catch (error) {
       console.error('Error al guardar el usuario:', error);
       message.error('No se pudo guardar el usuario.');
