@@ -63,7 +63,8 @@ const UserForm: React.FC = () => {
    const fetchTeams = async () => {
     try {
       const listTeams = await TeamService.getAllTeams(); 
-      setTeams(listTeams); 
+      const activeTeams = listTeams.filter(team => !team.is_deleted);
+      setTeams(activeTeams); 
     } catch (error) {
       console.error('Error al obtener la lista de equipos:', error);
       message.error('Error al cargar la lista de equipos.');
