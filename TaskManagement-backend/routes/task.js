@@ -185,13 +185,13 @@ async function createTask(req, res, next) {
     }
     try {
       //Valido tarea
-      const taskDeleted = await Task.findOneAndDelete(req.params.id);
+      const taskDeleted = await Task.findOneAndDelete({_id : req.params.id});
       if (!taskDeleted) {
         res.status(404).send('Task not found');
         return res.status(400).send('Task not found');
       } 
       res.send(taskDeleted)
-    }catch{
+    }catch(err){
       next(err);
     }
 

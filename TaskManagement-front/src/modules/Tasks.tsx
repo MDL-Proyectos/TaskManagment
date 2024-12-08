@@ -43,8 +43,9 @@ function Tasks() {
         const taskDeleted = await TaskServices.getTaskById(id);
         if (taskDeleted.status === 'Nuevo'){
           await TaskServices.deleteTask(id); 
-          message.success('Tarea eliminada correctamente');
-          return;
+          message.success('Tarea eliminada correctamente', id);
+          
+          return navigate('/tasks/'); // Redirigir después de guardar;
         }
         console.error('La tarea no puede eliminarse:', taskDeleted.status);
         message.error('La tarea no puede eliminarse: Su estado debe ser "Nuevo"');
@@ -64,7 +65,7 @@ function Tasks() {
 
   return (
     <>
-      <h1>Listado de Tareas</h1>
+      <h2>Listado de Tareas</h2>
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : tasks.length === 0 ? (
@@ -73,6 +74,7 @@ function Tasks() {
         <>
           <List
             itemLayout="horizontal"
+            grid={{ gutter: 10, column: 1 }}
             dataSource={tasks}
             renderItem={(task) => (
               <List.Item

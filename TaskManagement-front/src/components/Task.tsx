@@ -20,8 +20,8 @@ export interface TaskData {
 
 const Task: React.FC<TaskData> = ({title, assigned_team,assigned_user,status}) => {
     return (
-      <li>
-        <p>Titulo: {title}</p>
+      <ul>
+        <h4>Titulo: {title}</h4>
         <p>Status: {status}</p>
         <p>
         Team Asignado: {typeof assigned_team === 'string' 
@@ -31,7 +31,7 @@ const Task: React.FC<TaskData> = ({title, assigned_team,assigned_user,status}) =
         <p>Responsable: {typeof assigned_user === 'string' 
         ? 'Referenciado por ID'
       : `${assigned_user?.first_name} ${assigned_user?.last_name} `}</p> 
-      </li>
+      </ul>
     );
   };
   
