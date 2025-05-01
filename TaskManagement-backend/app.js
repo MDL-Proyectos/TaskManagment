@@ -9,6 +9,7 @@ import userRouter from './routes/user.js'
 import taskRouter from './routes/task.js'
 import teamsRouter from './routes/team.js'
 import roleRouter from './routes/roles.js'
+import taskStatusRouter from './routes/TaskStatus.js'
 //import authentication from './middlewares/authentication.js'
 //import authorization from './middlewares/authorization.js'
 
@@ -30,5 +31,7 @@ app.use('/task', taskRouter)
 app.use('/users', userRouter)
 app.use('/teams', teamsRouter)
 app.use('/roles', roleRouter)
+app.use('/taskStatus', taskStatusRouter)
+
 
 export default app
