@@ -10,7 +10,7 @@ router.get('/', getAllTeams)
 router.get('/:id', getTeamById)
 router.post('/', createTeam)
 router.put('/:id', updateTeam)
-//router.delete('/:id', deleteTask)
+router.delete('/:id', deleteTeam)
 
 async function getAllTeams(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
@@ -105,6 +105,34 @@ async function createTeam(req, res, next) {
       await teamToUpdate.updateOne(req.body)
       console.log(teamToUpdate)
       res.send(teamToUpdate)
+
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async function deleteTeam(req, res, next) {
+    console.log('DELETE team ', req.body)
+    if (!req.params.id) {
+      return res.status(404).send('Parameter id not found')
+    }
+    
+  
+    //if (!req.isAdmin() && req.params.id != req.user._id) {
+    // return res.status(403).send('Unauthorized')
+    //}      
+  
+    try {
+      const teamToDelete = await  Team.findOne({ idTeam: req.params.id })
+      
+      if (!teamToDelete) {
+        console.error('Team not found')
+        return res.status(404).send('Team not found')
+      }   
+  
+      await teamToDelete.deleteOne(req.body)
+      console.log(teamToDelete)
+      res.send(teamToDelete)
 
     } catch (err) {
       next(err)
