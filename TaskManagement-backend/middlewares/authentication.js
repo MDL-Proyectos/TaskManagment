@@ -10,6 +10,7 @@ function getToken(req, next) {
   const matches = TOKEN_REGEX.exec(req.headers.authorization)
 
   if (!matches) {
+    console.log('no matchea')
     return next(new createError.Unauthorized())
   }
 
@@ -18,6 +19,7 @@ function getToken(req, next) {
 }
 
 function authentication(req, res, next) {
+  console.error('req', req.headers.authorization)
   if (!req.headers.authorization) {
     console.error('Missing authorization header')
     return next(new createError.Unauthorized())

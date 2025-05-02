@@ -80,6 +80,16 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   }
 };
 
+userSchema.method('checkPassword', async function checkPassword(potentialPassword) {
+  if (!potentialPassword) {
+    return Promise.reject(new Error('Password is required'))
+  }
+
+  const isMatch = await bcrypt.compare(potentialPassword, this.password)
+
+  return { isOk: isMatch, isLocked: this.is_deleted }
+});
+
 // Crear el modelo de Mongoose
 const User = mongoose.model('tm-user', userSchema);
 

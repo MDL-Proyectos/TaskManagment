@@ -9,11 +9,21 @@ import Task from '../schemas/task.js'
 const router = express.Router()
 
 router.get('/', getAllUsers)
+router.get('/testpss/:name', passTest)
 router.get('/:id', getUserById)
 router.post('/', createUser)
 router.put('/:id', updateUser)
 router.put('/blockUser/:id', blockUser)
 router.delete('/delete/:id', deleteUser)
+
+//prueba de hasheo
+async function passTest(req, res, next){
+  const passEncrypted = await bcrypt.hash(req.params.name, 10);
+  console.log('name pss: ', req.params.name)
+  console.log('> pss: ', passEncrypted)
+  res.send(passEncrypted) 
+}
+
 
 function toDate(input) {
   const [day, month, year] = input.split('/')
@@ -51,53 +61,77 @@ async function getUserById(req, res, next) {
   }
 }
 
-async function createUser(req, res, next) {
-  console.log('createUser: ', req.body)
 
-  const user = req.body
+const saltRounds = 10; // Define el número de rondas de hashing
+
+async function createUser(req, res, next) {
+  console.log('createUser: ', req.body);
+
+  const user = req.body;
 
   try {
-     //valido mail 
-    const isNew = await User.findOne({ email: user.email })
-    if (isNew) {
+    // 1. Validar que los campos obligatorios estén presentes
+    if (!user.email || !user.password || !user.role || !user.team) {
+      return res.status(400).send('Faltan campos obligatorios (email, password, role, team).');
+    }
+
+    // 2. Validar el formato del email (opcional, pero recomendado)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      return res.status(400).send('Formato de email inválido.');
+    }
+
+    // 3. Verificar si el usuario ya existe por email (código de estado 409 Conflict es más apropiado)
+    const existingUser = await User.findOne({ email: user.email });
+    if (existingUser) {
       console.log('El usuario ya existe.');
-      return res.status(404).send('El usuario ya existe.');
+      return res.status(409).send('El usuario con este email ya existe.');
     }
 
-    const role = await Role.findOne({ name: user.role })
+    // 4. Buscar el rol
+    const role = await Role.findOne({ name: user.role });
     if (!role) {
-      return res.status(404).send('Role not found');
+      return res.status(400).send('Role no encontrado.'); // Código 400 porque el cliente envió un rol inválido
     }
 
-    const team = await Team.findOne({ idTeam: user.team })
+    // 5. Buscar el equipo
+    const team = await Team.findOne({ idTeam: user.team });
     if (!team) {
-      return res.status(404).send('Team not found');
+      return res.status(400).send('Equipo no encontrado.'); // Código 400 porque el cliente envió un team inválido
     }
 
-    //const passEncrypted = await bcrypt.hash(user.password, 10)
+    // 6. Hashear la contraseña ANTES de crear el usuario
+    const passEncrypted = await bcrypt.hash(user.password, saltRounds);
 
+    // 7. Crear el nuevo usuario
     const userCreated = await User.create({
       ...user,
+      password: passEncrypted, // Usar la contraseña hasheada
       team: team._id,
-      //password: user.password, //descativado el bcrypt
       role: role._id,
-    })
+    });
 
-    res.send(userCreated)
+    // 8. Responder con el usuario creado (no enviar la contraseña hasheada)
+    const { password: removedPassword, ...userWithoutPassword } = userCreated.toObject();
+    res.status(201).send(userWithoutPassword); // Código 201 Created para indicar creación exitosa
+
   } catch (err) {
-    next(err)
+    console.error('Error al crear usuario:', err);
+    next(err); // Pasar el error al siguiente middleware de manejo de errores
   }
 }
 
 const getUserByField = async (fieldSearch, value) => {
   try {
     const user = await User.findOne({ [fieldSearch]: value });
-    return user; 
+    return user;
   } catch (error) {
     console.error('Error al buscar el usuario', error);
-    throw error;  // Si ocurre un error, lo lanzamos
+    throw error; // Si ocurre un error, lo lanzamos para que lo maneje el llamador
   }
 };
+
+export { createUser, getUserByField }; // Exporta ambas funciones si las vas a usar en otros módulos
 
 async function updateUser(req, res, next) {
   console.log('updateUser with id: ', req.params.id)

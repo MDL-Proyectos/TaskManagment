@@ -1,6 +1,6 @@
 function authorization(req, res, next) {
   req.isAdmin = function isAdmin() {
-    return req.user && req.user.role === 'admin'
+    return req.user && req.user.role === 'lider'
   }
 
   req.isClient = function isClient() {
