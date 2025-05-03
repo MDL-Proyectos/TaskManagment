@@ -19,7 +19,7 @@ function getToken(req, next) {
 }
 
 function authentication(req, res, next) {
-  console.error('req', req.headers.authorization)
+  //console.error('req', req.headers.authorization)
   if (!req.headers.authorization) {
     console.error('Missing authorization header')
     return next(new createError.Unauthorized())

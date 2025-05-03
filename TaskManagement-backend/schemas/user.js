@@ -17,7 +17,8 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    minlength: 6  // Validación mínima para la contraseña
+    minlength: 6,  // Validación mínima para la contraseña
+    select: false
   },
   team: { 
     type: ObjectId, 

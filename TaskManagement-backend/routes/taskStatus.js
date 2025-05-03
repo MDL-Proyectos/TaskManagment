@@ -13,7 +13,7 @@ router.put('/:name', updateTaskStatus)
 router.delete('/:name', deleteTaskStatus)
 
 async function getAllTaskStatus(req, res, next) {
-    console.log('getAllTaskStatus...')
+    //console.log('getAllTaskStatus...')
     try {
      
       const status = await TaskStatus.find({})
@@ -24,7 +24,7 @@ async function getAllTaskStatus(req, res, next) {
 }
 
 async function getTaskStatusByName(req, res, next) {
-  console.log('getTaskStatusByName by name ', req.params.name)
+  //console.log('getTaskStatusByName by name ', req.params.name)
   try {
     
     const status = await TaskStatus.findOne({ name: req.params.name })
@@ -37,12 +37,21 @@ async function getTaskStatusByName(req, res, next) {
 async function createTaskStatus(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const status = req.body
-    try {
 
-      const taskStatusCreating = await await TaskStatus.create({
-        ...status
-      })
-      res.send(taskStatusCreating)
+    try {
+      const statusNew = await TaskStatus.findOne({name: status.name})
+
+    if (statusNew)
+    {
+     console.log('TaskStatus Exist');
+      return res.status(404).send('TaskStatus exist.');
+    }
+    const taskStatusCreating = await TaskStatus.create({
+      ...status
+    })
+    res.send(taskStatusCreating)
+
+      
     } catch (err) {
       next(err)
     }
@@ -59,7 +68,7 @@ async function createTaskStatus(req, res, next) {
       const taskStatusUpdated = await TaskStatus.findOne({name : req.params.name});
      
       if (!taskStatusUpdated) {
-        res.status(404).send('TaskStatus not found');
+        console.log('TaskStatus not found');
         return res.status(400).send('TaskStatus not found');
       } 
       await taskStatusUpdated.updateOne(req.body)
