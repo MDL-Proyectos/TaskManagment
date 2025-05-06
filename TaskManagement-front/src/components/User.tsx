@@ -1,4 +1,3 @@
-import React from 'react';
 
 export interface UsuarioData {
   _id: string;
@@ -14,8 +13,7 @@ export interface UsuarioData {
   phone?: string;             // Teléfono (opcional)
   is_deleted?: boolean;       // Eliminación lógica (opcional, por defecto `false`)
 }
-
-const Usuario: React.FC<UsuarioData> = ({ first_name, last_name, email, role, observations, phone, team }) => {
+const Usuario = ({ first_name, last_name, email, role, phone, team }: UsuarioData) => {
   return (
     <li>
       <p>Nombre: {first_name} {last_name}</p>
@@ -29,9 +27,7 @@ const Usuario: React.FC<UsuarioData> = ({ first_name, last_name, email, role, ob
           ? 'Referenciado por ID' 
           : `${team?.name}`}
       </p>
-
       {phone && <p>Teléfono: {phone}</p>}
-      {observations && <p>Observaciones: {observations}</p>}
     </li>
   );
 };

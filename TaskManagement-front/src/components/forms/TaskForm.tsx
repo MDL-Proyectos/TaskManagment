@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, DatePicker, Form, Input, message, Select } from 'antd';
 import TaskServices from '../../routes/TaskServices.tsx';
 import UserServices from '../../routes/UserServices.tsx';
-import dayjs from 'dayjs'; //esto me permite ajutar los formatos de fechas y corregirlos en el momento de visualizarlo
+import dayjs from 'dayjs'; //esto me permite ajustar los formatos de fechas y corregirlos en el momento de visualizarlo
 import { UsuarioData } from '../User.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import { TeamData } from '../Team.tsx';
@@ -12,13 +12,13 @@ type SizeType = Parameters<typeof Form>[0]['size'];
 
 dayjs.extend(utc);
 
-const TaskForm: React.FC = () => {
+const TaskForm = () => {
   const { idTask } = useParams<{ idTask: string }>(); // ID desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
-  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la listlista de usuarios
+  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
@@ -27,7 +27,7 @@ const TaskForm: React.FC = () => {
   // Función para obtener los datos de la tarea desde el backend
   const fetchTask = async () => {
     try {
-      const response = await TaskServices.getTaskById(idTask as string); // Llama al servicio para obtener los datos
+      const response = await TaskServices.getTaskById(idTask as string); 
       const mappedData = {
         ...response,
         created_at: response.created_at ? dayjs(response.created_at, 'DD-MM-YYYY') : null,

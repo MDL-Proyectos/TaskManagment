@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -16,7 +16,7 @@ import { UsuarioData } from '../User.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
-const TeamForm: React.FC = () => {
+const TeamForm = () => {
   const { idTeam } = useParams<{ idTeam: string }>(); // ID desde la URL
   const [isEditMode, setIsEditMode] = useState<boolean>(!!idTeam); // Determina el modo (edición/creación)
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
@@ -61,12 +61,11 @@ const TeamForm: React.FC = () => {
     }
   };
 
-  // Ejecutar fetchTeam cuando el componente se monta
+  // Ejecutar fetchTeam cuando el componente se carga
   useEffect(() => {
     fetchUsers();
     if (idTeam) {
         fetchTeam();
-        //console.log(idTeam);
     }
   }, [idTeam, form]);
 
@@ -78,7 +77,7 @@ const TeamForm: React.FC = () => {
       await TeamService.updateTeam(idTeam as string, values); // Llama a tu endpoint de actualización
       message.success('Team actualizado correctamente');
       }else{
-        await TeamService.createTeam(values); // Llama a tu endpoint de actualización
+        await TeamService.createTeam(values); // Llama a tu endpoint de creación
         message.success('Team creado correctamente');
       }
       navigate('/teams'); 

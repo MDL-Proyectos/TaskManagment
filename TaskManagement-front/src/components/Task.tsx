@@ -17,8 +17,7 @@ export interface TaskData {
   authorized_by?: {_id: string; first_name: string; last_name: string}; // Usuario que autoriza la tarea (opcional)
   observations?: string; // Observaciones adicionales (opcional, por defecto es una cadena vacía)
 }
-
-const Task: React.FC<TaskData> = ({title, assigned_team,assigned_user,status}) => {
+const Task  = ({title, assigned_team,assigned_user,status}: TaskData) => {
     return (
       <ul>
         <h4>Titulo: {title}</h4>

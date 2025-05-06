@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -12,7 +12,7 @@ import userService from '../../routes/UserServices.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
-const RoleForm: React.FC = () => {
+const RoleForm = () => {
   const { name } = useParams<{ name: string }>(); // ID desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default'); //Antd
   const [isEditMode, setIsEditMode] = useState<boolean>(!!name); // Determina el modo (edición/creación)
@@ -22,7 +22,7 @@ const RoleForm: React.FC = () => {
     setComponentSize(size);
   };
 
-  // Función para obtener los datos del usuario desde el backend
+  // Función para obtener los datos del usuario 
   const fetchRole = async () => {
     try {
       const response = await RoleServices.getRoleByName(name as string); // Llama al servicio para obtener los datos
@@ -52,7 +52,6 @@ const validaNombre = async (name: string): Promise<boolean> => {
       return !existingRole;
     } catch (error) {
       console.error('Error al validar el nombre del Rol:', error);
-      // En caso de error en la validación, asumimos que el nombre no es válido
       return false;
     }
   };
@@ -61,7 +60,7 @@ const validaNombre = async (name: string): Promise<boolean> => {
 const validacionUsuarios = async (name: string): Promise<boolean> => {
   try {
     const userList = await userService.getUsers();
-      // Busca si algún usuario tiene asignado el rol con el nombre proporcionado
+      // Busca si algún usuario tiene asignado el rol con el nombre 
       const isRoleUsed = userList.some((user: any) => user.role === name);
 
       return isRoleUsed; 
@@ -118,8 +117,6 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
           return; // Detenemos el flujo en caso de error
         }
       }
-  
-      // Redirigir después de guardar
       navigate('/users/role');
     } catch (error) {
       console.error('Error eliminar el Rol:', error);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -17,13 +17,13 @@ import { TeamData } from '../Team.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
-const UserForm: React.FC = () => {
+const UserForm = () => {
   const { userid } = useParams<{ userid: string }>(); // ID del usuario desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
   const [roles, setRoles] = useState<RoleData[]>([]); // Estado para almacenar la listlista de usuarios
-  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la listlistlista de usuarios
+  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
@@ -80,18 +80,6 @@ const UserForm: React.FC = () => {
     }
   }, [userid, form]);
 
-  // Función para manejar la actualización del usuario
- /* const handleUpdate = async (values: UsuarioData) => {
-    try {
-      console.log('Valores enviados para actualizar:', values);
-      await UserServices.updateUser(userid as string, values); // Llama a tu endpoint de actualización
-      message.success('Usuario actualizado correctamente');
-      navigate('/'); // Redirige al listado de usuarios
-    } catch (error) {
-      console.error('Error al actualizar el usuario:', error);
-      message.error('No se pudo actualizar el usuario.');
-    }    
-  };*/
 
    // Manejo de creación o edición
    const handleFinish = async (values: any) => {
@@ -101,7 +89,7 @@ const UserForm: React.FC = () => {
         // Editar usuario
         await UserServices.updateUser(userid, values);
         message.success('Usuario actualizado correctamente');
-        navigate('/users'); // Redirigir tras guardar
+        navigate('/users'); // Redirigir 
       } else {
         // Crear usuario
         const isNew = await UserServices.getUsers();
@@ -109,7 +97,7 @@ const UserForm: React.FC = () => {
         if(!existingUser) {
           await UserServices.createUser(values); // Llama al endpoint de creación
           message.success('Usuario creado correctamente');
-          return navigate('/users'); // Redirigir tras guardars
+          return navigate('/users'); // Redirigir
         }
         message.error('El correo ya se encuentra registrado.');        
       }
@@ -128,7 +116,6 @@ const UserForm: React.FC = () => {
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
-     // onFinish={handleUpdate} // Maneja el envío del formulario
      onFinish={handleFinish} // Maneja el envío del formulario
     >
       <Form.Item

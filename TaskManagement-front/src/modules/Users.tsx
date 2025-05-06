@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, List, Skeleton } from 'antd';
+import { Avatar, Button, List } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
 import { UsuarioData } from '../components/User.tsx';
 
 //const count = 3; // Número de usuarios por "página"
 
-const Users: React.FC = () => {
+const Users = () => {
   const [initLoading, setInitLoading] = useState(true);
   const [data, setData] = useState<UsuarioData[]>([]);
   const [list, setList] = useState<UsuarioData[]>([]);
@@ -24,7 +24,6 @@ const Users: React.FC = () => {
     }
   };
 
-  // Ejecutar fetchUsers cuando el componente se monta
   useEffect(() => {
     fetchUsers();
   }, []);

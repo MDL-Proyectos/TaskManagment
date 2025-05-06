@@ -5,7 +5,7 @@ export interface TeamData {
   is_deleted?: boolean;       // Eliminación lógica 
 }
 
-const Team: React.FC<TeamData> = ({idTeam, name,liderTeam}) => {
+const Team = ({idTeam, name,liderTeam}: TeamData) => {
     return (
       <li>
         <p>Identificación: {idTeam}</p>
