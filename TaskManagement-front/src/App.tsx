@@ -1,43 +1,97 @@
-import './App.css'
-import Home from './modules/Home.tsx'
-import Layout from './modules/Layout.tsx'
-import Users from './modules/Users.tsx'
-import Tasks from './modules/Tasks.tsx'
-import Teams from './modules/Teams.tsx'
-import TeamForm from './components/forms/TeamForm.tsx'
-import UserForm from './components/forms/UserForm.tsx'
-import NotFound from './modules/NotFound.tsx'
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import TaskForm from './components/forms/TaskForm.tsx'
-import Role from './modules/Role.tsx'
-import RoleForm from './components/forms/RoleForm.tsx'
+import './App.css';
+import Home from './modules/Home.tsx';
+import Layout from './modules/Layout.tsx';
+import Users from './modules/Users.tsx';
+import Tasks from './modules/Tasks.tsx';
+import Teams from './modules/Teams.tsx';
+import TeamForm from './components/forms/TeamForm.tsx';
+import UserForm from './components/forms/UserForm.tsx';
+import NotFound from './modules/NotFound.tsx';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
+import TaskForm from './components/forms/TaskForm.tsx';
+import Role from './modules/Role.tsx';
+import RoleForm from './components/forms/RoleForm.tsx';
+import Login from './modules/Login.tsx';
+import { AuthProvider, useAuth } from './contexts/authContext.tsx';
 
 function App() {
-
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="Users" element={<Users />} />
-            <Route path="teams" element={<Teams />} />
-            <Route path="tasks" element={<Tasks />} />
-            <Route path="/users/role/" element={<Role />} />
-            <Route path="/users/:userid" element={<UserForm />} />
-            <Route path="/users/role/:name" element={<RoleForm />} />
-            <Route path="/users/create" element={<UserForm />} />
-            <Route path="/users/role/create" element={<RoleForm />} />
-            <Route path="/teams/:idTeam" element={<TeamForm />} />
-            <Route path="/teams/new" element={<TeamForm />} />
-            <Route path="/tasks/:idTask" element={<TaskForm />} />
-            <Route path="/tasks/new" element={<TaskForm />} />
-            <Route path="*" element={<NotFound />} />            
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </div>
-  )
+  );
 }
 
-export default App
+function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+      />
+      <Route element={<Layout />}>
+        <Route
+          path="/"
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="Users"
+          element={isAuthenticated ? <Users /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="teams"
+          element={isAuthenticated ? <Teams /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="tasks"
+          element={isAuthenticated ? <Tasks /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users/role/"
+          element={isAuthenticated ? <Role /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users/:userid"
+          element={isAuthenticated ? <UserForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users/role/:name"
+          element={isAuthenticated ? <RoleForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users/create"
+          element={isAuthenticated ? <UserForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/users/role/create"
+          element={isAuthenticated ? <RoleForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/teams/:idTeam"
+          element={isAuthenticated ? <TeamForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/teams/new"
+          element={isAuthenticated ? <TeamForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/tasks/:idTask"
+          element={isAuthenticated ? <TaskForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/tasks/new"
+          element={isAuthenticated ? <TaskForm /> : <Navigate to="/login" />}
+        />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;
