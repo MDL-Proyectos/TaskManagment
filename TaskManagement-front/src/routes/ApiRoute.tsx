@@ -28,7 +28,7 @@ api.interceptors.response.use(
 )*/
 
 api.interceptors.response.use(
-  (response) => response.data, // Aquí asegúrate de devolver solo los datos
+  (response) => response, // Aquí asegúrate de devolver solo los datos -  (response) => response.data
   (error) => {
     console.error('API Error:', error);
     return Promise.reject(error);
