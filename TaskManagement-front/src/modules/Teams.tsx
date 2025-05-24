@@ -12,6 +12,11 @@ function Teams() {
   const fetchTeams = async () => {
     try {
       const data = await TeamService.getAllTeams(); // Llama directamente al método del servicio
+     
+      if (!Array.isArray(data)) {
+        console.error('La respuesta de equipos no es un array:', data);
+        return;
+      }
       setTeam(data); // Actualiza el estado con los datos recibidos
       //console.log(await TeamService.getAllTeams());
     } catch (error) {

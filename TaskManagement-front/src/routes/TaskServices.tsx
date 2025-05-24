@@ -2,8 +2,16 @@ import api from './ApiRoute';
 import { TaskData } from '../components/Task';
  
 const userService = {
-  getAllTask: (): Promise<TaskData[]> => api.get('/task'),
-  getTaskById: (id: string): Promise<TaskData> => api.get(`/task/${id}`),
+ 
+  getAllTask: async (): Promise<TaskData[]> =>{
+    const response = await api.get('/task');
+    return response.data; // Aquí sí es el array
+  },    
+  getTaskById: async (id: string): Promise<TaskData> => {
+    const response = await api.get(`/task/${id}`);
+    console.log('Respuesta de la tarea:', response.data);
+    return response.data;
+  },
   updateTask: async (id: any, values: TaskData) => {
     try {
       const response = await api.put(`/task/${id}`, values); 

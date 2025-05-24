@@ -4,21 +4,29 @@ import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../components/Task.tsx';
 
+
 function Tasks() {
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [initLoading, setInitLoading] = useState(true); // Estado para controlar el loading
   const navigate = useNavigate();
 
-  const fetchTasks = async () => {
-    try {
-      const data = await TaskServices.getAllTask();
-      setTasks(data); // Actualizar tareas
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    } finally {
-      setInitLoading(false); // Desactivar loading
+ const fetchTasks = async () => {
+  try {
+    const data = await TaskServices.getAllTask();
+    console.log('Datos de tareas recibidos:', data); // Verificar los datos recibidos
+    if (Array.isArray(data)) {
+      setTasks(data); // Actualizar tareas solo si es un array
+    } else {
+      setTasks([]); // Si no es un array, deja tasks vacío
+      console.error('La respuesta de tareas no es un array:', data);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    setTasks([]); // En caso de error, deja tasks vacío
+  } finally {
+    setInitLoading(false); // Desactivar loading
+  }
+};
 
   useEffect(() => {
     fetchTasks(); // Cargar las tareas cuando el componente se carga
@@ -53,8 +61,15 @@ function Tasks() {
       message.error('No se pudo eliminar la tarea.');
     }
   };
+  const ocultarColumna = true;
 
   const columns = [
+    {
+      title: 'idTask',
+      dataIndex: '_id',
+      key: '_id',
+      hidden: ocultarColumna
+    },
     {
       title: 'Título',
       dataIndex: 'title',
@@ -109,7 +124,7 @@ function Tasks() {
   ];
 
   const dataSource = tasks.map((task) => ({
-    key: task._id,
+    _id: task._id,
     title: task.title,
     assigned_team: task.assigned_team,
     assigned_user: task.assigned_user,

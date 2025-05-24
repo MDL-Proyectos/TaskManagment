@@ -2,8 +2,14 @@ import api from './ApiRoute';
 import { RoleData } from '../components/Role';
  
 const RoleServices = {
-  getAllRole: (): Promise<RoleData[]> => api.get('/roles'),
-  getRoleByName: (name: string): Promise<RoleData> => api.get(`/roles/${name}`),
+  
+  getAllRole: async (): Promise<RoleData[]> => {
+    const response = await api.get('/roles')
+  return response.data; },
+  getRoleByName: async (name: string): Promise<RoleData> => {
+    const response = await api.get(`/roles/${name}`);
+    return response.data;
+  },
   createRole: async (RoleData: any) => {
     const response = await api.post('/roles', RoleData);
     return response.data;

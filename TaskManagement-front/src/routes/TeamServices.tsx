@@ -2,8 +2,14 @@ import api from './ApiRoute';
 import { TeamData } from '../components/Team';
  
 const TeamService = {
-  getAllTeams: (): Promise<TeamData[]> => api.get('/teams'),
-  getTeamById: (id: string): Promise<TeamData> => api.get(`/teams/${id}`),
+  getAllTeams: async (): Promise<TeamData[]> => {
+    const response = await api.get('/teams');
+    return response.data; // Aquí sí es el array
+  },
+  getTeamById: async (id: string): Promise<TeamData> => {
+    const response = await api.get(`/teams/${id}`);
+    return response.data;
+  },
   updateTeam: async (id: any, values: TeamData) => {
     try {
       const response = await api.put(`/teams/${id}`, values); 
