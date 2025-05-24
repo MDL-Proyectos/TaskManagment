@@ -2,17 +2,16 @@ import { useState } from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import {
   QuestionCircleOutlined,
-  PhoneOutlined,
   HomeOutlined,
   TeamOutlined,
-  MailOutlined,
   UserOutlined,
   BookOutlined,
   IdcardOutlined
 } from '@ant-design/icons'
-import { Layout, Menu, theme } from 'antd'
-
+import { Button, Layout, Menu, theme } from 'antd'
+import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout
+import { useAuth } from '../contexts/authContext.tsx';
 
 function getItem(label: any, key: any, icon:any, children?: any) {
   return {
@@ -22,6 +21,7 @@ function getItem(label: any, key: any, icon:any, children?: any) {
     label,
   }
 }
+
 
 const items = [
   getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />),
@@ -35,7 +35,17 @@ const items = [
 ]
 
 const App = () => {
+   
   const [collapsed, setCollapsed] = useState(false)
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+
   const {
     token: { colorBgContainer },
   } = theme.useToken()
@@ -69,6 +79,14 @@ const App = () => {
           }}
         >
           <h2>Task-Management</h2>
+          <Button
+            type="primary"
+            danger
+            style={{ marginRight: 24 }}
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
         </Header>
         <Content
           style={{
@@ -88,6 +106,7 @@ const App = () => {
             <Outlet />
           </div>
         </Content>
+        
         <Footer
           style={{
             textAlign: 'center',

@@ -28,6 +28,7 @@ function App() {
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
+  console.log('isAuthenticated', isAuthenticated);
 
   return (
     <Routes>
@@ -39,6 +40,10 @@ function AppRoutes() {
         <Route
           path="/"
           element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/logout"
+          element={isAuthenticated ? <Navigate to="/logout" /> : <Login />}
         />
         <Route
           path="Users"
