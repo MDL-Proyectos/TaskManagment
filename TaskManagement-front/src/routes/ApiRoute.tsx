@@ -9,17 +9,17 @@ const api = axios.create({
   },
 })
 
-/*api.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
-    const data = localStorage.get() // Before request is sent
-    if (data) { 
-      config.headers.common.Authorization = `${data.token}`
-    }
-    return config
+     const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
   },
   (error) => Promise.reject(error) // Do something with request error
 )
-
+/*
 api.interceptors.response.use(
   (response) => response.data, // Do something with response data
   (error) =>

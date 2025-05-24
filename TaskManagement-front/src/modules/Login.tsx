@@ -1,65 +1,33 @@
-import { useState } from 'react'
 import { Button, Checkbox, Form, Input } from 'antd';
 import AuthServices from '../routes/LoginRoute.tsx';
-import { useAuth } from '../contexts/authContext.tsx'; // Importa el hook useAuth
+import { useAuth } from '../contexts/authContext.tsx'; 
 
 type FieldType = {
     email?: string;
     password?: string;
     remember?: string;
   };
+  const Login = () => {
+  const { login} = useAuth();  
+  const handleLogin = async (values: FieldType) => {
+    const { email, password } = values;
+    if (!email || !password) return;
 
-  const Login = (props: { login: (arg0: string) => void }) => {
-    const [email, setUser] = useState('');
-    const [password, setPassword] = useState('');
-    const { setToken, setUser: setAuthUser } = useAuth();
-  
-    async function doLogin() {
-      let data = {
-        email: email,
-        password: password,
-      };
-      console.log('Datos a enviar al backend:', data);
-      try {
-        const response = await AuthServices.logIn(data);
-        console.log('res: ', response)
-        return response; // Ahora 'response' será lo que devuelve AuthServices.logIn (response.data)
-      } catch (error) {
-        console.error('Error en doLogin:', error);
-        throw error; // Re-lanza el error para que lo capture el .catch en handleLogin
+    try {
+      const response = await AuthServices.logIn({ email, password });
+      if (response && response.token && response.user) {
+        login(response.token, response.user);
+        // Aquí puedes redirigir o mostrar mensaje de éxito
+      } else {
+        // Maneja error de credenciales
+        console.log('Credenciales incorrectas o error en la respuesta del servidor');
       }
+    } catch (error) {
+      console.error('Error en la llamada al login:', error);
+      // Muestra mensaje de error al usuario
     }
-  
-    function handleLogin() {
-      console.log('Ingresa a handleLogin');
-      doLogin()
-        .then((data) => { // 'response' de doLogin ahora es 'data'
-         // console.log('Respuesta del login:', data);
-          if (data && data.token) { // Ejemplo: verifica si la respuesta tiene un token
-            console.log('Login exitoso! Token:', data.token);
-            setToken(data.token); // Almacena el token en el contexto
-            setAuthUser(data.user); // Almacena la información del usuario en el contexto (opcional)
-            props.login('ok'); // Notifica al padre
-            // Redirige al usuario, etc.
-          } else {
-            console.log('Credenciales incorrectas o error en la respuesta del servidor');
-            // Aquí deberías mostrar un mensaje de error al usuario
-          }
-        })
-        .catch((error) => {
-          console.error('Error en la llamada al login:', error);
-          // Aquí deberías mostrar un mensaje de error al usuario
-        });
-    }
+  };
 
-    function handleUser(e: any) {
-        setUser(e.target.value)
-
-    }
-
-    function handlePass(e: any) {
-        setPassword(e.target.value)
-    }
 
     return (
         <div 
@@ -77,11 +45,11 @@ type FieldType = {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          label="Username"
+          label="Email"
           name="email"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input onChange={(e) => handleUser(e)} />
+          <Input />
         </Form.Item>
     
         <Form.Item<FieldType>
@@ -90,7 +58,7 @@ type FieldType = {
           rules={[{ required: true, message: 'Please input your password!'}]}
          
         >
-          <Input.Password onChange={(e) => handlePass(e)}/>
+          <Input.Password />
         </Form.Item>
     
         <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
