@@ -44,7 +44,7 @@ function AppRoutes() {
         <Route path="/users/create" element={<UserForm />} />
         <Route path="/users/:userid" element={<UserForm />} />
         <Route path="/tasks" element={<Tasks />} />
-        <Route path="/tasks/create" element={<TaskForm />} />
+        <Route path="/tasks/new" element={<TaskForm />} />
         <Route path="/tasks/:idTask" element={<TaskForm />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/create" element={<TeamForm />} />
