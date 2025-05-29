@@ -18,7 +18,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -26,7 +26,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(localStorage.getItem('authToken'));
-  console.log('token', token);
+  
   const [user, setUserState] = useState<AuthUser | null>(null);
 
   const setToken = (newToken: string | null) => {
@@ -40,12 +40,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const setUser = (newUser: AuthUser | null) => {
     setUserState(newUser);
-    // Si quieres persistir el usuario, puedes usar localStorage aquí también
-    // if (newUser) {
-    //   localStorage.setItem('authUser', JSON.stringify(newUser));
-    // } else {
-    //   localStorage.removeItem('authUser');
-    // }
   };
 
   const isAuthenticated = !!token;
@@ -59,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log('logout');
     setToken(null);
     setUser(null);
-    // Puedes agregar redirección aquí si lo necesitas
+    
   };
 
   return (

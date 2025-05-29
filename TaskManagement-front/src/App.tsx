@@ -13,6 +13,7 @@ import Role from './modules/Role.tsx';
 import RoleForm from './components/forms/RoleForm.tsx';
 import Login from './modules/Login.tsx';
 import { AuthProvider, useAuth } from './contexts/authContext.tsx';
+import ProtectedRoute from './layout/ProtectedRoute.tsx';
 
 function App() {
   return (
@@ -36,65 +37,26 @@ function AppRoutes() {
         path="/login"
         element={isAuthenticated ? <Navigate to="/" /> : <Login />}
       />
+      <Route element={<ProtectedRoute />}>
       <Route element={<Layout />}>
-        <Route
-          path="/"
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/logout"
-          element={isAuthenticated ? <Navigate to="/logout" /> : <Login />}
-        />
-        <Route
-          path="Users"
-          element={isAuthenticated ? <Users /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="teams"
-          element={isAuthenticated ? <Teams /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="tasks"
-          element={isAuthenticated ? <Tasks /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/users/role/"
-          element={isAuthenticated ? <Role /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/users/:userid"
-          element={isAuthenticated ? <UserForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/users/role/:name"
-          element={isAuthenticated ? <RoleForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/users/create"
-          element={isAuthenticated ? <UserForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/users/role/create"
-          element={isAuthenticated ? <RoleForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/teams/:idTeam"
-          element={isAuthenticated ? <TeamForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/teams/new"
-          element={isAuthenticated ? <TeamForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/tasks/:idTask"
-          element={isAuthenticated ? <TaskForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/tasks/new"
-          element={isAuthenticated ? <TaskForm /> : <Navigate to="/login" />}
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/create" element={<UserForm />} />
+        <Route path="/users/:userid" element={<UserForm />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/tasks/create" element={<TaskForm />} />
+        <Route path="/tasks/:idTask" element={<TaskForm />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/teams/create" element={<TeamForm />} />
+        <Route path="/teams/:idTeam" element={<TeamForm />} />
+        <Route path="/users/role" element={<Role />} />
+        <Route path="/users/role/create" element={<RoleForm />} />
+        <Route path="/users/role/:name" element={<RoleForm />} />
+
         <Route path="*" element={<NotFound />} />
       </Route>
+      </Route>
+      
     </Routes>
   );
 }

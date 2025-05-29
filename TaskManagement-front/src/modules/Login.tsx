@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import AuthServices from '../routes/LoginRoute.tsx';
 import { useAuth } from '../contexts/authContext.tsx'; 
+import Password from 'antd/es/input/Password';
 
 type FieldType = {
     email?: string;
@@ -47,7 +48,7 @@ type FieldType = {
         <Form.Item<FieldType>
           label="Email"
           name="email"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[{ required: true, message: 'Por favor, ingresa tu email!' }]}
         >
           <Input />
         </Form.Item>
@@ -55,8 +56,7 @@ type FieldType = {
         <Form.Item<FieldType>
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!'}]}
-         
+          rules={[{ required: true, message: 'Por favor, ingresa tu contraseña!' }]}
         >
           <Input.Password />
         </Form.Item>
