@@ -246,7 +246,20 @@ const TaskForm = () => {
                 >
                   <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
                 </Form.Item>
-
+                <Form.Item
+                  {...restField}
+                  label="Autor"
+                  name={[name, 'author']}
+                  
+                >
+                  <Select placeholder="Selecciona un autor">
+                    {users.map((user) => (
+                      <Select.Option key={user._id} value={user._id}>
+                        {user.first_name} {user.last_name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
                 <Button type="link" danger onClick={() => remove(name)}>
                   Eliminar Comentario
                 </Button>
