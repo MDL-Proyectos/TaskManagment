@@ -1,5 +1,5 @@
 import api from './ApiRoute';
-import { UsuarioData } from '../components/User';
+import { UsuarioData } from '../entities/User';
  
 const userService = {
   

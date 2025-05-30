@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import RoleServices from '../routes/RoleServices';
-import { RoleData } from '../components/Role';
+import { RoleData } from '../entities/Role';
 //import userService from '../../services/users'
 import { List } from 'antd';
 import { Avatar, Button } from 'antd';

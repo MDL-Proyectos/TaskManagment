@@ -1,5 +1,5 @@
 import api from './ApiRoute';
-import { TeamData } from '../components/Team';
+import { TeamData } from '../entities/Team';
  
 const TeamService = {
   getAllTeams: async (): Promise<TeamData[]> => {

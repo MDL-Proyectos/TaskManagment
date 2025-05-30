@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Skeleton, Button, message, Table } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
-import { TaskData } from '../components/Task.tsx';
+import { TaskData } from '../entities/Task.tsx';
 
 
 function Tasks() {

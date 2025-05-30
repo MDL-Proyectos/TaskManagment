@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { TeamData } from '../components/Team';
+import { TeamData } from '../entities/Team';
 import { useNavigate } from 'react-router-dom';
 import TeamService from '../routes/TeamServices';
 //import userService from '../../services/users'

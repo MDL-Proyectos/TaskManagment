@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, Button, List } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
-import { UsuarioData } from '../components/User.tsx';
+import { UsuarioData } from '../entities/User.tsx';
 
 //const count = 3; // Número de usuarios por "página"
 

@@ -10,10 +10,10 @@ import {
 } from 'antd';
 import UserServices from '../../routes/UserServices.tsx';
 //import RoleService from '../../routes/RoleServices.tsx';
-import { RoleData } from '../Role.tsx';
+import { RoleData } from '../../entities/Role.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import RoleServices from '../../routes/RoleServices.tsx';
-import { TeamData } from '../Team.tsx';
+import { TeamData } from '../../entities/Team.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 

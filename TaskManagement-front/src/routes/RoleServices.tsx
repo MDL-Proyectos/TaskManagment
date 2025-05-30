@@ -1,5 +1,5 @@
 import api from './ApiRoute';
-import { RoleData } from '../components/Role';
+import { RoleData } from '../entities/Role';
  
 const RoleServices = {
   

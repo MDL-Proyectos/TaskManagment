@@ -9,10 +9,10 @@ import {
   Select
 } from 'antd';
 import TeamServices from '../../routes/TeamServices.tsx';
-import { TeamData } from '../Team.tsx';
+import { TeamData } from '../../entities/Team.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import UserServices from '../../routes/UserServices.tsx';
-import { UsuarioData } from '../User.tsx';
+import { UsuarioData } from '../../entities/User.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 

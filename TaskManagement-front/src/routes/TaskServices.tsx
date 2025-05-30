@@ -1,5 +1,5 @@
 import api from './ApiRoute';
-import { TaskData } from '../components/Task';
+import { TaskData } from '../entities/Task';
  
 const userService = {
  
