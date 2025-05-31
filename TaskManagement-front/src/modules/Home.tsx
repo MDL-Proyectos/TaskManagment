@@ -1,24 +1,17 @@
 import { useEffect, useState } from 'react'
+import { useAuth } from '../contexts/authContext';
 //import userService from '../../services/users'
 
 function Home() {
-  const [apiInfo, setApiInfo] = useState({})
-  useEffect(() => {
-    /*const fetchData = async () => {
-      const response = await userService.getRoot()
-      setApiInfo(response)
-    }
-    fetchData()*/
-  }, [])
+  
+   const { user } = useAuth();
+  //console.log('user:', user); 
 
   return (
     <>
-      <h1>Bienvenido, Usuario</h1>
-      {apiInfo && (
-        <h3>
-          Gestionemos tus tareas!
-        </h3>
-      )}
+      <h1>Bienvenido, {user?.first_name}</h1>
+
+        <h3>Gestionemos tus tareas!</h3>
     </>
   )
 }

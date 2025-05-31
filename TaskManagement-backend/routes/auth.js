@@ -42,7 +42,7 @@ async function createUserToken(req, res, next) {
     }
 
     const response = await generateUserToken(req, user)
-
+    //console.log(user.toJSON())
     res.status(201).json(response)
   } catch (err) {
     next(err)

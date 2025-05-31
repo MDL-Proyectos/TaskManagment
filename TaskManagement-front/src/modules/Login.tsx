@@ -60,11 +60,7 @@ type FieldType = {
         >
           <Input.Password />
         </Form.Item>
-    
-        <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-    
+      
         <Form.Item label={null}>
           <Button type="primary" htmlType="submit">
             Submit
@@ -77,3 +73,7 @@ type FieldType = {
 };
 
 export default Login;
+
+/*        <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>*/
