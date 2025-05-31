@@ -1,6 +1,7 @@
 import './App.css';
 import Home from './modules/Home.tsx';
 import Layout from './layout/Layout.tsx';
+import Layout2 from './layout/Layout copy.tsx';
 import Users from './pages/Users.tsx';
 import Tasks from './pages/Tasks.tsx';
 import Teams from './pages/Teams.tsx';
@@ -14,6 +15,8 @@ import RoleForm from './components/forms/RoleForm.tsx';
 import Login from './modules/Login.tsx';
 import { AuthProvider, useAuth } from './contexts/authContext.tsx';
 import ProtectedRoute from './layout/ProtectedRoute.tsx';
+import TaskModal from './components/forms/TaskModal.tsx';
+import { useState } from 'react';
 
 function App() {
   return (
@@ -26,10 +29,11 @@ function App() {
     </div>
   );
 }
-
+//<Route path="/tasks/:idTask" element={<TaskModal visible={modalVisible} onClose={() => setModalVisible(false)} />} />
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
   console.log('isAuthenticated', isAuthenticated);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <Routes>
@@ -38,14 +42,14 @@ function AppRoutes() {
         element={isAuthenticated ? <Navigate to="/" /> : <Login />}
       />
       <Route element={<ProtectedRoute />}>
-      <Route element={<Layout />}>
+      <Route element={<Layout2 />}>
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/create" element={<UserForm />} />
         <Route path="/users/:userid" element={<UserForm />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/tasks/new" element={<TaskForm />} />
-        <Route path="/tasks/:idTask" element={<TaskForm />} />
+        
         <Route path="/teams" element={<Teams />} />
         <Route path="/teams/create" element={<TeamForm />} />
         <Route path="/teams/:idTeam" element={<TeamForm />} />
