@@ -3,17 +3,20 @@ import { Skeleton, Button, message, Table } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
+import TaskModal from '../components/forms/TaskModal.tsx';
 
 
 function Tasks() {
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [initLoading, setInitLoading] = useState(true); // Estado para controlar el loading
   const navigate = useNavigate();
+  const [modalVisible, setModalVisible] = useState(false);
+const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
  const fetchTasks = async () => {
   try {
     const data = await TaskServices.getAllTask();
-    console.log('Datos de tareas recibidos:', data); // Verificar los datos recibidos
+    //console.log('Datos de tareas recibidos:', data); // Verificar los datos recibidos
     if (Array.isArray(data)) {
       setTasks(data); // Actualizar tareas solo si es un array
     } else {
@@ -47,6 +50,7 @@ function Tasks() {
         if (taskDeleted.status === 'Nuevo') {
           await TaskServices.deleteTask(id); 
           message.success('Tarea eliminada correctamente');
+           await fetchTasks();
           return navigate('/tasks/'); // Redirigir después de eliminar
         }
         console.error('La tarea no puede eliminarse:', taskDeleted.status);
@@ -116,7 +120,10 @@ function Tasks() {
       key: 'actions',
       render: (task: TaskData) => (
         <>
-          <a key="edit" onClick={() => handleEdit(task._id)}>Editar</a>
+          <a key="edit" onClick={() => {
+          setEditingTaskId(task._id);
+          setModalVisible(true);
+        }}>Editar</a>
           <a key="delete" onClick={() => handleDelete(task._id)}>Eliminar</a>
         </>
       ),
@@ -149,10 +156,18 @@ function Tasks() {
           <p>Cantidad total de Tareas: {tasks.length}</p>
         </>
       )}
-      <Button type="primary" onClick={handleCreate}>
-        Crear Tarea
-      </Button>
+      <Button onClick={() => setModalVisible(true)}>Nueva Tarea</Button>
+<TaskModal
+  visible={modalVisible}
+  idTask={editingTaskId}
+  onClose={() => setModalVisible(false)}
+  onSuccess={() => {
+    setModalVisible(false);
+    fetchTasks();
+  }}
+/>
     </>
+    
   );
 }
 
