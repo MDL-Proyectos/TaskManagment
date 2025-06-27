@@ -4,7 +4,7 @@ interface AuthUser {
   _id: string;
   role: string;
   email: string;
-   first_name: string;
+  first_name: string;
   last_name: string;
 }
 
@@ -27,8 +27,11 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(localStorage.getItem('authToken'));
   
-  const [user, setUserState] = useState<AuthUser | null>(null);
-
+ // const [user, setUserState] = useState<AuthUser | null>(localStorage.getItem('AuthUser'));
+const [user, setUserState] = useState<AuthUser | null>(() => {
+  const storedUser = localStorage.getItem('newUser');
+  return storedUser ? JSON.parse(storedUser) as AuthUser : null;
+});
   const setToken = (newToken: string | null) => {
     setTokenState(newToken);
     if (newToken) {
@@ -40,6 +43,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const setUser = (newUser: AuthUser | null) => {
     setUserState(newUser);
+    if (newUser) {
+      localStorage.setItem('newUser', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('newUser');
+    }
   };
 
   const isAuthenticated = !!token;
