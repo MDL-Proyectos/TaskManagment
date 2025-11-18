@@ -84,15 +84,15 @@ async function createTeam(req, res, next) {
         req.body.id = teamSelected._id
       }
      
-      if (teamNewData.liderTeam._id) {
-        console.log('Encontro registro de lider' + teamNewData.liderTeam._id)
+      if (teamNewData.liderTeam) {
+        console.log('Encontro registro de lider' + teamNewData.liderTeam)
         try{
-          const liderSelected = await User.findById(teamNewData.liderTeam._id);
+          const liderSelected = await User.findById(teamNewData.liderTeam);
           if (!liderSelected) {
             console.info('teamSelected not found.')
             return res.status(404).send('LiderTeam not found')
           }
-            req.body.liderTeam = liderSelected._id;
+            req.body.liderTeam = liderSelected;
         }catch (err) {
           return res.status(404).send('LiderTeam not found')
         }
