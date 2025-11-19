@@ -12,6 +12,10 @@ const taskSchema = new Schema({
     type: String,
     required: true
     },
+    description: { //modificable
+    type: String,
+    required: true
+    },
     assigned_team: { //modificable
       type: ObjectId,  // Array de equipos asignados
     ref: 'tm-team', 
