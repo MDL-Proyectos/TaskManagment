@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table } from 'antd';
+import { Skeleton, Button, message, Table, Space, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 import TaskModal from '../components/forms/TaskModal.tsx';
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import GlobalSearch from '../components/forms/GlobalSearch';
+import dayjs from 'dayjs'; // Importar dayjs
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+const { confirm } = Modal;
 
 
 function Tasks() {
@@ -12,6 +18,7 @@ function Tasks() {
   const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
 const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+const [searchText, setSearchText] = useState('');
 
  const fetchTasks = async () => {
   try {
@@ -36,35 +43,77 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   }, []);
 
   const handleCreate = () => {
-    navigate('/tasks/new');
+   // navigate('/tasks/new');
+    setEditingTaskId(null);
+    setModalVisible(true);
   };
 
   const handleEdit = (idTask: string) => {
-    navigate(`/tasks/${idTask}`);
+    setEditingTaskId(idTask);
+    setModalVisible(true);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      if (id) {
-        const taskDeleted = await TaskServices.getTaskById(id);
-        if (taskDeleted.status === 'Nuevo') {
-          await TaskServices.deleteTask(id); 
-          message.success('Tarea eliminada correctamente');
-           await fetchTasks();
-          return navigate('/tasks/'); // Redirigir después de eliminar
+  const handleDelete = (id: string) => {
+    //Mostrar el modal de confirmación
+    confirm({
+      title: '¿Estás seguro de que quieres eliminar esta Tarea?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Esta acción no se puede deshacer. Solo las tareas con estado "Nuevo" pueden eliminarse.',
+      okText: 'Sí, Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      
+      onOk: async () => {
+        try {
+          if (id) {
+            const taskDeleted = await TaskServices.getTaskById(id);
+            
+            // Verificar el estado de la tarea antes de eliminar
+            if (taskDeleted.status === 'Nuevo') {
+              await TaskServices.deleteTask(id);
+              message.success('Tarea eliminada correctamente');
+              await fetchTasks();
+              return; 
+            }
+            
+            console.error('La tarea no puede eliminarse:', taskDeleted.status);
+            message.error('La tarea no puede eliminarse: Su estado debe ser "Nuevo"');
+          } else {
+            console.error('No se encuentra ID del elemento.');
+            message.error('No se encuentra ID del elemento');
+          }
+        } catch (error) {
+          console.error('Error al eliminar tarea:', error);
+          message.error('No se pudo eliminar la tarea.');
         }
-        console.error('La tarea no puede eliminarse:', taskDeleted.status);
-        message.error('La tarea no puede eliminarse: Su estado debe ser "Nuevo"');
-      } else {
-        console.error('No se encuentra ID del elemento.');
-        message.error('No se encuentra ID del elemento');
-        return;
-      }
-    } catch (error) {
-      console.error('Error al eliminar tarea:', error);
-      message.error('No se pudo eliminar la tarea.');
-    }
+      },
+    
+      onCancel() {
+      },
+    });
   };
+  
+  const handleGlobalSearch = (value: string) => {
+      //Limpiar el texto (trim) y pasarlo a minusculas
+      setSearchText(value.toLowerCase().trim()); 
+    };
+
+    const filteredTasks = tasks.filter(task => {
+      // Si no hay texto de búsqueda, muestra todas las tareas
+      if (!searchText) return true;
+
+      const searchTerms = [
+        task.title,
+        task.status,
+        task.project,
+        task.assigned_user?.first_name, 
+        task.assigned_user?.last_name, 
+        task.assigned_team?.name
+      ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
+
+      return searchTerms.includes(searchText);
+    });
+
   const ocultarColumna = true;
 
   const columns = [
@@ -81,6 +130,7 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
     },
     {
       title: 'Equipo Asignado',
+      style: { font: { color: 'red' } },
       dataIndex: 'assigned_team',
       key: 'assigned_team',
       render: (assigned_team: { name: string } | undefined) => assigned_team?.name || 'No asignado',
@@ -104,32 +154,33 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
       title: 'Fecha de Vencimiento',
       dataIndex: 'due_date',
       key: 'due_date',
-      render: (due_date: string) => {
-        // Función para convertir el formato dd-mm-yyyy a un objeto Date
-        const convertToDate = (dateStr: string) => {
-          const [day, month, year] = dateStr.split('-').map(Number);
-          return new Date(year, month - 1, day); // Mes empieza desde 0 en JavaScript
-        };
-  
-        const date = convertToDate(due_date);
-        return isNaN(date.getTime()) ? 'Fecha inválida' : date.toLocaleDateString();
+          render: (due_date: string | null | undefined) => {
+        if (!due_date) {
+          return 'N/A';
+        }
+
+        // Usar dayjs para formatear la fecha ISO 8601
+        const formattedDate = dayjs(due_date).isValid()
+          ? dayjs(due_date).format('DD-MM-YYYY')
+          : 'Fecha inválida';
+
+        return formattedDate;
       },
     },
     {
       title: 'Acciones',
       key: 'actions',
       render: (task: TaskData) => (
-        <>
-          <a key="edit" onClick={() => {
-          setEditingTaskId(task._id);
-          setModalVisible(true);
-        }}>Editar</a>
-          <a key="delete" onClick={() => handleDelete(task._id)}>Eliminar</a>
-        </>
+        <Space size="middle">
+          <a key="edit" onClick={() => handleEdit(task._id)}>
+              <EditOutlined /> Editar
+            </a>
+          <a key="delete" onClick={() => handleDelete(task._id)}><DeleteOutlined />Eliminar</a>
+        </Space>
       ),
     },
   ];
-
+  //Reemplazado por filteredTasks en dataSource
   const dataSource = tasks.map((task) => ({
     _id: task._id,
     title: task.title,
@@ -140,7 +191,7 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   }));
 
   return (
-    <>
+    <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
       <h2>Listado de Tareas</h2>
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
@@ -148,25 +199,45 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
         <p>No hay tareas disponibles.</p>
       ) : (
         <>
+            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+              <GlobalSearch 
+                onSearch={handleGlobalSearch} 
+                placeholder="Buscar por Título, Usuario o Estado..."
+              />
+            </div>
           <Table
-            dataSource={dataSource}
+            dataSource={filteredTasks}
             columns={columns}
-            pagination={false} // Deshabilitar la paginación si no es necesaria
+            pagination={{
+              pageSize: 10, // Mostrar 10 registros por página
+              showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
+            }}
           />
           <p>Cantidad total de Tareas: {tasks.length}</p>
         </>
       )}
-      <Button onClick={() => setModalVisible(true)}>Nueva Tarea</Button>
+      <Button 
+        type="primary"
+        icon={<PlusOutlined />} 
+        onClick={handleCreate}
+        style={{ marginBottom: 16 }}
+      >
+        Crear nueva tarea
+      </Button>
 <TaskModal
   visible={modalVisible}
   idTask={editingTaskId}
-  onClose={() => setModalVisible(false)}
+  onClose={() => {
+    setModalVisible(false); // Cierra el modal
+    setEditingTaskId(null); // Asegura que el ID quede limpio
+  }}
   onSuccess={() => {
     setModalVisible(false);
+    setEditingTaskId(null); 
     fetchTasks();
   }}
 />
-    </>
+    </div>
     
   );
 }
