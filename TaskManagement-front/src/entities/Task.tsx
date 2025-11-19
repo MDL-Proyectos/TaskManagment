@@ -16,6 +16,7 @@ export interface TaskData {
   project: string; // Proyecto al que pertenece la tarea (obligatorio)
   authorized_by?: {_id: string; first_name: string; last_name: string}; // Usuario que autoriza la tarea (opcional)
   observations?: string; // Observaciones adicionales (opcional, por defecto es una cadena vacía)
+  description: string; // Descripción de la tarea (opcional, por defecto es una cadena vacía)
 }
 const Task  = ({title, assigned_team,assigned_user,status}: TaskData) => {
     return (
