@@ -66,6 +66,9 @@ const TeamForm = () => {
     fetchUsers();
     if (idTeam) {
         fetchTeam();
+    }else{
+      console.log('Modo creación de Team');
+      setIsEditMode(false);
     }
   }, [idTeam, form]);
 
@@ -101,7 +104,7 @@ const TeamForm = () => {
       <Form.Item
         label="Identificación"
         name="idTeam"
-        rules={[{ required: true, message: 'Por favor, ingresa el nombre' }]}
+        rules={[{ required: false, message: 'Por favor, ingresa el nombre' }]}
       >
         <Input
           placeholder="..."
