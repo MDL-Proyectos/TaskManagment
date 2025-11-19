@@ -35,14 +35,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
       const response = await TaskServices.getTaskById(idTask as string); 
       const mappedData = {
         ...response,
-        created_at: response.created_at ? dayjs(response.created_at, 'DD-MM-YYYY') : null,
-        due_date: response.due_date ? dayjs(response.due_date, 'DD-MM-YYYY') : null,
-        completed_at: response.completed_at ? dayjs(response.completed_at, 'DD-MM-YYYY') : null,
+        description: response.description || '', // Asegurar que description tenga un valor predeterminado
+        created_at: response.created_at ? dayjs(response.created_at) : null,
+        due_date: response.due_date ? dayjs(response.due_date) : null,
+        completed_at: response.completed_at ? dayjs(response.completed_at) : null,
         comments: response.comments?.map((comment: any) => ({
           ...comment,
-          created_at: comment.created_at ? dayjs(comment.created_at, 'DD-MM-YYYY') : null,
+          created_at: comment.created_at ? dayjs(comment.created_at) : null,
         })),
       };
+      // Verificar los valores mapeados
+      console.log('Datos mapeados para el formulario:', mappedData);
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedData);
     } catch (error) {
@@ -77,8 +80,12 @@ const TaskModal: React.FC<TaskModalProps> = ({
           useEffect(() => {
             fetchUsers();
             fetchTeams();
+            
             if (idTask) {
+              // MODO EDITAR: Cargar datos
               fetchTask();
+            } else {
+              form.resetFields(); 
             }
           }, [idTask, form]);
 
@@ -101,7 +108,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       setConfirmLoading(false);
       message.error('Error al guardar la tarea');
     }
-    navigate('/tasks');
+
   };
 
   return (
@@ -111,7 +118,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
       onOk={handleOk}
       confirmLoading={confirmLoading}
       onCancel={onClose}
-      destroyOnClose
     >
       <Form form={form} layout="vertical">
         <Form.Item
