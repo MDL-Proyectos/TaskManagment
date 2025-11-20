@@ -85,7 +85,8 @@ function Role() {
                   color: 'white',
                 }}
               >
-                Nombre del Rol: {role.name}
+                Nombre del Rol: {role.name}<br/>
+                Administrador: {role.is_admin? 'No' : 'Si'}
               </Card>
             </List.Item>
           )}

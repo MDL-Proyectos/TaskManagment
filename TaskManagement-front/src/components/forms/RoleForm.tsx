@@ -9,8 +9,16 @@ import {
 } from 'antd';
 import RoleServices from '../../routes/RoleServices.tsx';
 import userService from '../../routes/UserServices.tsx';
+import GenericFormModal from './GenericModal.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
+
+interface RoleFormModalProps {
+  initialRoleName?: string | null; 
+  open: boolean; 
+  onClose: () => void; 
+  onSaveSuccess: () => void; 
+}
 
 const RoleForm = () => {
   const { name } = useParams<{ name: string }>(); // ID desde la URL
@@ -142,6 +150,16 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
       > 
         <Input placeholder="Nombre" disabled={false}/>
       </Form.Item>
+
+      <Form.Item
+        label="Administrador"
+        name="is_admin"
+        valuePropName="checked"
+        getValueFromEvent={(checked) => !checked} // Invierte el valor al cambiar el switch
+        getValueProps={(value) => ({ checked: !value })} // Invierte el valor al cargar
+        >
+        <Switch />
+    </Form.Item>
 
     <Form.Item
         label="Activo"
