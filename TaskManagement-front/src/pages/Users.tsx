@@ -57,7 +57,7 @@ const Users = () => {
         data.first_name,
         data.last_name,
         data.email,
-        data.role,
+        data.role.name,
         data.team?.name // Búsqueda anidada
       ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
 
@@ -70,9 +70,25 @@ const Users = () => {
       // dataIndex es el campo del objeto 'UsuarioData' que se debe mostrar
       dataIndex: 'first_name', 
       key: 'first_name',
-      // Opcional: Renderiza el nombre y apellido juntos y lo hace linkeable
-      render: (_, record) => <a>{record.first_name} {record.last_name}</a>,
       sorter: (a, b) => a.first_name.localeCompare(b.first_name),
+    },
+    {
+      title: 'Apellido',
+      dataIndex: 'last_name',
+      key: 'last_name',
+      sorter: (a, b) => a.last_name.localeCompare(b.last_name),
+    },
+    {
+      title: 'Rol',
+      dataIndex: 'role',
+      key: 'role',
+      render: (role) => role.name.toUpperCase()|| 'No asignado',
+    },
+    {
+      title: 'Equipo',
+      dataIndex: 'team',
+      key: 'team',
+      render: (team) => team?.name.toUpperCase() || 'No asignado',
     },
     {
       title: 'Email',
@@ -80,6 +96,11 @@ const Users = () => {
       key: 'email',
       // Para hacer la columna ordenable por email
       sorter: (a, b) => a.email.localeCompare(b.email),
+    },
+    {
+      title: 'Teléfono',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
       title: 'Acciones',
@@ -103,8 +124,9 @@ const Users = () => {
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
       <h1>Listado de Usuarios</h1>
       
-      {/* Botón de Creación */}
-      <Button 
+      
+      <Button
+      //Botón de Creación  
         type="primary" 
         icon={<UserAddOutlined />}
         onClick={handleCreate}
