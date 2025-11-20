@@ -6,15 +6,15 @@ import Role from '../schemas/role.js'
 
 async function generateUserToken(req, user) {
   const role = await Role.findById(user.role).exec()
-
+  console.log('User role:', role)
   const payload = {
     _id: user._id,
-    role: role.name,
+    role: role,
   }
 
   const userResponse = {
     _id: user._id,
-    role: role.name,
+    role: role,
     email: user.email,
     first_name: user.first_name,
     last_name: user.last_name,

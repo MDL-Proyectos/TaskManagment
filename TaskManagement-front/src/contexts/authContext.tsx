@@ -1,8 +1,13 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
+interface Role {
+  is_admin: boolean;
+  name: string; // Puedes agregar más propiedades si es necesario
+}
+
 interface AuthUser {
   _id: string;
-  role: string;
+  role: Role;
   email: string;
   first_name: string;
   last_name: string;
