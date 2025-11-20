@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table, Space, Modal } from 'antd';
+import { Skeleton, Button, message, Table, Space, Modal, TableProps} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
@@ -116,7 +116,7 @@ const [searchText, setSearchText] = useState('');
 
   const ocultarColumna = true;
 
-  const columns = [
+  const columns: TableProps<TaskData>['columns'] = [
     {
       title: 'idTask',
       dataIndex: '_id',
@@ -127,13 +127,14 @@ const [searchText, setSearchText] = useState('');
       title: 'Título',
       dataIndex: 'title',
       key: 'title',
+      sorter: (a, b) => a.title.localeCompare(b.title),
     },
     {
       title: 'Equipo Asignado',
-      style: { font: { color: 'red' } },
       dataIndex: 'assigned_team',
       key: 'assigned_team',
       render: (assigned_team: { name: string } | undefined) => assigned_team?.name || 'No asignado',
+      sorter: (a, b) => a.assigned_team?.name.localeCompare(b.assigned_team?.name || '') || 0,
     },
     {
       title: 'Usuario Asignado',
@@ -141,6 +142,7 @@ const [searchText, setSearchText] = useState('');
       key: 'assigned_user',
       render: (assigned_user: { first_name: string; last_name: string } | undefined) =>
         assigned_user ? `${assigned_user.first_name} ${assigned_user.last_name}` : 'No asignado',
+      sorter: (a, b) => a.assigned_user?.first_name.localeCompare(b.assigned_user?.first_name || '') || 0,
     },
     {
       title: 'Estado',
@@ -149,7 +151,23 @@ const [searchText, setSearchText] = useState('');
       render: (status: 'Nuevo' | 'En progreso' | 'Completado') => (
         <span>{status}</span>
       ),
+      sorter: (a, b) => a.status.localeCompare(b.status),
     },
+    {
+      title: 'Fecha de Creación',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (created_at: string | null | undefined) => {
+        if (!created_at) {
+          return 'N/A';
+        }
+        // Usar dayjs para formatear la fecha ISO 8601
+        const formattedDate = dayjs(created_at).isValid()
+          ? dayjs(created_at).format('DD-MM-YYYY')
+          : 'Fecha inválida'; 
+          return formattedDate;
+    }      
+      },
     {
       title: 'Fecha de Vencimiento',
       dataIndex: 'due_date',
@@ -167,6 +185,7 @@ const [searchText, setSearchText] = useState('');
         return formattedDate;
       },
     },
+
     {
       title: 'Acciones',
       key: 'actions',
