@@ -101,6 +101,7 @@ async function createTeam(req, res, next) {
         delete req.body.liderTeam
       }
     
+      req.body.is_deleted = !teamNewData.is_deleted //debo negar el valor porque el data viaja a la inversa en el modal.
   
       await teamToUpdate.updateOne(req.body)
       console.log(teamToUpdate)
