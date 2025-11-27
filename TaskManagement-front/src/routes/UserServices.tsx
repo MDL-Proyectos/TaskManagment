@@ -27,6 +27,14 @@ const userService = {
   deleteUser: async (id: string) => {
     const response = await api.delete(`/users/delete/${id}`);
     return response.data;
-  }  
+  },
+  validatePassword: async (id: string) => {
+    const response = await api.post(`/users/p/${id}`);
+    return response.data.valid;
+  },
+  resetPassword: async (id: string) => {
+    const response = await api.put(`/users/p/reset/${id}`);
+    return response.data.valid;
+  }        
 };
 export default userService;

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Space } from 'antd'; // Importamos Table y Space
+import { Button, Table, Space, Modal, message} from 'antd'; // Importamos Table y Space
 import type { TableProps } from 'antd'; // Importamos tipos si usas TypeScript
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
 import { UsuarioData } from '../entities/User.tsx';
 // importamos los iconos que podrías necesitar para las acciones (opcional)
-import { EditOutlined, UserAddOutlined } from '@ant-design/icons';
+import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/forms/GlobalSearch';
 
+const { confirm } = Modal;
 
 const Users = () => {
   const [initLoading, setInitLoading] = useState(true);
@@ -41,7 +42,41 @@ const Users = () => {
   const handleCreate = () => {
     navigate(`/users/create`);
   };
+  const handleResetPass = (id: string) => {
+    //Mostrar el modal de confirmación
+    confirm({
+      title: '¿Estás seguro de que quieres resetear la Contraseña?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Esta acción no se puede deshacer.',
+      okText: 'Sí, resetear',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      
+      onOk: async () => {
+        try {
+          if (id) {
+            const userPassUpdated = await UserServices.getUserById(id);
 
+              await UserServices.resetPassword(id);
+              message.success('Reseteo realizado correctamente');
+              return; 
+            
+            console.error('La la pass no puede restablecerse:', userPassUpdated._id);
+            message.error('Password no pudo ser reseteada');
+          } else {
+            console.error('No se encuentra ID del elemento.');
+            message.error('No se encuentra ID del elemento');
+          }
+        } catch (error) {
+          console.error('Error al resetear pass:', error);
+          message.error('Error al resetear la contraseña.');
+        }
+      },
+    
+      onCancel() {
+      },
+    });
+  };
     const handleGlobalSearch = (value: string) => {
       // 1. Limpiar el texto (trim) y pasarlo a minúsculas
       setSearchText(value.toLowerCase().trim()); 
@@ -114,6 +149,14 @@ const Users = () => {
             type="link"
           >
             Editar
+          </Button>
+
+           <Button 
+            icon={<AlertOutlined />} 
+            onClick={() => handleResetPass(record._id)} 
+            type="link"
+          >
+            Reset Password
           </Button>
         </Space>
       ),
