@@ -13,6 +13,8 @@ router.get('/testpss/:name', passTest)
 router.get('/:id', getUserById)
 router.post('/', createUser)
 router.put('/:id', updateUser)
+router.put('/p/:id', updatePassword)
+router.put('/p/reset/:id', resetPassword)
 router.put('/blockUser/:id', blockUser)
 router.delete('/delete/:id', deleteUser)
 
@@ -63,6 +65,72 @@ async function getUserById(req, res, next) {
 
 
 const saltRounds = 10; // Define el número de rondas de hashing
+
+async function resetPassword(req, res, next) {
+  console.log('resetPassword with id: ', req.params.id)
+  const user = await User.findById(req.params.id);
+  user.password = '1';
+  console.log('user ', user);
+  try{
+    // 1. Validar que los campos obligatorios estén presentes
+    if (!user) {
+      return res.status(400).send('Falta el usuario.');
+    }
+    // 2. Hashear la contraseña ANTES de actualizar el usuario
+    const passEncrypted = await bcrypt.hash(user.password, saltRounds);
+
+    user.password = passEncrypted;
+    console.log('team ' + user.team );
+    const team = await Team.findOne({ _id: user.team })
+    if (!team) {
+      return res.status(400).send('Equipo no encontrado.'); // Código 400 porque el cliente envió un team inválido
+    }
+    console.log('team ', team);
+    user.team = team._id;
+
+    const role = await Role.findOne({ _id: user.role })
+    user.role = role._id;
+    await user.save();
+
+        res.status(200).json({ message: 'Contraseña actualizada con éxito.' });
+    } catch (error) {
+        console.error('Error al actualizar la contraseña:', error);
+        res.status(500).json({ error: 'Error al actualizar la contraseña.' });
+    }
+}
+
+async function updatePassword(req, res, next) {
+  
+  const user = req.body;
+  try{
+    // 1. Validar que los campos obligatorios estén presentes
+    if (!user.password) {
+      return res.status(400).send('Falta el campo obligatorio password.');
+    }
+    // 2. Hashear la contraseña ANTES de actualizar el usuario
+    const passEncrypted = await bcrypt.hash(user.password, saltRounds);
+    const userToUpdate = await User.findById(req.params.id) 
+
+    if (!userToUpdate) {
+      return res.status(404).send('User not found');
+    }
+    if (userToUpdate.password === passEncrypted) {
+      return res.status(400).send('La nueva contraseña no puede ser igual a la anterior.');
+    }
+
+    const userUpdated = await User.create({
+      ...user,
+      password: passEncrypted, // Usar la contraseña hasheada
+    });
+
+    const { password: removedPassword, ...userWithoutPassword } = userUpdated.toObject();
+    res.status(201).send(userWithoutPassword); // Código 201 Created para indicar creación exitosa
+
+  } catch (err) {
+    console.error('Error al crear contraseña:', err);
+    next(err); // Pasar el error al siguiente middleware de manejo de errores
+  }
+}
 
 async function createUser(req, res, next) {
   console.log('createUser: ', req.body);
