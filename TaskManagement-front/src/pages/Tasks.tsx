@@ -148,9 +148,23 @@ const [searchText, setSearchText] = useState('');
       title: 'Estado',
       dataIndex: 'status',
       key: 'status',
-      render: (status: 'Nuevo' | 'En progreso' | 'Completado') => (
-        <span>{status}</span>
-      ),
+      render: (status: 'Nuevo' | 'En progreso' | 'Completado') => {
+        let color = '';
+        switch (status) {
+          case 'Nuevo':
+            color = 'grey';
+            break;
+          case 'En progreso':
+            color = 'greenforest';
+            break;
+          case 'Completado':
+            color = 'red';
+            break;
+          default:
+            color = 'green';
+        }
+        return <span style={{ fontWeight: 'bold', color }}>{status.toUpperCase()}</span>;
+      },
       sorter: (a, b) => a.status.localeCompare(b.status),
     },
     {

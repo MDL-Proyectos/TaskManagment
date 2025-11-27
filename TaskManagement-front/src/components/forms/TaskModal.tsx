@@ -6,7 +6,6 @@ import { UsuarioData } from '../../entities/User';
 import { TeamData } from '../../entities/Team';
 import UserServices from '../../routes/UserServices';
 import TeamService from '../../routes/TeamServices';
-import { useNavigate, useParams } from 'react-router-dom';
 
 interface TaskModalProps {
   visible: boolean;
@@ -26,7 +25,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
-   const navigate = useNavigate();
 
   // Cargar datos si es edición
   const fetchTask = async () => {
@@ -273,7 +271,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             </Form.Item>
           </div>
         )}
-      </Form.List>{/* Agrega aquí el resto de los campos de tu TaskForm */}
+      </Form.List>
       </Form>
     </Modal>
   );
