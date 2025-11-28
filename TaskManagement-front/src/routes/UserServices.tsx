@@ -1,6 +1,6 @@
 import api from './ApiRoute';
-import { UsuarioData } from '../entities/User';
- 
+import { UsuarioData, PasswordInterface } from '../entities/User';
+
 const userService = {
   
   getUsers: async (): Promise<UsuarioData[]> => {
@@ -28,9 +28,13 @@ const userService = {
     const response = await api.delete(`/users/delete/${id}`);
     return response.data;
   },
-  validatePassword: async (id: string) => {
-    const response = await api.post(`/users/p/${id}`);
-    return response.data.valid;
+  validatePassword: async (id: any, values: PasswordInterface ) : Promise<boolean> => {
+    const response = await api.put(`/users/p/validate/${id}`, values);
+    return response.data;
+  },
+  updatePasswordUser: async (id: any, values: PasswordInterface ) : Promise<boolean> => {
+    const response = await api.put(`/users/p/${id}`, values);
+    return response.data;
   },
   resetPassword: async (id: string) => {
     const response = await api.put(`/users/p/reset/${id}`);

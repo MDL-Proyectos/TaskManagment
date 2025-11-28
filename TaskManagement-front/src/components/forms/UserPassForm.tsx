@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Form,
@@ -11,7 +11,6 @@ import UserServices from '../../routes/UserServices.tsx';
 type SizeType = Parameters<typeof Form>[0]['size'];
 
 const UserPassForm = () => {
-  const { userid } = useParams<{ userid: string }>(); // ID del usuario desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
@@ -47,7 +46,7 @@ const UserPassForm = () => {
     if(userId){  
       fetchUsers();
     }    
-  }, [userid, form]);
+  }, [form]);
 
 
    // Manejo de creación o edición
@@ -59,20 +58,24 @@ const UserPassForm = () => {
       }
 
       //valido contraseña actual
-      const isValid = await UserServices.validatePassword(values.currentPassword);
+      const newUser = localStorage.getItem('newUser');
+      const userid = newUser ? JSON.parse(newUser)._id : null; // Obtener el _id del usuario logueado desde localStorage
+      console.log('Validando contraseña actual para el usuario ID:', userid);
+      const isValid = await UserServices.validatePassword(userid, values);
       if (!isValid) {
         message.error('La contraseña actual no es válida.');
         return;
-      }  
-      if (userid) {
-        // Editar usuario
-        await UserServices.updateUser(userid, values);
+      } 
+     // message.error('La contraseña actual es válida.');
+     //   return;
+     const resultUpdated =  await UserServices.updatePasswordUser(userid, values);
+      if (!resultUpdated) {
+        message.error('La contraseña no fue actualizada. Inténtalo de nuevo.');
+        return;
+      } 
         message.success('Contraseña actualizada');
         navigate('/users'); // Redirigir 
-      } else {
 
-        message.error('No se puede actualizar la contraseña.');        
-      }
     } catch (error) {
       console.error('Error al guardar el usuario:', error);
       message.error('No se pudo guardar el usuario.');
@@ -107,7 +110,7 @@ const UserPassForm = () => {
 
       <Form.Item 
         label="Password Actual"
-        name="password"
+        name="currentPassword"
         rules={[
           { required: true, message: 'Por favor, ingresa un código' },
           { pattern: /^[\w\s@#$%^&*()_+=-]+$/, message: 'El código debe tener 6 dígitos' },
