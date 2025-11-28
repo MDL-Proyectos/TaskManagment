@@ -7,6 +7,8 @@ import {
   Select,
   Switch,
   message,
+  Row,
+  Col
 } from 'antd';
 import UserServices from '../../routes/UserServices.tsx';
 //import RoleService from '../../routes/RoleServices.tsx';
@@ -112,12 +114,15 @@ const UserForm = () => {
       form={form}
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
-      layout="horizontal"
+      layout="vertical"
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
-      style={{ maxWidth: 600 }}
+      style={{ maxWidth: 1000 }}
      onFinish={handleFinish} // Maneja el envío del formulario
+     
     >
+        <Row gutter={16}>
+    <Col span={12}>
       <Form.Item
         label="Nombre"
         name="first_name"
@@ -125,6 +130,8 @@ const UserForm = () => {
       > 
         <Input placeholder="Nombre del usuario" />
       </Form.Item>
+      </Col>
+      <Col span={12}>
       <Form.Item
         label="Apellido"
         name="last_name"
@@ -132,6 +139,8 @@ const UserForm = () => {
       >
         <Input placeholder="Apellido del usuario" />
       </Form.Item>
+      </Col>
+      <Col span={12}>
       <Form.Item
         label="Team"
         name="team"
@@ -145,6 +154,8 @@ const UserForm = () => {
             ))}
         </Select>
       </Form.Item>
+      </Col>
+      <Col span={12}>
 
       <Form.Item
         label="Rol"
@@ -159,7 +170,8 @@ const UserForm = () => {
             ))}
         </Select>
       </Form.Item>
-
+      </Col>
+      <Col span={12}>
       <Form.Item 
         label="Notas"
         name="observations"
@@ -167,32 +179,35 @@ const UserForm = () => {
       >
        <Input
         placeholder="Notas personales..."
-        disabled={!!userid} // Habilitado solo si no hay idUser
+        disabled={false} 
       />
       </Form.Item>
 
       <Form.Item 
         label="Password"
         name="password"
+        hidden={true}
         rules={[
           { required: true, message: 'Por favor, ingresa un código' },
           { pattern: /^[\w\s@#$%^&*()_+=-]+$/, message: 'El código debe tener 6 dígitos' },
         ]}
       >
        <Input.Password
-        placeholder="Password"
-        //disabled={!!userid} // Habilitado solo si no hay idUser
+        placeholder="Password"      
       />
       </Form.Item>
-
+        </Col>
+      <Col span={12}>
       <Form.Item
         label="Email"
         name="email"
+        style={{width: '100%'}}
         rules={[{ required: true, type: 'email', message: 'Por favor, ingresa un correo válido' }]}
       >
         <Input placeholder="Correo electrónico" />
       </Form.Item>
-      
+      </Col>
+      <Col span={12}>
       <Form.Item
         label="Teléfono"
         name="phone"
@@ -200,25 +215,28 @@ const UserForm = () => {
       >
         <Input placeholder="Telefono / Celular" />
       </Form.Item>
-
+        </Col>
+      <Col span={12}>
     <Form.Item
         label="Activo"
         name="is_deleted"
         valuePropName="checked"
+        
         getValueFromEvent={(checked) => !checked} // Invierte el valor al cambiar el switch
         getValueProps={(value) => ({ checked: !value })} // Invierte el valor al cargar
         >
         <Switch />
     </Form.Item>
-
-      <Form.Item wrapperCol={{ span: 24 }}>
+        </Col>  
+      <Col span={12} style={{ display: 'flex', justifyContent: 'right', marginTop: '20px' }}>
         <Button type="primary" htmlType="submit">
           Guardar Cambios
         </Button>
         <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/users')}>
           Cancelar
         </Button>
-      </Form.Item>
+      </Col>
+      </Row>
     </Form>
   );
 };
