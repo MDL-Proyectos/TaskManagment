@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import {
   QuestionCircleOutlined,
@@ -7,42 +7,55 @@ import {
   UserOutlined,
   BookOutlined,
   IdcardOutlined,
-  BookTwoTone,
-  CheckSquareOutlined,
   FileDoneOutlined
 } from '@ant-design/icons'
 import { Button, Layout, Menu, theme, Breadcrumb } from 'antd'
 import { useNavigate } from 'react-router-dom';
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Footer } = Layout
 import { useAuth } from '../contexts/authContext.tsx';
 
-function getItem(label: any, key: any, icon:any, children?: any) {
+function getItem(label: any, key: any, icon: any, children?: any, roles?: Rol[]) {
   return {
     key,
     icon,
     children,
     label,
-  }
+    roles, //Filtro los items por rol de usuario.
+  };
 }
 
+export interface MenuItem {
+  key: string;
+  icon?: React.ReactNode;
+  children?: MenuItem[];
+  label: React.ReactNode;
+  roles?: Rol[]; 
+}
 
+type Rol = 'ADMIN' | 'MANAGER' | 'ALL_USER' | 'LIDER';
 
-
-const items = [
-  getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />),
-  //getItem(<Link to="/users"> Usuarios </Link>, '2', <UserOutlined />),
+//Defino los items del menu y los roles que pueden ver cada uno
+const generateMenuItems = () => [
+  getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />, null, ['ALL_USER']), 
+  
+  // Ítem principal que requiere rol admin
   getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
-    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />),  
-    getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />),,
-    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />)]),
-  getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />),
-  getItem(<Link to="/tasks"> Tareas </Link>, '4', <BookOutlined />),
-  getItem(<Link to="/about"> About </Link>, '7', <QuestionCircleOutlined />),
-]
+    // Sub-items
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER']), 
+    getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN','LIDER', 'MANAGER']),
+    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
+    
+  ], ['ADMIN', 'MANAGER','LIDER']),
+  getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
+  getItem(<Link to="/tasks"> Tareas </Link>, '4', <BookOutlined />, null, ['ALL_USER']),
+  getItem(<Link to="/about"> About </Link>, '7', <QuestionCircleOutlined />, null, ['ALL_USER']), 
+];
 
 const App: React.FC = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user} = useAuth(); //acceso al usuario logueado
+  const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
+  const userAdmin = user?.role.is_admin;
   
     const handleLogout = () => {
       logout();
@@ -53,6 +66,37 @@ const App: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const filteredItems = useMemo(() => { //para calcular la lista de ítems filtrados solo cuando el currentRole cambia
+    const allItems = generateMenuItems();
+
+    const filterMenu = (menuItems: MenuItem[]): MenuItem[] => { //para filtrar los items del menú según el rol actual
+      return menuItems
+        .map(item => {
+          // Si el ítem no tiene roles o el rol actual está incluido, lo mantiene
+          const isItemAllowed = !item.roles || item.roles.includes(currentRole as Rol);
+  
+          if (!isItemAllowed && !item.roles?.includes('ALL_USER')) {
+            return null; // El ítem principal no está permitido
+          }
+
+          // Si el ítem tiene sub-ítems, los filtra recursivamente
+          if (item.children) {
+            const filteredChildren = filterMenu(item.children);
+            // Si el ítem principal está permitido pero no tiene hijos visibles, no lo mostramos (opcional)
+            if (filteredChildren.length === 0 && !item.label) { 
+                return null;
+            }
+            return { ...item, children: filteredChildren };
+          }
+
+          return item; 
+        })
+        .filter(item => item !== null); // Eliminar ítems nulos/no permitidos
+    };
+
+    return filterMenu(allItems);
+  }, [currentRole]);
+
   return (
     <Layout style={{ minHeight: '100vh', height: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -61,7 +105,7 @@ const App: React.FC = () => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['2']}
-          items={items}
+          items={filteredItems}
           style={{ flex: 1, minWidth: 0 }}
         />
         <FileDoneOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24 }} />
