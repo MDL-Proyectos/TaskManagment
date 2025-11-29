@@ -25,7 +25,7 @@ const UserPassForm = () => {
           const newUser = localStorage.getItem('newUser');
      const userId = newUser ? JSON.parse(newUser)._id : null;
       const response = await UserServices.getUserById(userId as string); // Llama al servicio para obtener los datos
-      console.log('Datos del usuario obtenidos:', response);
+     
       const mappedData = {
         ...response
       };
@@ -48,11 +48,9 @@ const UserPassForm = () => {
     }    
   }, [form]);
 
-
    // Manejo de creación o edición
    const handleFinish = async (values: any) => {
     try {
-      console.log('Valores enviados:', values);
       if (!values){
          message.error('Por favor, ingresa tu contraseña actual.');     
       }
@@ -60,7 +58,7 @@ const UserPassForm = () => {
       //valido contraseña actual
       const newUser = localStorage.getItem('newUser');
       const userid = newUser ? JSON.parse(newUser)._id : null; // Obtener el _id del usuario logueado desde localStorage
-      console.log('Validando contraseña actual para el usuario ID:', userid);
+      
       const isValid = await UserServices.validatePassword(userid, values);
       if (!isValid) {
         message.error('La contraseña actual no es válida.');
