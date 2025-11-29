@@ -7,6 +7,7 @@ import { UsuarioData } from '../entities/User.tsx';
 // importamos los iconos que podrías necesitar para las acciones (opcional)
 import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/forms/GlobalSearch';
+import { useAuth } from '../contexts/authContext.tsx';
 
 const { confirm } = Modal;
 
@@ -16,6 +17,7 @@ const Users = () => {
   const [searchText, setSearchText] = useState('');
   // 'list' ya no es necesario; usamos 'data' directamente en la Table
   const navigate = useNavigate();
+  const {user} = useAuth(); 
 
   // Función para obtener los usuarios desde el backend
   const fetchUsers = async () => {
@@ -85,6 +87,13 @@ const Users = () => {
     };
 
     const filteredUsers = data.filter(data => {
+
+       if (user?.role.is_admin && user?._id) {
+        // Solo su propia cuenta
+        if (data._id !== user?._id) {
+            return false; 
+        }
+    }
       // Si no hay texto de búsqueda, muestra todas las tareas
       if (!searchText) return true;
 
