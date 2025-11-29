@@ -9,9 +9,9 @@ function Home() {
 
   return (
     <>
-      <h1>Bienvenido, {user?.first_name}</h1>
+      <h1>Hola, {user?.first_name}!</h1>
 
-        <h3>Gestionemos tus tareas!</h3>
+        <h3>Gestioná tus tareas de manera fácil y práctica.</h3>
     </>
   )
 }
