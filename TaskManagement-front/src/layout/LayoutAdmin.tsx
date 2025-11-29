@@ -41,11 +41,11 @@ const generateMenuItems = () => [
   // Ítem principal que requiere rol admin
   getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
     // Sub-items
-    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER']), 
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER', 'ALL_USER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN','LIDER', 'MANAGER']),
-    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
+    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),
     
-  ], ['ADMIN', 'MANAGER','LIDER']),
+  ], ['ALL_USER']),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
   getItem(<Link to="/tasks"> Tareas </Link>, '4', <BookOutlined />, null, ['ALL_USER']),
   getItem(<Link to="/about"> About </Link>, '7', <QuestionCircleOutlined />, null, ['ALL_USER']), 
