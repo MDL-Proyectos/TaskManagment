@@ -8,8 +8,11 @@ import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/forms/GlobalSearch';
 import dayjs from 'dayjs'; // Importar dayjs
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { useAuth } from '../contexts/authContext.tsx';
 
 const { confirm } = Modal;
+
+type Rol = 'ADMIN' | 'MANAGER' | 'USER' | 'GUEST';
 
 
 function Tasks() {
@@ -19,6 +22,7 @@ function Tasks() {
   const [modalVisible, setModalVisible] = useState(false);
 const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 const [searchText, setSearchText] = useState('');
+const {user} = useAuth(); 
 
  const fetchTasks = async () => {
   try {
@@ -54,6 +58,10 @@ const [searchText, setSearchText] = useState('');
   };
 
   const handleDelete = (id: string) => {
+    if (user?.role.is_admin) {
+      message.error('No tienes permisos para eliminar tareas.');
+      return;
+    }
     //Mostrar el modal de confirmación
     confirm({
       title: '¿Estás seguro de que quieres eliminar esta Tarea?',
@@ -99,9 +107,16 @@ const [searchText, setSearchText] = useState('');
     };
 
     const filteredTasks = tasks.filter(task => {
-      // Si no hay texto de búsqueda, muestra todas las tareas
-      if (!searchText) return true;
 
+      if (user?.role.is_admin && user?._id) {
+        // Solo incluir tareas donde el usuario asignado coincida con el usuario logueado
+        if (task.assigned_user?._id !== user?._id) {
+            return false; 
+        }
+    }
+      // Si no hay texto de búsqueda, muestra todas las tareas
+      if (!searchText && !user?.role.is_admin) return true;
+      
       const searchTerms = [
         task.title,
         task.status,
