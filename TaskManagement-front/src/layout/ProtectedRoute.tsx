@@ -1,20 +1,28 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
+import LayoutUser from "./LayoutUser.tsx";
 
 interface ProtectedRouteProps {
-  allowedRoles?: string[];
+  allowedRoles?: ("lider" | "admin" | "normalUser")[];  
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  // Check if the user is authenticated
+  // Verificar si el usuario está autenticado
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
+  console.log('ProtectedRoute user.admin:', user?.role?.is_admin);
+  // Verificar si el rol del usuario está permitido
+  if (user?.role?.is_admin && !allowedRoles?.includes("normalUser")) {
+   console.log('User role:', user?.role);
+  // return <Navigate to="/" replace />; 
+    return <Navigate to="/" replace />;
+  }
 
-  // If all checks pass, render the child components
+  // Si todas las verificaciones pasan, renderizar los componentes hijos
   return <Outlet />;
 };
 /*

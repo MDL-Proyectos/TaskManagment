@@ -42,27 +42,28 @@ function AppRoutes() {
         path="/login"
         element={isAuthenticated ? <Navigate to="/" /> : <Login />}
       />
-      <Route element={<ProtectedRoute />}>
-      <Route element={<Layout2 />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/create" element={<UserForm />} />
-        <Route path="/users/:userid" element={<UserForm />} />
-        <Route path="/users/p/" element={<UserPassForm />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/tasks/new" element={<TaskForm />} />
-        
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/create" element={<TeamForm />} />
-        <Route path="/teams/:idTeam" element={<TeamForm />} />
-        <Route path="/users/role" element={<Role />} />
-        <Route path="/users/role/create" element={<RoleForm />} />
-        <Route path="/users/role/:name" element={<RoleForm />} />
-
-        <Route path="*" element={<NotFound />} />
+      <Route element={<ProtectedRoute  allowedRoles={["normalUser"]}/>}>
+        <Route path="/" element={<Layout2 />}>
+          <Route index element={<Home />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="tasks/new" element={<TaskForm />} />          
+          </Route>
       </Route>
+      <Route element={<ProtectedRoute allowedRoles={["admin", "lider"]}/>}>
+        <Route path="/" element={<Layout2 />}>
+          <Route path="users" element={<Users />} />
+          <Route path="users/create" element={<UserForm />} />
+          <Route path="users/:userid" element={<UserForm />} />
+          <Route path="users/p/" element={<UserPassForm />} />
+          <Route path="teams" element={<Teams />} />
+          <Route path="teams/create" element={<TeamForm />} />
+          <Route path="teams/:idTeam" element={<TeamForm />} />
+          <Route path="users/role" element={<Role />} />
+          <Route path="users/role/create" element={<RoleForm />} />
+          <Route path="users/role/:name" element={<RoleForm />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Route>
-      
     </Routes>
   );
 }
