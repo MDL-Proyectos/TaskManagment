@@ -1,6 +1,5 @@
 import './App.css';
 import Home from './modules/Home.tsx';
-import LayoutUser from './layout/LayoutUser.tsx';
 import Layout2 from './layout/LayoutAdmin.tsx';
 import Users from './pages/Users.tsx';
 import Tasks from './pages/Tasks.tsx';
@@ -15,8 +14,6 @@ import RoleForm from './components/forms/RoleForm.tsx';
 import Login from './modules/Login.tsx';
 import { AuthProvider, useAuth } from './contexts/authContext.tsx';
 import ProtectedRoute from './layout/ProtectedRoute.tsx';
-import TaskModal from './components/forms/TaskModal.tsx';
-import { useState } from 'react';
 import UserPassForm from './components/forms/UserPassForm.tsx';
 
 function App() {
@@ -34,7 +31,6 @@ function App() {
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
   console.log('isAuthenticated', isAuthenticated);
-  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <Routes>
@@ -45,15 +41,15 @@ function AppRoutes() {
       <Route element={<ProtectedRoute  allowedRoles={["normalUser"]}/>}>
         <Route path="/" element={<Layout2 />}>
           <Route index element={<Home />} />
-          <Route path="users/p/" element={<UserPassForm />} />          
-          <Route path="tasks" element={<Tasks />} />
-          <Route path="users" element={<Users />} />         
+          <Route path="users/p/" element={<UserPassForm />} />        
+          <Route path="tasks" element={<Tasks />} />      
           <Route path="tasks/new" element={<TaskForm />} />     
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>
       <Route element={<ProtectedRoute allowedRoles={["admin", "lider"]}/>}>
         <Route path="/" element={<Layout2 />}>
+          <Route path="users" element={<Users />} />           
           <Route path="users/create" element={<UserForm />} />
           <Route path="users/:userid" element={<UserForm />} />
           <Route path="teams" element={<Teams />} />
