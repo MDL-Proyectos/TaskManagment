@@ -41,7 +41,7 @@ const generateMenuItems = () => [
   // Ítem principal que requiere rol admin
   getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
     // Sub-items
-    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER', 'ALL_USER']), 
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN','LIDER', 'MANAGER']),
     getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),
     
@@ -55,7 +55,6 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const { logout, user} = useAuth(); //acceso al usuario logueado
   const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
-  const userAdmin = user?.role.is_admin;
   
     const handleLogout = () => {
       logout();
@@ -63,7 +62,7 @@ const App: React.FC = () => {
     };
 
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const filteredItems = useMemo(() => { //para calcular la lista de ítems filtrados solo cuando el currentRole cambia
