@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Skeleton, Button, message, Table, Space, Modal, TableProps} from 'antd';
-import { useNavigate } from 'react-router-dom';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 import TaskModal from '../components/forms/TaskModal.tsx';
@@ -9,16 +8,15 @@ import GlobalSearch from '../components/forms/GlobalSearch';
 import dayjs from 'dayjs'; // Importar dayjs
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext.tsx';
+import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 const { confirm } = Modal;
 
-type Rol = 'ADMIN' | 'MANAGER' | 'USER' | 'GUEST';
 
 
 function Tasks() {
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [initLoading, setInitLoading] = useState(true); // Estado para controlar el loading
-  const navigate = useNavigate();
   const [modalVisible, setModalVisible] = useState(false);
 const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 const [searchText, setSearchText] = useState('');
@@ -106,28 +104,20 @@ const {user} = useAuth();
       setSearchText(value.toLowerCase().trim()); 
     };
 
-    const filteredTasks = tasks.filter(task => {
-
-      if (user?.role.is_admin && user?._id) {
-        // Solo incluir tareas donde el usuario asignado coincida con el usuario logueado
-        if (task.assigned_user?._id !== user?._id) {
-            return false; 
-        }
-    }
-      // Si no hay texto de búsqueda, muestra todas las tareas
-      if (!searchText && !user?.role.is_admin) return true;
-      
-      const searchTerms = [
+    const filteredTasks = useDataFilter(
+    tasks, 
+    searchText, 
+    // Función de mapeo específica para TaskData
+    (task: TaskData) => 
+      [
         task.title,
         task.status,
         task.project,
         task.assigned_user?.first_name, 
         task.assigned_user?.last_name, 
         task.assigned_team?.name
-      ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
-
-      return searchTerms.includes(searchText);
-    });
+      ].join(' ')
+  );
 
   const ocultarColumna = true;
 
@@ -228,15 +218,6 @@ const {user} = useAuth();
       ),
     },
   ];
-  //Reemplazado por filteredTasks en dataSource
-  const dataSource = tasks.map((task) => ({
-    _id: task._id,
-    title: task.title,
-    assigned_team: task.assigned_team,
-    assigned_user: task.assigned_user,
-    status: task.status,
-    due_date: task.due_date,
-  }));
 
   return (
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
