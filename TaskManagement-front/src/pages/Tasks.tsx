@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table, Space, Modal, TableProps} from 'antd';
+import { Skeleton, Button, message, Table, Space, Modal, TableProps, Typography} from 'antd';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 import TaskModal from '../components/forms/TaskModal.tsx';
@@ -11,7 +11,7 @@ import { useAuth } from '../contexts/authContext.tsx';
 import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 const { confirm } = Modal;
-
+const { Title } = Typography;
 
 
 function Tasks() {
@@ -221,7 +221,9 @@ const {user} = useAuth();
 
   return (
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
-      <h2>Listado de Tareas</h2>
+      <Title level={3} style={{ marginBottom: 30 }}>
+        Listado de Tareas
+      </Title>
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : tasks.length === 0 ? (

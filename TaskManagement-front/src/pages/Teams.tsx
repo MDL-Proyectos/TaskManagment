@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
-import Team, { TeamData } from '../entities/Team';
-import { useNavigate } from 'react-router-dom';
+import { TeamData } from '../entities/Team';
 import TeamService from '../routes/TeamServices';
 //import userService from '../../services/users'
-import { Button, Card, List } from 'antd';
+import { Button, Card, List, Typography } from 'antd';
 import GlobalSearch from '../components/forms/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
 import TeamModal from '../components/forms/TeamModal';
-
+const { Title } = Typography;
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -16,7 +15,6 @@ function Teams() {
   // Estado para controlar la visibilidad del modal
   const [isModalOpen, setIsModalOpen] = useState(false); 
   // La navegación ya no se usa para editar/crear, pero se mantiene si es necesario para otras rutas
-  const navigate = useNavigate(); 
 
   const fetchTeams = async () => {
     try {
@@ -82,14 +80,15 @@ function Teams() {
  
   return (
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
-      
+      <Title level={2} style={{ marginBottom: 50 }}>
+      Equipos
+      </Title>
       <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end'}}>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Nombre o Lider..."
               />
             </div>
-            <h2 style={{marginBottom: 50}}>Equipos</h2>
         {team.length === 0 ? (
           <p>...</p>
           ) : (

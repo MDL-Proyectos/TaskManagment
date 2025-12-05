@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Table, Space, Modal, message} from 'antd'; // Importamos Table y Space
+import { useState, useEffect } from 'react';
+import { Button, Table, Space, Modal, message, Typography} from 'antd'; // Importamos Table y Space
 import type { TableProps } from 'antd'; // Importamos tipos si usas TypeScript
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
@@ -10,6 +10,7 @@ import GlobalSearch from '../components/forms/GlobalSearch';
 import { useAuth } from '../contexts/authContext.tsx';
 
 const { confirm } = Modal;
+const { Title } = Typography;
 
 const Users = () => {
   const [initLoading, setInitLoading] = useState(true);
@@ -174,7 +175,9 @@ const Users = () => {
 
   return (
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
-      <h1>Listado de Usuarios</h1>
+      <Title level={2} style={{ marginBottom: 30 }}>
+       Usuarios
+      </Title>
       
       
       <Button

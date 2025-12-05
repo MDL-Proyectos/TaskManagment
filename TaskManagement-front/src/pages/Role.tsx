@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import RoleServices from '../routes/RoleServices';
 import { RoleData } from '../entities/Role';
 //import userService from '../../services/users'
-import { Card, List } from 'antd';
-import { Avatar, Button } from 'antd';
-import { UserOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, List, Typography } from 'antd';
+import { Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/forms/GlobalSearch';
 
+const { Title } = Typography;
 function Role() {
   const [roles, setRole] = useState<RoleData[]>([]);
   const navigate = useNavigate();   
@@ -54,7 +55,7 @@ function Role() {
 
   return (
     <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
-        <h2 style={{ marginBottom: 50 }}>Roles en sistema</h2>
+        <Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>
         <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end'}}>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
