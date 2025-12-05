@@ -41,6 +41,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         liderTeam: leaderId, // Pasa el ID (string o null) al campo del Form
         is_deleted: !response.is_deleted,
       };
+      console.log('Datos mapeados para el formulario:', mappedData);
       form.setFieldsValue(mappedData);
     } catch (error) {
       console.error('Error al obtener los datos del equipo:', error);
@@ -164,8 +165,8 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         name="is_deleted"
         valuePropName="checked"
         // checked=true significa is_deleted=false
-        getValueFromEvent={(checked) => !checked}
-        getValueProps={(value) => ({ checked: !value })}
+        getValueFromEvent={(checked) => checked}
+        getValueProps={(value) => ({ checked: value })}
       >
         <Switch />
       </Form.Item>
