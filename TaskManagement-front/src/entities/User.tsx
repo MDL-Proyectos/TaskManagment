@@ -10,7 +10,8 @@ export interface UsuarioData {
   role: { _id: string; name: string };
   observations?: string;      // Observaciones adicionales (opcional)
   email: string;              // Correo del usuario (obligatorio, único, validado por regex)
-  phone?: string;             // Teléfono (opcional)
+  phone?: string; 
+  is_leader?: boolean;           
   is_deleted?: boolean;       // Eliminación lógica (opcional, por defecto `false`)
 }
 const Usuario = ({ first_name, last_name, email, role, phone, team }: UsuarioData) => {
@@ -34,10 +35,12 @@ const Usuario = ({ first_name, last_name, email, role, phone, team }: UsuarioDat
 
 export interface PasswordInterface {
   _id: string;
-  password: string;           // Contraseña (obligatoria, mínimo 6 caracteres)
-  currentpassword: string;           // Contraseña (obligatoria, mínimo 6 caracteres)
-  email: string;              // Correo del usuario (obligatorio, único, validado por regex)
-  is_deleted?: boolean;       // Eliminación lógica (opcional, por defecto `false`)
+  password: string;          
+  currentpassword: string;           
+  email: string;             
+  is_deleted?: boolean;       
+  first_name: string;         
+  last_name: string;          
 }
 
 export default Usuario;

@@ -188,7 +188,7 @@ const UserForm = () => {
         name="password"
         hidden={true}
         rules={[
-          { required: true, message: 'Por favor, ingresa un código' },
+          { required: false, message: 'Por favor, ingresa un código' },
           { pattern: /^[\w\s@#$%^&*()_+=-]+$/, message: 'El código debe tener 6 dígitos' },
         ]}
       >
@@ -224,6 +224,16 @@ const UserForm = () => {
         
         getValueFromEvent={(checked) => !checked} // Invierte el valor al cambiar el switch
         getValueProps={(value) => ({ checked: !value })} // Invierte el valor al cargar
+        >
+        <Switch />
+    </Form.Item>
+    <Form.Item
+        label="Team Lider"
+        name="is_leader"
+        valuePropName="checked"
+        
+        getValueFromEvent={(checked) => checked} // Invierte el valor al cambiar el switch
+        getValueProps={(value) => ({ checked: value })} // Invierte el valor al cargar
         >
         <Switch />
     </Form.Item>

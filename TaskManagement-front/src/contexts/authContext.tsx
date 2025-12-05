@@ -11,6 +11,8 @@ interface AuthUser {
   email: string;
   first_name: string;
   last_name: string;
+  team?: string;
+  is_leader: boolean;
 }
 
 interface AuthContextType {
