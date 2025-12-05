@@ -19,7 +19,7 @@ app.set('port', port)
 // Create HTTP server.
 const server = http.createServer(app)
 
-const db_url = process.env.MONGO_URL // || 'mongodb://127.0.0.1:27017/'
+const db_url = process.env.MONGO_URI // || 'mongodb://127.0.0.1:27017/'
 const db_name = process.env.MONGO_DB || 'db_task'
 
 // MongoDB database initialization
@@ -28,7 +28,7 @@ initDatabase()
   .catch((err) => console.log(err))
 
 async function initDatabase() {
-  await mongoose.connect('mongodb+srv://matias:admin@cluster0.smmk1.mongodb.net/db_task')
+  await mongoose.connect(db_url)
 }
 
 // Listen on provided port, on all network interfaces.
