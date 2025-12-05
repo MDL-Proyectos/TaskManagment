@@ -49,6 +49,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: false  // Eliminación lógica, por defecto es "false"
   },
+  is_leader: {
+    type: Boolean,
+    default: false  
+  },
   team:{
     type: ObjectId,
     ref: 'tm-team',
