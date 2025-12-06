@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import api from './ApiRoute';
 
 interface dataLog {
@@ -15,10 +16,17 @@ interface dataLog {
       try {
         const response = await api.post(`/auth`, values);
     //   console.log('Respuesta del login:', response.data);
+      if (response.status !== 201) {
+        throw new Error('Error en la autenticación');
+      }
         return response.data; // Devuelve directamente response.data
-      } catch (error) {
-        console.error('Error al loguear:', error);
-        throw error;
+      } catch (error: any) {
+        if (error.response.status === 401) {
+           throw console.warn('Credenciales inválidas');
+        } else {
+         throw console.error('Error al loguear:', error);
+        }
+      
       }
     },
   };

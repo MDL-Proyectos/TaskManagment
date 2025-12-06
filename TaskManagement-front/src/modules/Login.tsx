@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import AuthServices from '../routes/LoginRoute.tsx';
 import { useAuth } from '../contexts/authContext.tsx'; 
 import Password from 'antd/es/input/Password';
@@ -16,16 +16,10 @@ type FieldType = {
 
     try {
       const response = await AuthServices.logIn({ email, password });
-      if (response && response.token && response.user) {
-        login(response.token, response.user);
-        // Aquí puedes redirigir o mostrar mensaje de éxito
-      } else {
-        // Maneja error de credenciales
-        console.log('Credenciales incorrectas o error en la respuesta del servidor');
-      }
+      //console.log('Respuesta del login:', response);
+       login(response.token, response.user);
     } catch (error) {
-      console.error('Error en la llamada al login:', error);
-      // Muestra mensaje de error al usuario
+      console.error('Error al loguear.');
     }
   };
 
