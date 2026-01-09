@@ -1,7 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
-import LayoutUser from "./LayoutUser.tsx";
 
 interface ProtectedRouteProps {
   allowedRoles?: ("lider" | "admin" | "normalUser")[];  

@@ -75,7 +75,7 @@ const UserPassForm = () => {
         navigate('/users'); // Redirigir 
 
     } catch (error) {
-      console.error('Error al guardar el usuario:', error);
+      console.error('Error al guardar el usuario.');
       message.error('No se pudo guardar el usuario.');
     }
   };
@@ -86,7 +86,6 @@ const UserPassForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      onFinish={handleFinish} // Maneja el envío del formulario
