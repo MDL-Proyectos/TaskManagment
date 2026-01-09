@@ -22,8 +22,8 @@
     "figlet": "^1.8.0",
     "jsonwebtoken": "^9.0.2",
     "migrate-mongo": "^11.0.0",
-    "mongodb": "^6.10.0",
-    "mongoose": "^8.7.3",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.0.1",
     "mongoose-validator": "^2.1.0",
     "morgan": "~1.10.0"
   },
