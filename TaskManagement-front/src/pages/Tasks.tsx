@@ -141,6 +141,7 @@ const {user} = useAuth();
       render: (assigned_team: { name: string } | undefined) => assigned_team?.name || 'No asignado',
       sorter: (a, b) => a.assigned_team?.name.localeCompare(b.assigned_team?.name || '') || 0,
     },
+    
     {
       title: 'Usuario Asignado',
       dataIndex: 'assigned_user',
@@ -171,6 +172,29 @@ const {user} = useAuth();
         return <span style={{ fontWeight: 'bold', color }}>{status.toUpperCase()}</span>;
       },
       sorter: (a, b) => a.status.localeCompare(b.status),
+    },
+    {
+      title: 'Prioridad',
+      dataIndex: 'priorityLevel',
+      key: 'priorityLevel',
+      render: (priorityLevel: 'Baja' | 'Media' | 'Alta') => {
+        let color = '';
+        switch (priorityLevel) {
+          case 'Baja':
+            color = 'grey';
+            break;
+          case 'Media':
+            color = 'blue';
+            break;
+          case 'Alta':
+            color = 'red';
+            break;
+          default:
+            color = 'red';
+        }
+        return <span style={{ fontWeight: 'bold', color }}>{priorityLevel.toUpperCase()}</span>;
+      },
+      sorter: (a, b) => a.priorityLevel.localeCompare(b.priorityLevel),
     },
     {
       title: 'Fecha de Creación',
@@ -226,11 +250,17 @@ const {user} = useAuth();
       </Title>
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
-      ) : tasks.length === 0 ? (
+      ) : filteredTasks.length === 0 ? (
         <p>No hay tareas disponibles.</p>
       ) : (
         <>
-            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
+              <Button 
+                type="primary"
+                icon={<PlusOutlined />} 
+                onClick={handleCreate}
+              >Crear nueva tarea
+              </Button>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Título, Usuario o Estado..."
@@ -244,17 +274,10 @@ const {user} = useAuth();
               showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
             }}
           />
-          <p>Cantidad total de Tareas: {tasks.length}</p>
+          <p>Cantidad total de Tareas: {filteredTasks.length}</p>
         </>
       )}
-      <Button 
-        type="primary"
-        icon={<PlusOutlined />} 
-        onClick={handleCreate}
-        style={{ marginBottom: 16 }}
-      >
-        Crear nueva tarea
-      </Button>
+      
 <TaskModal
   visible={modalVisible}
   idTask={editingTaskId}

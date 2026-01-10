@@ -8,6 +8,7 @@ export interface TaskData {
   created_at?: Date; // Fecha de creación (opcional, por defecto es la fecha actual)
   due_date: Date; // Fecha de vencimiento (obligatoria)
   completed_at?: Date | null; // Fecha de finalización (opcional, por defecto null)
+  priorityLevel: 'Baja' | 'Media' | 'Alta'; // Nivel de prioridad (opcional, valores enumerados)
   comments?: {
     author: {_id: string; first_name: string; last_name: string}; // Autor del comentario (obligatorio)
     message: string; // Mensaje del comentario (obligatorio)

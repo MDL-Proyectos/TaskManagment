@@ -136,6 +136,18 @@ const TaskModal: React.FC<TaskModalProps> = ({
           <Select.Option value="Completado">Completado</Select.Option>
         </Select>
       </Form.Item>
+      <Form.Item
+          label="Prioridad"
+          name="priorityLevel"
+          rules={[{ required: true, message: 'Por favor, selecciona una prioridad' }]}
+          
+        >
+          <Select>
+            <Select.Option value="Baja">Baja</Select.Option>
+            <Select.Option value="Media">Media</Select.Option>
+            <Select.Option value="Alta">Alta</Select.Option>
+          </Select>
+        </Form.Item>
         <Form.Item
           label="Descripción"
           name="description"
