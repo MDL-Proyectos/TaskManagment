@@ -32,6 +32,12 @@ const taskSchema = new Schema({
     enum: ['Nuevo', 'En Progreso', 'Completado'], // Enum para los posibles estados
     default: 'Nuevo'  // Si no se proporciona un estado, por defecto será "Nuevo"
     },
+    priorityLevel: { //modificable
+    type: String,
+    required: true,
+    enum: ['Alta', 'Media', 'Baja'], 
+    default: 'Baja'  
+    },
     created_at: {
       type: String,
       default: Date.now,
