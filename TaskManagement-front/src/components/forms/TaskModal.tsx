@@ -134,6 +134,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           <Select.Option value="Nuevo">Nuevo</Select.Option>
           <Select.Option value="En Progreso">En Progreso</Select.Option>
           <Select.Option value="Completado">Completado</Select.Option>
+          <Select.Option value="Cancelado">Cancelado</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item

@@ -61,6 +61,9 @@ export const useTaskStats = () => {
         task.assigned_user?._id === currentUserId
       );
     }
+    // Excluir tareas con estado "cancelado"
+    filteredTasks = filteredTasks.filter(task => task.status !== 'Cancelado');
+
     //cuento el total de las tareas
     counts.total = filteredTasks.length;
     //cuento las tareas por estado

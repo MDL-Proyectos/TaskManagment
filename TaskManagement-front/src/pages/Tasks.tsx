@@ -154,20 +154,23 @@ const {user} = useAuth();
       title: 'Estado',
       dataIndex: 'status',
       key: 'status',
-      render: (status: 'Nuevo' | 'En progreso' | 'Completado') => {
+      render: (status: 'Nuevo' | 'En Progreso' | 'Completado' | 'Cancelado') => {
         let color = '';
         switch (status) {
           case 'Nuevo':
             color = 'grey';
             break;
-          case 'En progreso':
-            color = 'greenforest';
+          case 'En Progreso':
+            color = 'green';
             break;
           case 'Completado':
             color = 'red';
             break;
+          case 'Cancelado':
+            color = 'orange';
+            break;
           default:
-            color = 'green';
+            color = 'blue';
         }
         return <span style={{ fontWeight: 'bold', color }}>{status.toUpperCase()}</span>;
       },
@@ -251,7 +254,13 @@ const {user} = useAuth();
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : filteredTasks.length === 0 ? (
+        <div>
+          <GlobalSearch 
+                onSearch={handleGlobalSearch} 
+                placeholder="Buscar por Título, Usuario o Estado..."
+              />
         <p>No hay tareas disponibles.</p>
+        </div>
       ) : (
         <>
             <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
@@ -261,6 +270,7 @@ const {user} = useAuth();
                 onClick={handleCreate}
               >Crear nueva tarea
               </Button>
+             {/* <p>Cantidad total de Tareas: {filteredTasks.length}</p> */}
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Título, Usuario o Estado..."
@@ -270,11 +280,10 @@ const {user} = useAuth();
             dataSource={filteredTasks}
             columns={columns}
             pagination={{
-              pageSize: 10, // Mostrar 10 registros por página
+              pageSize: 8, // Mostrar 10 registros por página
               showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
             }}
           />
-          <p>Cantidad total de Tareas: {filteredTasks.length}</p>
         </>
       )}
       

@@ -4,7 +4,7 @@ export interface TaskData {
   title: string; // Título de la tarea (obligatorio)
   assigned_team?: {_id: string; idTeam: string; name: string}; // Equipo asignado (opcional)
   assigned_user?: {_id: string; first_name: string; last_name: string}; // Usuario asignado (opcional)
-  status: 'Nuevo' | 'En progreso' | 'Completado'; // Estado de la tarea (obligatorio, valores enumerados)
+  status: 'Nuevo' | 'En progreso' | 'Completado' | 'Cancelado'; // Estado de la tarea (obligatorio, valores enumerados)
   created_at?: Date; // Fecha de creación (opcional, por defecto es la fecha actual)
   due_date: Date; // Fecha de vencimiento (obligatoria)
   completed_at?: Date | null; // Fecha de finalización (opcional, por defecto null)
