@@ -3,10 +3,11 @@ import jwt from 'jsonwebtoken'
 // import path from 'path'
 
 import Role from '../schemas/role.js'
+import logger from '../utils/logger.js'
 
 async function generateUserToken(req, user) {
   const role = await Role.findById(user.role).exec()
-  console.log('User role:', role)
+  logger.info('User role:', role)
   const payload = {
     _id: user._id,
     role: role,

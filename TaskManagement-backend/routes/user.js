@@ -1,6 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
-
+import logger from'../utils/logger.js';
 import User from '../schemas/user.js'
 import Role from '../schemas/role.js'
 import Team from '../schemas/team.js'
@@ -23,8 +23,9 @@ const saltRounds = 10; // Define el número de rondas de hashing
 //prueba de hasheo
 async function passTest(req, res, next){
   const passEncrypted = await bcrypt.hash(req.params.name, saltRounds);
-  console.log('name pss: ', req.params.name)
-  console.log('> pss: ', passEncrypted)
+  
+  logger.info('name pss: ', req.params.name)
+  logger.info('> pss: ', passEncrypted)
   res.send(passEncrypted) 
 }
 
@@ -36,6 +37,7 @@ function toDate(input) {
 
 async function getAllUsers(req, res, next) {
   //console.log('getAllUsers by user ', req.user._id)
+  //logger.info('getAllUsers by user: %s ', req.user._id)
   try {
     const users = await User.find({}).populate('role').populate('team')
     res.send(users)
@@ -72,14 +74,15 @@ async function validatePassword(req, res, next) {
     if (!user) {
       return res.status(404).send('User not found');
     }
-    console.log('User password hash: ', req.body.currentPassword);
+    logger.info('User password hash: ', req.body.currentPassword);
+   // console.log
     
     const result = await user.checkPassword(req.body.currentPassword)
     if (!result.isOk) {
       console.error('User password is invalid. Sending 401 to client')
       return res.status(401).end()
     }
-    
+       logger.info('Password is valid');
       res.status(200).send('Invalid password');
     
   } catch (err) {
@@ -152,10 +155,10 @@ async function updatePassword(req, res, next) {
 async function createUser(req, res, next) {
  // console.log('createUser: ', req.body);
   const user = req.body;
-
+  logger.info('createUser: ', user);
   try {
     // 1. Validar que los campos obligatorios estén presentes
-    if (!user.email || !user.password || !user.role || !user.team) {
+    if (!user.email || !user.role || !user.team) {
       return res.status(400).send('Faltan campos obligatorios (email, password, role, team).');
     }
 
@@ -185,6 +188,7 @@ async function createUser(req, res, next) {
     }
 
     // 6. Hashear la contraseña ANTES de crear el usuario
+    user.password = '1'; // Contraseña por defecto
     const passEncrypted = await bcrypt.hash(user.password, saltRounds);
 
     // 7. Crear el nuevo usuario

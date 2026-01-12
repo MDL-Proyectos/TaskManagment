@@ -1,5 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
+import logger from '../utils/logger.js'
 
 import Role from '../schemas/role.js'
 
@@ -14,7 +15,7 @@ router.delete('/:name', deleteRole)
 async function getAllRoles(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     try {
-      console.log('getAllRoles')
+      logger.info('getAllRoles')
       const role = await Role.find({})
       res.send(role)
     } catch (err) {
@@ -23,9 +24,9 @@ async function getAllRoles(req, res, next) {
 }
 
 async function getTaskByName(req, res, next) {
-  console.log('getTaskByName by name ', req.params.name)
+  logger.info('getTaskByName by name ', req.params.name)
   try {
-    console.log('getTaskByName')
+    logger.info('getTaskByName')
     const role = await Role.findOne({ name: req.params.name })
     res.send(role)
   } catch (err) {
@@ -37,7 +38,7 @@ async function createRole(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const role = req.body
     try {
-      console.log('CREATE ROLE')
+      logger.info('CREATE ROLE')
 
       const roleCreate = await await Role.create({
         ...role
@@ -56,7 +57,7 @@ async function createRole(req, res, next) {
     }
   
     try {
-      console.log(req.params)
+      logger.info(req.params)
       const roleUpdated = await Role.findOne({name : req.params.name});
      
       if (!roleUpdated) {
@@ -64,7 +65,7 @@ async function createRole(req, res, next) {
         return res.status(400).send('Role not found');
       } 
       await roleUpdated.updateOne(req.body)
-      console.log(roleUpdated)
+      logger.info(roleUpdated)
   
     res.send(`Role Updated :  ${req.params.id}`)
     } catch (err) {
@@ -73,7 +74,7 @@ async function createRole(req, res, next) {
   }
 
   async function deleteRole(req, res, next) {
-    console.log('DELETE ROLE')
+    logger.info('DELETE ROLE')
     try {
      const roleDeleted = await Role.findOneAndDelete({name : req.params.name});
       if (!roleDeleted) {

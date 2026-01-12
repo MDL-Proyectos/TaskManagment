@@ -6,6 +6,7 @@ import figlet from 'figlet'
 import mongoose from 'mongoose'
 import pkg from '../package.json' with { type: 'json' }
 import dotenv from 'dotenv'
+import logger from '../utils/logger.js'
 
 debug('TaskManagement-AP:server')
 
@@ -24,8 +25,8 @@ const db_name = process.env.MONGO_DB || 'db_task'
 
 // MongoDB database initialization
 initDatabase()
-  .then(() => console.log('Database connection established successfully!'))
-  .catch((err) => console.log(err))
+  .then(() => logger.info('Database connection established successfully!'))
+  .catch((err) => logger.error(err))
 
 async function initDatabase() {
   await mongoose.connect(db_url)
@@ -47,11 +48,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
+      logger.error(bind + ' requires elevated privileges')
       process.exit(1)
       break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
+      logger.error(bind + ' is already in use')
       process.exit(1)
       break
     default:

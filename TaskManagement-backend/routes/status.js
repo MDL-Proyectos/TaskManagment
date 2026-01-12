@@ -1,5 +1,6 @@
 import express from 'express'
 import pkg from '../package.json' with { type: 'json' }
+import logger from'../utils/logger.js';
 
 const router = express.Router()
 
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/status', (req, res) => {
-  console.log('Responding to status request')
+  logger.info('Responding to status request')
   res.status(200).send({ status: 'The API is up and running' })
 })
 

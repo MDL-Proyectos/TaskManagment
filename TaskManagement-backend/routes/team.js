@@ -1,5 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
+import logger from '../utils/logger.js'
 
 import Team from '../schemas/team.js'
 import User from '../schemas/user.js'
@@ -15,7 +16,7 @@ router.delete('/:id', deleteTeam)
 async function getAllTeams(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     try {
-      console.log('getAllTeams')
+      logger.info('getAllTeams')
       const teams = await Team.find({}).populate('liderTeam')
       res.send(teams)
     } catch (err) {
@@ -24,14 +25,14 @@ async function getAllTeams(req, res, next) {
   }
 
   async function getTeamById(req, res, next) {
-    console.log('getTeamByID by team ', req.params)
+    logger.info('getTeamByID by team ', req.params)
 
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
 
     try {
-      console.log('getTeamByID')
+      logger.info('getTeamByID')
       const teamSelected = await Team.findOne({ idTeam: req.params.id })//.populate('liderTeam')
       res.send(teamSelected)
     } catch (err) {
@@ -56,7 +57,7 @@ async function createTeam(req, res, next) {
       }
   }
   async function updateTeam(req, res, next) {
-    console.log('put team ', req.body)
+    logger.info('put team ', req.body)
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
@@ -70,7 +71,7 @@ async function createTeam(req, res, next) {
       const teamToUpdate = await  Team.findOne({ idTeam: req.params.id })
       const teamNewData = req.body
       if (!teamToUpdate) {
-        console.error('Team not found')
+        logger.error('Team not found')
         return res.status(404).send('Team not found')
       }
 
@@ -78,18 +79,18 @@ async function createTeam(req, res, next) {
         const teamSelected = await Team.findOne({ idTeam: teamNewData.idTeam })
   
         if (!teamSelected) {
-          console.info('teamSelected not found.')
+          logger.info('teamSelected not found.')
           return res.status(400).end()
         }
         req.body.id = teamSelected._id
       }
      
       if (teamNewData.liderTeam) {
-        console.log('Encontro registro de lider' + teamNewData.liderTeam)
+        logger.info('Encontro registro de lider' + teamNewData.liderTeam)
         try{
           const liderSelected = await User.findById(teamNewData.liderTeam);
           if (!liderSelected) {
-            console.info('teamSelected not found.')
+            logger.info('teamSelected not found.')
             return res.status(404).send('LiderTeam not found')
           }
             req.body.liderTeam = liderSelected;
@@ -104,7 +105,7 @@ async function createTeam(req, res, next) {
       req.body.is_deleted = !teamNewData.is_deleted //debo negar el valor porque el data viaja a la inversa en el modal.
   
       await teamToUpdate.updateOne(req.body)
-      console.log(teamToUpdate)
+      logger.info(teamToUpdate)
       res.send(teamToUpdate)
 
     } catch (err) {
@@ -113,7 +114,7 @@ async function createTeam(req, res, next) {
   }
 
   async function deleteTeam(req, res, next) {
-    console.log('DELETE team ', req.body)
+    logger.info('DELETE team ', req.body)
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
@@ -127,12 +128,12 @@ async function createTeam(req, res, next) {
       const teamToDelete = await  Team.findOne({ idTeam: req.params.id })
       
       if (!teamToDelete) {
-        console.error('Team not found')
+        logger.error('Team not found')
         return res.status(404).send('Team not found')
       }   
   
       await teamToDelete.deleteOne(req.body)
-      console.log(teamToDelete)
+      logger.info(teamToDelete)
       res.send(teamToDelete)
 
     } catch (err) {
