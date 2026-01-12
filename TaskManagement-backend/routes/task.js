@@ -1,5 +1,6 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
+import logger from '../utils/logger.js'
 
 import Task from '../schemas/task.js'
 import Team from '../schemas/team.js'
@@ -14,13 +15,14 @@ router.put('/:id', updateTask)
 router.delete('/delete/:id', deleteTask)
 
 async function getAllTasks(req, res, next) {
-    //console.log('getAllUsers by user ', req.user._id)
+    //logger.log('getAllUsers by user ', req.user._id)
     try {
-      console.log('getAllTasks')
+      logger.info('getAllTasks')
       const task = await Task.find({})
       .populate('assigned_team')
       .populate('assigned_user')
       .populate('authorized_by')
+      .populate('project')
       res.send(task)
     } catch (err) {
       next(err)
@@ -28,13 +30,13 @@ async function getAllTasks(req, res, next) {
   }
 
   async function getTaskById(req, res, next) {
-    console.log('getTask with id: ', req.params.id)
+    logger.info('getTask with id: ', req.params.id)
 
   if (!req.params.id) {
     res.status(500).send('The param id is not defined')
   }
     try {
-      console.log('getTaskById')
+      logger.info('getTaskById')
       const task = await Task.findById(req.params.id)
       .populate('assigned_team')
       .populate('assigned_user')
@@ -46,10 +48,10 @@ async function getAllTasks(req, res, next) {
   }
 
 async function createTask(req, res, next) {
-    console.log('post task ', req.body)
+    logger.info('post task ', req.body)
     const task = req.body
     try {
-      console.log(' task.assigned_team ' + task.assigned_team)
+      logger.info(' task.assigned_team ' + task.assigned_team)
       const team = await Team.findOne({ idTeam: task.assigned_team.idTeam })
     if (!team) {
       res.status(404).send('Team not found')
@@ -60,7 +62,7 @@ async function createTask(req, res, next) {
       const userAssigned = await User.findById(task.assigned_user)
 
       if (!userAssigned) {
-        console.info('userAssigned not found.')
+        logger.info('userAssigned not found.')
         return res.status(400).end()
       }
       req.body.assigned_user = userAssigned._id
@@ -69,16 +71,16 @@ async function createTask(req, res, next) {
     //Valido autor
     if (task.comments && Array.isArray(task.comments)) { //es una coleccion
       for (const comment of task.comments) {
-        console.log('Validating comment author:', comment.author);
+        logger.info('Validating comment author:', comment.author);
         if (comment.author) {
           const userAuthor = await User.findById(comment.author);
           if (!userAuthor) {
-            console.info('userAuthor not found for comment.');
+            logger.info('userAuthor not found for comment.');
             return res.status(400).send('Invalid comment author');
           }
           comment.author = userAuthor._id; // Reemplaza con el ID validado
         } else {
-          console.info('Comment author is missing.');
+          logger.info('Comment author is missing.');
           return res.status(400).send('Comment author is required');
         }
       }
@@ -89,7 +91,7 @@ async function createTask(req, res, next) {
       const authorizedUser = await User.findById(task.authorized_by)
 
       if (!authorizedUser) {
-        console.info('authorizedUser not found.')
+        logger.info('authorizedUser not found.')
         return res.status(400).end()
       }
       req.body.authorized_by = authorizedUser._id
@@ -128,7 +130,7 @@ async function createTask(req, res, next) {
       const taskToUpdate = await Task.findById(req.params.id)
       const taskNewData = req.body
       if (!taskToUpdate) {
-        console.error('Task not found')
+        logger.error('Task not found')
         return res.status(404).send('Task not found')
       }  
 
@@ -137,7 +139,7 @@ async function createTask(req, res, next) {
         const teamSelected = await Team.findOne({ idTeam: taskNewData.assigned_team.idTeam })
   
         if (!teamSelected) {
-          console.info('teamSelected not found.')
+          logger.info('teamSelected not found.')
           return res.status(400).end()
         }
         req.body.assigned_team = teamSelected._id
@@ -148,30 +150,30 @@ async function createTask(req, res, next) {
         const newUserAssigned = await User.findById(taskNewData.assigned_user)
   
         if (!newUserAssigned) {
-          console.info('newUserAssigned not found.')
+          logger.info('newUserAssigned not found.')
           return res.status(400).end()
         }
         req.body.assigned_user = newUserAssigned._id
       }
 
       //valido el usuario autorizador
-      console.log("authorized_by " + taskNewData.authorized_by)
+      logger.info("authorized_by " + taskNewData.authorized_by)
       if (taskNewData.authorized_by) {
         const userAuthorized = await User.findById(taskNewData.authorized_by)
   
         if (!userAuthorized) {
-          console.info('userAuthorized not found.')
+          logger.info('userAuthorized not found.')
           return res.status(400).end()
         }
         req.body.authorized_by = userAuthorized._id
       }else{
-        console.info('userAuthorized not found.')
+        logger.info('userAuthorized not found.')
         return res.status(400).end()
       }
     
   
       await taskToUpdate.updateOne(req.body)
-      console.log(taskToUpdate)
+      logger.info(taskToUpdate)
       res.send(taskToUpdate)
 
     } catch (err) {

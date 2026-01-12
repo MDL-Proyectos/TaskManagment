@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import validate from 'mongoose-validator';
-import bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 
 const Schema = mongoose.Schema
@@ -74,7 +72,8 @@ const taskSchema = new Schema({
       }
     ],
     project: {
-      type: String,  // Proyecto al que pertenece la tarea
+      type: ObjectId, 
+      ref: 'tm-taskproject',
       required: true
     },
     authorized_by: {
