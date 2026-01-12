@@ -9,10 +9,8 @@ import dayjs from 'dayjs'; // Importar dayjs
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext.tsx';
 import { useDataFilter } from '../hooks/useDataFilter.tsx';
-
 const { confirm } = Modal;
 const { Title } = Typography;
-
 
 function Tasks() {
   const [tasks, setTasks] = useState<TaskData[]>([]);
@@ -25,6 +23,7 @@ const {user} = useAuth();
  const fetchTasks = async () => {
   try {
     const data = await TaskServices.getAllTask();
+    console.info('Tareas obtenidas con éxito');
     //console.log('Datos de tareas recibidos:', data); // Verificar los datos recibidos
     if (Array.isArray(data)) {
       setTasks(data); // Actualizar tareas solo si es un array
@@ -115,7 +114,8 @@ const {user} = useAuth();
         task.project,
         task.assigned_user?.first_name, 
         task.assigned_user?.last_name, 
-        task.assigned_team?.name
+        task.assigned_team?.name,
+        task.project?.name
       ].join(' ')
   );
 
@@ -150,6 +150,14 @@ const {user} = useAuth();
         assigned_user ? `${assigned_user.first_name} ${assigned_user.last_name}` : 'No asignado',
       sorter: (a, b) => a.assigned_user?.first_name.localeCompare(b.assigned_user?.first_name || '') || 0,
     },
+    {
+      title: 'Proyecto',
+      dataIndex: 'project',
+      key: 'project',
+      render: (project: { name: string } | undefined) =>
+        project ? `${project.name.toUpperCase()}` : 'No Definido',
+      sorter: (a, b) => a.project?.name.localeCompare(b.project?.name || '') || 0,
+    },    
     {
       title: 'Estado',
       dataIndex: 'status',

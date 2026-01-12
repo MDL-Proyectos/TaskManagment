@@ -6,6 +6,8 @@ import { UsuarioData } from '../../entities/User';
 import { TeamData } from '../../entities/Team';
 import UserServices from '../../routes/UserServices';
 import TeamService from '../../routes/TeamServices';
+import ProjectServices from '../../routes/ProjectServices';
+import { TaskProjectData } from '../../entities/TaskProject';
 
 interface TaskModalProps {
   visible: boolean;
@@ -25,7 +27,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
-
+  const [projects, setProjects] = useState<TaskProjectData[]>([]); // Estado para almacenar la lista de proyectos
   // Cargar datos si es edición
   const fetchTask = async () => {
     try {
@@ -62,6 +64,18 @@ const TaskModal: React.FC<TaskModalProps> = ({
             message.error('Error al cargar la lista de usuarios.');
           }
         };
+
+        const fectchProjects = async () => {
+          try {
+            const listProjects = await ProjectServices.getAllProjects();  
+            const activeProjects = listProjects.filter(project => project.status !== 'Cancelado');
+            console.log('Active Projects:', activeProjects);
+            setProjects(activeProjects); 
+          } catch (error) {
+            console.error('Error al obtener la lista de proyectos:', error);
+            message.error('Error al cargar la lista de proyectos.');
+          }
+        };
   
          // Función para obtener los datos de los equipos
          const fetchTeams = async () => {
@@ -78,7 +92,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
           useEffect(() => {
             fetchUsers();
             fetchTeams();
-            
+            fectchProjects();
+
             if (idTask) {
               // MODO EDITAR: Cargar datos
               fetchTask();
@@ -213,7 +228,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
         name="project"
         rules={[{ required: true, message: 'Por favor, ingresa el proyecto' }]}
       >
-        <Input placeholder="Proyecto" />
+        <Select placeholder="Selecciona un Proyecto">
+            {projects.map((project) => (
+            <Select.Option key={project._id} value={project._id}>
+                {project.name} 
+            </Select.Option>
+            ))}
+        </Select>
       </Form.Item>
 
       <Form.Item

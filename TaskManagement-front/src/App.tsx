@@ -9,6 +9,7 @@ import UserForm from './components/forms/UserForm.tsx';
 import NotFound from './pages/NotFound.tsx';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import TaskForm from './components/forms/TaskForm.tsx';
+import TaskProjectPage from './pages/TaskProjectPage.tsx';
 import Role from './pages/Role.tsx';
 import RoleForm from './components/forms/RoleForm.tsx';
 import Login from './modules/Login.tsx';
@@ -43,7 +44,8 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="users/p/" element={<UserPassForm />} />        
           <Route path="tasks" element={<Tasks />} />      
-          <Route path="tasks/new" element={<TaskForm />} />     
+          <Route path="tasks/new" element={<TaskForm />} />   
+          <Route path="taskProject" element={<TaskProjectPage />} />     
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>

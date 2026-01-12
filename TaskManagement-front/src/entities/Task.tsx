@@ -14,7 +14,7 @@ export interface TaskData {
     message: string; // Mensaje del comentario (obligatorio)
     created_at?: Date; // Fecha de creación del comentario (opcional, por defecto es la fecha actual)
   }[]; // Array de comentarios (opcional)
-  project: string; // Proyecto al que pertenece la tarea (obligatorio)
+  project: {_id: string; name: string; status: string; idTeam: string}; // Proyecto al que pertenece la tarea (obligatorio)
   authorized_by?: {_id: string; first_name: string; last_name: string}; // Usuario que autoriza la tarea (opcional)
   observations?: string; // Observaciones adicionales (opcional, por defecto es una cadena vacía)
   description: string; // Descripción de la tarea (opcional, por defecto es una cadena vacía)
