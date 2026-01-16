@@ -9,7 +9,7 @@ const userService = {
   },    
   getTaskById: async (id: string): Promise<TaskData> => {
     const response = await api.get(`/task/${id}`);
-    console.log('Respuesta de la tarea:', response.data);
+  //  console.log('Respuesta de la tarea:', response.data);
     return response.data;
   },
   updateTask: async (id: any, values: TaskData) => {

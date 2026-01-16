@@ -11,7 +11,6 @@ import {
   Col
 } from 'antd';
 import UserServices from '../../routes/UserServices.tsx';
-//import RoleService from '../../routes/RoleServices.tsx';
 import { RoleData } from '../../entities/Role.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import RoleServices from '../../routes/RoleServices.tsx';
@@ -22,20 +21,15 @@ type SizeType = Parameters<typeof Form>[0]['size'];
 const UserForm = () => {
   const { userid } = useParams<{ userid: string }>(); // ID del usuario desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
-  const [form] = Form.useForm(); // Instancia del formulario
+  const [form] = Form.useForm(); 
   const navigate = useNavigate();
-  const [roles, setRoles] = useState<RoleData[]>([]); // Estado para almacenar la listlista de usuarios
-  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
+  const [roles, setRoles] = useState<RoleData[]>([]); 
+  const [teams, setTeams] = useState<TeamData[]>([]); 
 
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
-  };
-
-  // Función para obtener los datos del usuario desde el backend
   const fetchUsers = async () => {
     try {
       const response = await UserServices.getUserById(userid as string); // Llama al servicio para obtener los datos
-      console.log('Datos del usuario obtenidos:', response);
+     // console.log('Datos del usuario obtenidos:', response);
       const mappedData = {
         ...response,
         team: response.team?.idTeam || '', // Usamos el nombre del equipo
@@ -86,7 +80,6 @@ const UserForm = () => {
    // Manejo de creación o edición
    const handleFinish = async (values: any) => {
     try {
-      console.log('Valores enviados:', values);
       if (userid) {
         // Editar usuario
         await UserServices.updateUser(userid, values);
@@ -97,7 +90,7 @@ const UserForm = () => {
         const isNew = await UserServices.getUsers();
         const existingUser = isNew.find(user => user.email === values.email);
         if(!existingUser) {
-          await UserServices.createUser(values); // Llama al endpoint de creación
+          await UserServices.createUser(values); 
           message.success('Usuario creado correctamente');
           return navigate('/users'); // Redirigir
         }

@@ -45,7 +45,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         })),
       };
       // Verificar los valores mapeados
-      console.log('Datos mapeados para el formulario:', mappedData);
+    //  console.log('Datos mapeados para el formulario:', mappedData);
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedData);
     } catch (error) {
@@ -69,7 +69,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           try {
             const listProjects = await ProjectServices.getAllProjects();  
             const activeProjects = listProjects.filter(project => project.status !== 'Cancelado');
-            console.log('Active Projects:', activeProjects);
+            
             setProjects(activeProjects); 
           } catch (error) {
             console.error('Error al obtener la lista de proyectos:', error);

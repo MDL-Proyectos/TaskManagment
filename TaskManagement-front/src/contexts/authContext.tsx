@@ -65,7 +65,7 @@ const [user, setUserState] = useState<AuthUser | null>(() => {
   };
 
   const logout = () => {
-    console.log('logout');
+   // console.log('logout');
     setToken(null);
     setUser(null);
     

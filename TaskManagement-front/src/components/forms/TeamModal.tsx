@@ -41,7 +41,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         liderTeam: leaderId, // Pasa el ID (string o null) al campo del Form
         is_deleted: !response.is_deleted,
       };
-      console.log('Datos mapeados para el formulario:', mappedData);
+      
       form.setFieldsValue(mappedData);
     } catch (error) {
       console.error('Error al obtener los datos del equipo:', error);
@@ -85,7 +85,6 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
       if (isEditMode) {
         // Usar el ID original para la actualización
         await TeamServices.updateTeam(initialTeamId as string, values);
-        console.log('Valores enviados para actualizar:', values);
         message.success('Equipo actualizado correctamente');
       } else {
         await TeamServices.createTeam(values);
@@ -105,8 +104,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
   const handleDelete = async () => {
     setLoading(true);
     try {
-      if (initialTeamId) {
-       
+      if (initialTeamId) {       
       }
     } catch (error) {
       message.error('No se pudo eliminar el equipo.');

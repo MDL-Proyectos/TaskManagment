@@ -9,33 +9,22 @@ import {
 } from 'antd';
 import RoleServices from '../../routes/RoleServices.tsx';
 import userService from '../../routes/UserServices.tsx';
-import GenericFormModal from './GenericModal.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
-
-interface RoleFormModalProps {
-  initialRoleName?: string | null; 
-  open: boolean; 
-  onClose: () => void; 
-  onSaveSuccess: () => void; 
-}
 
 const RoleForm = () => {
   const { name } = useParams<{ name: string }>(); // ID desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default'); //Antd
-  const [isEditMode, setIsEditMode] = useState<boolean>(!!name); // Determina el modo (edición/creación)
-  const [form] = Form.useForm(); // Instancia del formulario Antd
+  const [isEditMode, setIsEditMode] = useState<boolean>(!!name);
+  const [form] = Form.useForm(); 
   const navigate = useNavigate();
 
-  // Función para obtener los datos del usuario 
   const fetchRole = async () => {
     try {
-      const response = await RoleServices.getRoleByName(name as string); // Llama al servicio para obtener los datos
-      console.log('Datos del rol obtenidos:', response);
+      const response = await RoleServices.getRoleByName(name as string); 
       const mappedData = {
         ...response
       };
-
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedData);
     } catch (error) {
@@ -45,9 +34,7 @@ const RoleForm = () => {
   };
 
   useEffect(() => {
-   // if (isEditMode) {
-      fetchRole(); // Carga los datos solo en modo edición
-    //}
+      fetchRole(); 
   }, [isEditMode, name]);
 
   // Función para validar si el nombre ya existe

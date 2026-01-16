@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TeamData } from '../entities/Team';
 import TeamService from '../routes/TeamServices';
-//import userService from '../../services/users'
 import { Button, Card, List, Typography } from 'antd';
 import GlobalSearch from '../components/forms/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
@@ -11,11 +10,9 @@ const { Title } = Typography;
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);
   const [searchText, setSearchText] = useState('');
-// Estado para el ID del equipo que se está editando (null para crear)
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null); 
   // Estado para controlar la visibilidad del modal
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  // La navegación ya no se usa para editar/crear, pero se mantiene si es necesario para otras rutas
 
   const fetchTeams = async () => {
     try {
@@ -25,17 +22,15 @@ function Teams() {
         console.error('La respuesta de equipos no es un array:', data);
         return;
       }
-      setTeam(data); // Actualiza el estado con los datos recibidos
-      //console.log(await TeamService.getAllTeams());
+      setTeam(data); 
     } catch (error) {
       console.error('Error fetching teams:', error);
     }
   };
 
-   // Usar useEffect para ejecutar el fetch cuando el componente se carga
    useEffect(() => {
     fetchTeams(); // Llama a fetch cuando el componente se monta
-  }, []); // El array vacío asegura que solo se ejecute una vez (al cargar)
+  }, []); 
 
          // Abrir el modal en modo edición
       const handleEdit = (idTeam: string) => {
@@ -106,8 +101,8 @@ function Teams() {
                   </a>
                 }
                  headStyle={{ 
-                  backgroundColor: '#0c2c60ff', // Ejemplo: Un gris claro
-                  boxShadow: '0 4px 8px rgba(3, 3, 3, 0.1)', // Opcional: Agregar sombra para que destaque
+                  backgroundColor: '#0c2c60ff', 
+                  boxShadow: '0 4px 8px rgba(3, 3, 3, 0.1)', 
                   fontStyle: 'normal',
                   fontWeight: 'lighter',
                   color: 'white'
@@ -126,9 +121,9 @@ function Teams() {
       </Button>
       <TeamModal
         open={isModalOpen}
-        initialTeamId={editingTeamId} // Pasa el ID para modo edición (o null para creación)
+        initialTeamId={editingTeamId} 
         onClose={handleModalClose}
-        onSaveSuccess={handleSaveSuccess} // Función para recargar la lista
+        onSaveSuccess={handleSaveSuccess} 
       />
     </div>
   )

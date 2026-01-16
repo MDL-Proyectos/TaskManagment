@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Table, Modal, message } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import ProjectTaskModal from '../components/forms/ProjectTaskModal';
 import { TaskProjectData } from '../entities/TaskProject';
 import ProjectServices from '../routes/ProjectServices';
 import useAuth from '../hooks/useAuth';
-import ProjectManagementPage from './ProjectTaskManagment';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function TaskProjectPage() {
@@ -19,7 +18,7 @@ function TaskProjectPage() {
     const fetchProject = async () => {
     try {
       const data = await ProjectServices.getAllProjects(); // Llama directamente al método del servicio
-      console.log('Fetched Projects:', data);
+      
       if (!Array.isArray(data)) {
         console.error('La respuesta de equipos no es un array:', data);
         return;
@@ -80,21 +79,6 @@ const handleDelete = (id: string) => {
       onCancel() {
       },
     });
-  };
-
-  const handleSave = (values: TaskProjectData) => {
-    if (editingProject) {
-      // Edit existing project
-      setData((prevData) =>
-        prevData.map((item) => (item._id === editingProject._id ? { ...editingProject, ...values } : item))
-      );
-      message.success('Proyecto actualizado correctamente');
-    } else {
-      // Create new project
-      setData((prevData) => [...prevData, { ...values, _id: Date.now().toString() }]);
-      message.success('Proyecto creado correctamente');
-    }
-    setModalVisible(false);
   };
 
   const columns = [

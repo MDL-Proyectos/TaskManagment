@@ -1,5 +1,3 @@
-// src/components/GenericFormModal.tsx (VERSIÓN MEJORADA)
-
 import React from 'react';
 import { Modal, Form, FormInstance, Button } from 'antd';
 import { DeleteOutlined, SaveOutlined } from '@ant-design/icons';

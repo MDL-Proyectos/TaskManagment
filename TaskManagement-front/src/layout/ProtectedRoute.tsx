@@ -13,29 +13,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  console.log('ProtectedRoute user.admin:', user?.role?.is_admin);
+  //console.log('ProtectedRoute user.admin:', user?.role?.is_admin);
   // Verificar si el rol del usuario está permitido
   if (user?.role?.is_admin && !allowedRoles?.includes("normalUser")) {
    console.log('User role:', user?.role);
-  // return <Navigate to="/" replace />; 
+
     return <Navigate to="/" replace />;
   }
 
   // Si todas las verificaciones pasan, renderizar los componentes hijos
   return <Outlet />;
 };
-/*
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
-  const { user, isAuthenticated } = useAuth();
 
-
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-
-  if (allowedRoles && !allowedRoles.includes(user?.role || "")) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <Outlet />;
-};
-*/
 export default ProtectedRoute;

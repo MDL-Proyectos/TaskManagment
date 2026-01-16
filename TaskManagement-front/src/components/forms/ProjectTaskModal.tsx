@@ -24,18 +24,16 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const isEditMode = !!initialTaskId;
-  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
+  const [teams, setTeams] = useState<TeamData[]>([]); 
 
   const fetchProject = async () => {
-    try {
-    
+    try {    
       const response = await ProjectServices.getTaskById(initialTaskId as string); 
       const mappedResponse = {
         ...response,
         idTeam: response.idTeam ? response.idTeam.idTeam : undefined,
       };
-      // Verificar los valores mapeados
-      console.log('Datos mapeados para el formulario:', response);
+     
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedResponse);
     } catch (error) {
@@ -48,7 +46,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
     try {
       const listTeams = await TeamService.getAllTeams(); 
       const activeTeams = listTeams.filter(team => !team.is_deleted);
-      console.log('Active Teams:', activeTeams);
+      
       setTeams(activeTeams); 
     } catch (error) {
       console.error('Error al obtener la lista de equipos:', error);
@@ -75,7 +73,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
       if (isEditMode) {
         // Lógica para actualizar el proyecto
         await ProjectServices.updateProject(initialTaskId as string, values);
-        console.log('Valores enviados para actualizar:', values);
+      
         message.success('Equipo actualizado correctamente');        
         message.success('Proyecto actualizado correctamente');
       } else {

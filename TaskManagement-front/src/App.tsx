@@ -32,7 +32,7 @@ function App() {
 //<Route path="/tasks/:idTask" element={<TaskModal visible={modalVisible} onClose={() => setModalVisible(false)} />} />
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
-  console.log('isAuthenticated', isAuthenticated);
+//  console.log('isAuthenticated', isAuthenticated);
 
   return (
     <Routes>

@@ -22,10 +22,6 @@ const TeamForm = () => {
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
-
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
-  };
   const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
 
   // Función para obtener los datos del usuario desde el backend
@@ -96,7 +92,6 @@ const TeamForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      onFinish={habldeFinish} // Maneja el envío del formulario
