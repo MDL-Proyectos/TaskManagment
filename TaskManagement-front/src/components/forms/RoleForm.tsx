@@ -26,9 +26,6 @@ const RoleForm = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(!!name); // Determina el modo (edición/creación)
   const [form] = Form.useForm(); // Instancia del formulario Antd
   const navigate = useNavigate();
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
-  };
 
   // Función para obtener los datos del usuario 
   const fetchRole = async () => {
@@ -138,7 +135,6 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      onFinish={handleFinish} // Maneja el envío del formulario

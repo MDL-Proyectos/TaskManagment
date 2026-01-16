@@ -24,8 +24,13 @@ const RoleServices = {
     }
   },
   deleteRole: async (name: string) => {
-    const response = await api.delete(`/roles/${name}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/roles/${name}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error al eliminar el rol:', error);
+      throw error; 
+    }
   }    
 };
 export default RoleServices;

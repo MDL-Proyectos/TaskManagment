@@ -118,7 +118,6 @@ const TaskForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onValuesChange={onFormLayoutChange}
       onFinish={handleFinish}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}

@@ -115,7 +115,6 @@ const UserForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="vertical"
-      onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 1000 }}
      onFinish={handleFinish} // Maneja el envío del formulario

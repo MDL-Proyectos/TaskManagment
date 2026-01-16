@@ -7,6 +7,7 @@ import GlobalSearch from '../components/forms/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
 import TeamModal from '../components/forms/TeamModal';
 const { Title } = Typography;
+
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);
   const [searchText, setSearchText] = useState('');
