@@ -24,8 +24,13 @@ const ProjectServices = {
     }
   },
   deleteProject: async (name: string) => {
-    const response = await api.delete(`/taskProject/${name}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/taskProject/${name}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error al eliminar el proyecto:', error);
+      throw error; 
+    }
   }    
 };
 export default ProjectServices;

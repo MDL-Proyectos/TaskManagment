@@ -12,7 +12,11 @@ import { useDataFilter } from '../hooks/useDataFilter.tsx';
 const { confirm } = Modal;
 const { Title } = Typography;
 
-function Tasks() {
+interface TasksProps {
+  projectId?: string; 
+}
+
+function Tasks({ projectId }: TasksProps) {
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [initLoading, setInitLoading] = useState(true); // Estado para controlar el loading
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,29 +24,28 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 const [searchText, setSearchText] = useState('');
 const {user} = useAuth(); 
 
- const fetchTasks = async () => {
-  try {
-    const data = await TaskServices.getAllTask();
-    console.info('Tareas obtenidas con éxito');
-    //console.log('Datos de tareas recibidos:', data); // Verificar los datos recibidos
-    if (Array.isArray(data)) {
-      setTasks(data); // Actualizar tareas solo si es un array
-    } else {
-      setTasks([]); // Si no es un array, deja tasks vacío
-      console.error('La respuesta de tareas no es un array:', data);
+const fetchTasks = async () => {
+    try {
+      setInitLoading(true);
+      const data = await TaskServices.getAllTask();
+      if (Array.isArray(data)) {
+        // FILTRADO: Si hay projectId, filtramos las tareas
+        const filtered = projectId 
+          ? data.filter(t => t.project?._id === projectId) 
+          : data;
+        setTasks(filtered);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInitLoading(false);
     }
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
-    setTasks([]); // En caso de error, deja tasks vacío
-  } finally {
-    setInitLoading(false); // Desactivar loading
-  }
-};
+  };
 
-  useEffect(() => {
-    fetchTasks(); // Cargar las tareas cuando el componente se carga
-  }, []);
-
+useEffect(() => {
+    fetchTasks();
+  }, [projectId]);
+  
   const handleCreate = () => {
    // navigate('/tasks/new');
     setEditingTaskId(null);
@@ -268,6 +271,12 @@ const {user} = useAuth();
                 placeholder="Buscar por Título, Usuario o Estado..."
               />
         <p>No hay tareas disponibles.</p>
+         <Button 
+                type="primary"
+                icon={<PlusOutlined />} 
+                onClick={handleCreate}
+              >Crear nueva tarea
+              </Button>
         </div>
       ) : (
         <>

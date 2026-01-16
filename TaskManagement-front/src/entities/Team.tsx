@@ -1,4 +1,5 @@
 export interface TeamData {
+  _id?: string;
   idTeam: string; // Identificador único del equipo (obligatorio)
   name: string; // Nombre del equipo, único, en minúsculas y sin espacios adicionales (obligatorio)
   liderTeam?:   {_id: string; first_name: string; last_name: string}; 

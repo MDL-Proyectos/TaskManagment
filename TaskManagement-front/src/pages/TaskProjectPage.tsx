@@ -5,13 +5,16 @@ import ProjectTaskModal from '../components/forms/ProjectTaskModal';
 import { TaskProjectData } from '../entities/TaskProject';
 import ProjectServices from '../routes/ProjectServices';
 import useAuth from '../hooks/useAuth';
+import ProjectManagementPage from './ProjectTaskManagment';
+import { Link, useNavigate } from 'react-router-dom';
 
 
-const TaskProjectPage: React.FC = () => {
+function TaskProjectPage() {
   const [data, setData] = useState<TaskProjectData[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingProject, setEditingProject] = useState<TaskProjectData | null>(null);
   const {user} = useAuth(); 
+  const navigate = useNavigate();
 
     const fetchProject = async () => {
     try {
@@ -137,9 +140,15 @@ const handleDelete = (id: string) => {
   return (
     <div style={{ padding: '20px' }}>
       <h1>Gestión de Proyectos</h1>
-      <Button type="primary" onClick={handleCreate} style={{ marginBottom: '20px' }}>
-        Crear Proyecto
-      </Button>
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
+            <Button color="geekblue" variant="outlined" onClick={handleCreate} style={{ marginBottom: '20px' }}>
+              Crear Proyecto
+            </Button>
+             {/* <p>Cantidad total de Tareas: {filteredTasks.length}</p> */}
+            <Button color="geekblue" variant="solid" onClick={() => navigate('/taskProjectManagment')} style={{ marginBottom: '20px' }}>
+              Tareas por Proyecto
+            </Button>
+            </div>
       <Table dataSource={data} columns={columns} rowKey="_id" />
       {modalVisible && (
         <ProjectTaskModal

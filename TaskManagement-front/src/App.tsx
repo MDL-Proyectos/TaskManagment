@@ -16,6 +16,7 @@ import Login from './modules/Login.tsx';
 import { AuthProvider, useAuth } from './contexts/authContext.tsx';
 import ProtectedRoute from './layout/ProtectedRoute.tsx';
 import UserPassForm from './components/forms/UserPassForm.tsx';
+import ProjectTaskManagment from './pages/ProjectTaskManagment.tsx';
 
 function App() {
   return (
@@ -44,8 +45,7 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="users/p/" element={<UserPassForm />} />        
           <Route path="tasks" element={<Tasks />} />      
-          <Route path="tasks/new" element={<TaskForm />} />   
-          <Route path="taskProject" element={<TaskProjectPage />} />     
+          <Route path="tasks/new" element={<TaskForm />} />      
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>
@@ -60,7 +60,8 @@ function AppRoutes() {
           <Route path="users/role" element={<Role />} />
           <Route path="users/role/create" element={<RoleForm />} />
           <Route path="users/role/:name" element={<RoleForm />} />
-
+          <Route path="taskProject" element={<TaskProjectPage />} />    
+          <Route path="taskProjectManagment" element={<ProjectTaskManagment />} />    
         </Route>
       </Route>
     </Routes>

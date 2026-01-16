@@ -7,12 +7,14 @@ import {
   UserOutlined,
   BookOutlined,
   IdcardOutlined,
-  FileDoneOutlined
+  FileDoneOutlined,
+  ProfileOutlined
 } from '@ant-design/icons'
 import { Button, Layout, Menu, theme, Breadcrumb } from 'antd'
 import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout
 import { useAuth } from '../contexts/authContext.tsx';
+import { ItemType } from 'antd/es/menu/interface';
 
 function getItem(label: any, key: any, icon: any, children?: any, roles?: Rol[]) {
   return {
@@ -27,9 +29,10 @@ function getItem(label: any, key: any, icon: any, children?: any, roles?: Rol[])
 export interface MenuItem {
   key: string;
   icon?: React.ReactNode;
-  children?: MenuItem[];
+  children?: ItemType<MenuItem>[]; // Mantener el tipo esperado
   label: React.ReactNode;
-  roles?: Rol[]; 
+  roles?: Rol[];
+  [dataKey: `data-${string}`]: any; // Agregar firma de índice para propiedades dinámicas
 }
 
 type Rol = 'ADMIN' | 'MANAGER' | 'ALL_USER' | 'LIDER';
@@ -47,11 +50,12 @@ const generateMenuItems = () => [
     
   ], ['ALL_USER']),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
-  getItem(<Link to="/tasks"> Tareas </Link>, '4', <BookOutlined />, null, ['ALL_USER']),
-  getItem(<Link to="/about"> About </Link>, '7', <QuestionCircleOutlined />, null, ['ALL_USER']), 
+  getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),  
+  getItem(<Link to="/tasks"> Tareas </Link>, '7', <ProfileOutlined />, null, ['ALL_USER']),
+  getItem(<Link to="/about"> About </Link>, '8', <QuestionCircleOutlined />, null, ['ALL_USER']), 
 ];
 
-const App: React.FC = () => {
+function App() {
   const navigate = useNavigate();
   const { logout, user} = useAuth(); //acceso al usuario logueado
   const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
@@ -65,32 +69,29 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const filteredItems = useMemo(() => { //para calcular la lista de ítems filtrados solo cuando el currentRole cambia
+  const filteredItems = useMemo(() => {
     const allItems = generateMenuItems();
 
-    const filterMenu = (menuItems: MenuItem[]): MenuItem[] => { //para filtrar los items del menú según el rol actual
+    const filterMenu = (menuItems: MenuItem[]): ItemType<MenuItem>[] => {
       return menuItems
         .map(item => {
-          // Si el ítem no tiene roles o el rol actual está incluido, lo mantiene
           const isItemAllowed = !item.roles || item.roles.includes(currentRole as Rol);
-  
+
           if (!isItemAllowed && !item.roles?.includes('ALL_USER')) {
-            return null; // El ítem principal no está permitido
+            return null;
           }
 
-          // Si el ítem tiene sub-ítems, los filtra recursivamente
           if (item.children) {
-            const filteredChildren = filterMenu(item.children);
-            // Si el ítem principal está permitido pero no tiene hijos visibles, no lo mostramos (opcional)
-            if (filteredChildren.length === 0 && !item.label) { 
-                return null;
+            const filteredChildren = filterMenu(item.children as MenuItem[]);
+            if (filteredChildren.length === 0 && !item.label) {
+              return null;
             }
             return { ...item, children: filteredChildren };
           }
 
-          return item; 
+          return item;
         })
-        .filter(item => item !== null); // Eliminar ítems nulos/no permitidos
+        .filter((item): item is MenuItem => item !== null);
     };
 
     return filterMenu(allItems);

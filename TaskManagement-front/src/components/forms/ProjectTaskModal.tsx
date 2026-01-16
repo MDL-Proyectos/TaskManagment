@@ -126,7 +126,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
       <Form.Item
         label="Equipo"
         name="idTeam"
-        rules={[{ required: false }]}
+        rules={[{ required: true , message: 'Por favor, selecciona un equipo' }]}
       >
         <Select placeholder="Selecciona un Equipo">
             {teams.map((team) => (
