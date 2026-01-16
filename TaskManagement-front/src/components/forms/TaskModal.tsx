@@ -8,6 +8,7 @@ import UserServices from '../../routes/UserServices';
 import TeamService from '../../routes/TeamServices';
 import ProjectServices from '../../routes/ProjectServices';
 import { TaskProjectData } from '../../entities/TaskProject';
+import useAuth from '../../hooks/useAuth';
 
 interface TaskModalProps {
   visible: boolean;
@@ -28,6 +29,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [users, setUsers] = useState<UsuarioData[]>([]); // Estado para almacenar la lista de usuarios
  const [teams, setTeams] = useState<TeamData[]>([]); // Estado para almacenar la lista de equipos
   const [projects, setProjects] = useState<TaskProjectData[]>([]); // Estado para almacenar la lista de proyectos
+  const { user: currentUser } = useAuth();
+  
   // Cargar datos si es edición
   const fetchTask = async () => {
     try {
@@ -143,6 +146,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         <Form.Item
         label="Status"
         name="status"
+        initialValue={"Nuevo"}
         rules={[{ required: true, message: 'Por favor, selecciona un estado' }]}
       >
         <Select>
@@ -156,7 +160,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           label="Prioridad"
           name="priorityLevel"
           rules={[{ required: true, message: 'Por favor, selecciona una prioridad' }]}
-          
+          initialValue="Baja"
         >
           <Select>
             <Select.Option value="Baja">Baja</Select.Option>
@@ -174,12 +178,14 @@ const TaskModal: React.FC<TaskModalProps> = ({
         <Form.Item
           label="Fecha de creación"
           name="created_at"
+          initialValue={dayjs()}
         >
           <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
         </Form.Item>
          <Form.Item
         label="Fecha de Vencimiento"
         name="due_date"
+        initialValue={dayjs()}
         rules={[{ required: true, message: 'Por favor, selecciona la fecha de vencimiento' }]}
       >
         <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
@@ -188,6 +194,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       <Form.Item
         label="Fecha de Finalización"
         name="completed_at"
+        initialValue={dayjs()}
       >
         <DatePicker 
         format="DD-MM-YYYY" 
@@ -247,6 +254,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         label="Autorizó"
         name={['authorized_by', '_id']}
         rules={[{ required: true, message: 'Por favor, selecciona un usuario' }]}
+        initialValue={currentUser?._id}
         >
         <Select placeholder="Selecciona un usuario">
             {users.map((user) => (
@@ -275,16 +283,21 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   {...restField}
                   label="Fecha de Creación"
                   name={[name, 'created_at']}
+                  initialValue={dayjs()}
                 >
-                  <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+                  <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} 
+                  disabled={true} />
                 </Form.Item>
                 <Form.Item
                   {...restField}
                   label="Autor"
                   name={[name, 'author']}
+                  initialValue={currentUser?._id}
                   
                 >
-                  <Select placeholder="Selecciona un autor">
+                  <Select 
+                  disabled={true}
+                  placeholder="Selecciona un autor">
                     {users.map((user) => (
                       <Select.Option key={user._id} value={user._id}>
                         {user.first_name} {user.last_name}
