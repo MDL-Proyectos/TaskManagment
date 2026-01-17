@@ -14,13 +14,11 @@ router.post('/', createTaskProject)
 router.put('/:id', updateTaskProject)
 router.delete('/:id', deleteTaskProject)
 
-async function getAllTaskProjects(req, res, next) {
-    //console.log('getAllUsers by user ', req.user._id)
+async function getAllTaskProjects(req, res, next) {  
     try {
-      logger.info('getAllTaskProjects')
       const taskProject = await TaskProject.find({})
       .populate('idTeam')
-      logger.info("taskProject %s", taskProject)
+     // logger.info("taskProject %s", taskProject)
       res.send(taskProject)
     } catch (err) {
       next(err)
@@ -28,7 +26,7 @@ async function getAllTaskProjects(req, res, next) {
 }
 
 async function getTaskProjectById(req, res, next) {
-  logger.info('getTaskProjectById by id ', req.params.id)
+
   try {
     logger.info('getTaskProjectById')
     const taskProject = await TaskProject.findOne({ _id: req.params.id })
@@ -44,10 +42,9 @@ async function createTaskProject(req, res, next) {
     const taskProject = req.body
     try {
       logger.info('CREATE TASK PROJECT')
-      logger.info('taskProject %s', taskProject)
-
-        const team = await Team.findOne({ idTeam: taskProject.idTeam });
-        logger.info('team %s', team)
+    
+      const team = await Team.findOne({ idTeam: taskProject.idTeam });
+     
       if (!team) {
         return res.status(400).send('Equipo no encontrado.'); // Código 400 porque el cliente envió un team inválido
       }
@@ -63,15 +60,14 @@ async function createTaskProject(req, res, next) {
   }
 
   async function updateTaskProject(req, res, next) {
-    //console.log('getAllUsers by user ', req.user._id)
-    logger.info('UPDATE TASK PROJECT %s', req.body)
+
+   // logger.info('UPDATE TASK PROJECT %s', req.body)
     const taskProject = req.params
     if (!req.params.id) {
       res.status(500).send('The param id is not defined');
     }
   
     try {
-   //   logger.info(req.params)
       const taskProjectUpdated = await TaskProject.findOne({ _id: req.params.id });
       
       if (req.body.idTeam) {
@@ -89,7 +85,6 @@ async function createTaskProject(req, res, next) {
         return res.status(400).send('TaskProject not found');
       } 
       await taskProjectUpdated.updateOne(req.body)
-      logger.info(taskProjectUpdated)
 
     res.send(`TaskProject Updated :  ${req.params.id}`)
     } catch (err) {
@@ -99,7 +94,13 @@ async function createTaskProject(req, res, next) {
 
   async function deleteTaskProject(req, res, next) {
     logger.info('DELETE TASK PROJECT')
+
     try {
+      if (req.user.role.is_admin) {
+        logger.error('User is not admin.')
+        return res.status(403).end()
+      }
+
       if (!req.params.id) {
         return res.status(500).send('The param id is not defined');
       }

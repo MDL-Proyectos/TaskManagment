@@ -24,8 +24,8 @@ const saltRounds = 10; // Define el número de rondas de hashing
 async function passTest(req, res, next){
   const passEncrypted = await bcrypt.hash(req.params.name, saltRounds);
   
-  logger.info('name pss: ', req.params.name)
-  logger.info('> pss: ', passEncrypted)
+  //logger.info('name pss: ', req.params.name)
+ // logger.info('> pss: ', passEncrypted)
   res.send(passEncrypted) 
 }
 
@@ -74,15 +74,14 @@ async function validatePassword(req, res, next) {
     if (!user) {
       return res.status(404).send('User not found');
     }
-    logger.info('User password hash: ', req.body.currentPassword);
-   // console.log
+  // logger.info('User password hash: ', req.body.currentPassword);
     
     const result = await user.checkPassword(req.body.currentPassword)
     if (!result.isOk) {
-      console.error('User password is invalid. Sending 401 to client')
+      logger.error('User password is invalid. Sending 401 to client')
       return res.status(401).end()
     }
-       logger.info('Password is valid');
+      logger.info('Password is valid');
       res.status(200).send('Invalid password');
     
   } catch (err) {
@@ -94,7 +93,7 @@ async function validatePassword(req, res, next) {
 
 async function resetPassword(req, res, next) {
   const user = await User.findById(req.params.id);
-  user.password = '1';
+  user.password = process.env.DEFAULT_PASSWORD;
   
   try{
     // 1. Validar que los campos obligatorios estén presentes
@@ -116,7 +115,7 @@ async function resetPassword(req, res, next) {
     await user.save();
     res.status(200).json({ message: 'Contraseña actualizada con éxito.' });
     } catch (error) {
-        console.error('Error al actualizar la contraseña:', error);
+        logger.error('Error al actualizar la contraseña:', error);
         res.status(500).json({ error: 'Error al actualizar la contraseña.' });
         next(err); // Pasar el error al siguiente middleware de manejo de errores
     }
@@ -146,7 +145,7 @@ async function updatePassword(req, res, next) {
     await user.save();
     res.status(200).json({ message: 'Contraseña actualizada con éxito.' });
     } catch (error) {
-        console.error('Error al actualizar la contraseña:', error);
+        logger.error('Error al actualizar la contraseña:', error);
         res.status(500).json({ error: 'Error al actualizar la contraseña.' });
         next(err); // Pasar el error al siguiente middleware de manejo de errores
     }
@@ -155,7 +154,7 @@ async function updatePassword(req, res, next) {
 async function createUser(req, res, next) {
  // console.log('createUser: ', req.body);
   const user = req.body;
-  logger.info('createUser: ', user);
+
   try {
     // 1. Validar que los campos obligatorios estén presentes
     if (!user.email || !user.role || !user.team) {
@@ -171,7 +170,7 @@ async function createUser(req, res, next) {
     // 3. Verificar si el usuario ya existe por email (código de estado 409 Conflict es más apropiado)
     const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
-      console.log('El usuario ya existe.');
+      logger.error('El usuario ya existe.');
       return res.status(409).send('El usuario con este email ya existe.');
     }
 
@@ -204,7 +203,7 @@ async function createUser(req, res, next) {
     res.status(201).send(userWithoutPassword); // Código 201 Created para indicar creación exitosa
 
   } catch (err) {
-    console.error('Error al crear usuario:', err);
+    logger.error('Error al crear usuario:', err);
     next(err); // Pasar el error al siguiente middleware de manejo de errores
   }
 }
@@ -214,7 +213,7 @@ const getUserByField = async (fieldSearch, value) => {
     const user = await User.findOne({ [fieldSearch]: value });
     return user;
   } catch (error) {
-    console.error('Error al buscar el usuario', error);
+    logger.error('Error al buscar el usuario', error);
     throw error; // Si ocurre un error, lo lanzamos para que lo maneje el llamador
   }
 };
@@ -222,7 +221,6 @@ const getUserByField = async (fieldSearch, value) => {
 export { createUser, getUserByField }; // Exporta ambas funciones si las vas a usar en otros módulos
 
 async function updateUser(req, res, next) {
-  console.log('updateUser with id: ', req.params.id)
 
   if (!req.params.id) {
     return res.status(404).send('Parameter id not found')
@@ -239,7 +237,7 @@ async function updateUser(req, res, next) {
     const userToUpdate = await User.findById(req.params.id)
     const userNewData = req.body
     if (!userToUpdate) {
-      console.error('User not found')
+      logger.error('User not found')
       return res.status(404).send('User not found')
     }
 
@@ -247,18 +245,17 @@ async function updateUser(req, res, next) {
       const newRole = await Role.findOne({ name: userNewData.role })
 
       if (!newRole) {
-        console.info('New role not found.')
+        logger.error('New role not found.')
         return res.status(400).end()
       }
       req.body.role = newRole._id
     }
 
     if (req.body.team) {
-      console.log('team ' + userNewData.team)
       const newTeam = await Team.findOne({ idTeam: userNewData.team })
 
       if (!newTeam) {
-        console.info('New team not found.')
+        logger.error('New team not found.')
         return res.status(400).end()
       }
       req.body.team = newTeam._id
@@ -271,7 +268,6 @@ async function updateUser(req, res, next) {
 
     // This will return the previous status
     await userToUpdate.updateOne(req.body)
-    console.log(userToUpdate)
     res.send(userToUpdate)
 
     // This return the current status
@@ -290,7 +286,6 @@ async function updateUser(req, res, next) {
 }
 
 async function blockUser(req, res, next) {
-  console.log('BlockUser with id: ', req.params.id)
 
   if (!req.params.id) {
     res.status(500).send('The param id is not defined')
@@ -306,7 +301,6 @@ async function blockUser(req, res, next) {
    // await User.deleteOne({ _id: user._id })
    blockUser.is_deleted = true
     await blockUser.updateOne(req.body)
-    console.log(blockUser)
     res.send(blockUser)
 
   //  res.send(`User deleted :  ${req.params.id}`)
@@ -316,13 +310,17 @@ async function blockUser(req, res, next) {
 }
 
 async function deleteUser(req, res, next) {
-  console.log('deleteUser with id: ', req.params.id);
 
   if (!req.params.id) {
     res.status(500).send('The param id is not defined');
   }
 
-  try {
+  if (req.user.role.is_admin) {
+    logger.error('User is not admin.')
+    return res.status(403).end()
+  }  
+
+  try {    
     const userDeleted = await User.findById(req.params.id);
    
     if (!userDeleted) {
@@ -332,14 +330,14 @@ async function deleteUser(req, res, next) {
     const listTask = await Task.find({assigned_user : userDeleted});
 
     if (listTask.length > 0) {
-      console.log(listTask);
+      logger.error(listTask);
       return res.status(400).send('The user cannot be deleted. Related tasks exist.');
     }
 
    // await User.deleteOne({ _id: user._id })
    userDeleted.is_deleted = true
     await userDeleted.deleteOne(req.body)
-    console.log(userDeleted)
+    logger.info(userDeleted)
 
   res.send(`User deleted :  ${req.params.id}`)
   } catch (err) {

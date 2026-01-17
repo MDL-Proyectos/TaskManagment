@@ -15,7 +15,7 @@ router.delete('/:name', deleteRole)
 async function getAllRoles(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     try {
-      logger.info('getAllRoles')
+   //   logger.info('getAllRoles')
       const role = await Role.find({})
       res.send(role)
     } catch (err) {
@@ -24,9 +24,9 @@ async function getAllRoles(req, res, next) {
 }
 
 async function getTaskByName(req, res, next) {
-  logger.info('getTaskByName by name ', req.params.name)
+  //logger.info('getTaskByName by name ', req.params.name)
   try {
-    logger.info('getTaskByName')
+   // logger.info('getTaskByName')
     const role = await Role.findOne({ name: req.params.name })
     res.send(role)
   } catch (err) {
@@ -38,7 +38,7 @@ async function createRole(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const role = req.body
     try {
-      logger.info('CREATE ROLE')
+      logger.info('CREATE NEW ROLE')
 
       const roleCreate = await await Role.create({
         ...role
@@ -57,7 +57,7 @@ async function createRole(req, res, next) {
     }
   
     try {
-      logger.info(req.params)
+     // logger.info(req.params)
       const roleUpdated = await Role.findOne({name : req.params.name});
      
       if (!roleUpdated) {
@@ -65,7 +65,7 @@ async function createRole(req, res, next) {
         return res.status(400).send('Role not found');
       } 
       await roleUpdated.updateOne(req.body)
-      logger.info(roleUpdated)
+      //logger.info(roleUpdated)
   
     res.send(`Role Updated :  ${req.params.id}`)
     } catch (err) {
@@ -74,8 +74,12 @@ async function createRole(req, res, next) {
   }
 
   async function deleteRole(req, res, next) {
-    logger.info('DELETE ROLE')
+    logger.info('DELETE ROLE: ', req.params.name)
     try {
+      if (req.user.role.is_admin) {
+        logger.error('User is not admin.')
+        return res.status(403).end()
+      }
      const roleDeleted = await Role.findOneAndDelete({name : req.params.name});
       if (!roleDeleted) {
         res.status(404).send('Role not found');

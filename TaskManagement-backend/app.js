@@ -20,10 +20,11 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(authorization)
+//app.use(authorization)
 
 app.use('/', statusRouter)
 app.use('/auth', authRouter)
+app.use(authorization)
 //app.use('/users', authentication, userRouter)
 
 //app.use('/auth')

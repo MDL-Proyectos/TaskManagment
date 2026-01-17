@@ -25,7 +25,7 @@ async function getAllTeams(req, res, next) {
   }
 
   async function getTeamById(req, res, next) {
-    logger.info('getTeamByID by team ', req.params)
+   // logger.info('getTeamByID by team ', req.params)
 
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
@@ -43,8 +43,7 @@ async function getAllTeams(req, res, next) {
 async function createTeam(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const team = req.body
-    delete req.body.liderTeam
-    
+    delete req.body.liderTeam    
     try {
     
         const teamCreate = await Team.create({
@@ -57,7 +56,7 @@ async function createTeam(req, res, next) {
       }
   }
   async function updateTeam(req, res, next) {
-    logger.info('put team ', req.body)
+
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
@@ -86,11 +85,11 @@ async function createTeam(req, res, next) {
       }
      
       if (teamNewData.liderTeam) {
-        logger.info('Encontro registro de lider' + teamNewData.liderTeam)
+    
         try{
           const liderSelected = await User.findById(teamNewData.liderTeam);
           if (!liderSelected) {
-            logger.info('teamSelected not found.')
+            logger.error('teamSelected not found.')
             return res.status(404).send('LiderTeam not found')
           }
             req.body.liderTeam = liderSelected;
@@ -105,7 +104,6 @@ async function createTeam(req, res, next) {
       req.body.is_deleted = !teamNewData.is_deleted //debo negar el valor porque el data viaja a la inversa en el modal.
   
       await teamToUpdate.updateOne(req.body)
-      logger.info(teamToUpdate)
       res.send(teamToUpdate)
 
     } catch (err) {
@@ -114,15 +112,15 @@ async function createTeam(req, res, next) {
   }
 
   async function deleteTeam(req, res, next) {
-    logger.info('DELETE team ', req.body)
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
     
-  
-    //if (!req.isAdmin() && req.params.id != req.user._id) {
-    // return res.status(403).send('Unauthorized')
-    //}      
+      //valido que sea admin el usuario que elimina
+      if (req.user.role.is_admin) {
+        logger.error('User is not admin.')
+        return res.status(403).end()
+      }    
   
     try {
       const teamToDelete = await  Team.findOne({ idTeam: req.params.id })
