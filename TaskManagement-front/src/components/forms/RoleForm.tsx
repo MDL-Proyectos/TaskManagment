@@ -95,7 +95,7 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
   const handleDelete = async (values: any) => {
   
     try {
-      console.log('Valores enviados:', values);
+   //   console.log('Valores enviados:', values);
   
       if (values) {
         const validoUso = await validacionUsuarios(values.name);

@@ -175,7 +175,7 @@ useEffect(() => {
             color = 'green';
             break;
           case 'Completado':
-            color = 'red';
+            color = 'purple';
             break;
           case 'Cancelado':
             color = 'orange';
