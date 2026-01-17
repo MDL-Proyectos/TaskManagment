@@ -8,6 +8,7 @@ import UserServices from '../../routes/UserServices';
 import { TeamData } from '../../entities/Team';
 import { UsuarioData } from '../../entities/User';
 import GenericFormModal from './GenericModal'; // Asume esta ruta
+import userService from '../../routes/UserServices';
 
 interface TeamFormModalProps {
   initialTeamId?: string | null;
@@ -54,6 +55,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
 
   const fetchUsers = async () => {
     try {
+
       const listUsers = await UserServices.getUsers(); 
       // Filtrar solo usuarios activos
       setUsers(listUsers.filter(user => !user.is_deleted)); 
@@ -105,6 +107,20 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
     setLoading(true);
     try {
       if (initialTeamId) {       
+        const userList = await userService.getUsers();
+          // Busca si algún usuario tiene asignado
+        const isTeamUsed = userList.some((user: any) => user.team.idTeam === initialTeamId);
+        if (!isTeamUsed) {
+          await TeamServices.deleteTeam(initialTeamId); 
+          message.success('Equipo eliminado correctamente');
+        } else {
+          console.error('El Team esta siendo utilizado:', initialTeamId);
+          message.error('El Team esta siendo utilizado.');
+          return; // Detenemos el flujo en caso de error
+        }
+      onSaveSuccess();
+      onClose();
+
       }
     } catch (error) {
       message.error('No se pudo eliminar el equipo.');
