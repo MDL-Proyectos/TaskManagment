@@ -1,7 +1,11 @@
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import AuthServices from '../routes/LoginRoute.tsx';
+import React from 'react';
+import { Form, Input, Button, Typography, Card, Row, Col } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import fondoImg from '../assets/fondo1.jpg';
+const { Title, Text } = Typography;
 import { useAuth } from '../contexts/authContext.tsx'; 
-import Password from 'antd/es/input/Password';
+import AuthServices from '../routes/LoginRoute.tsx';
+import '../App.css';
 
 type FieldType = {
     email?: string;
@@ -23,51 +27,77 @@ type FieldType = {
     }
   };
 
+  return (
+    <div className="login-container">
+      <Card className="login-card" bodyStyle={{ padding: 0 }} bordered={false}>
+        <Row style={{ height: '100%' }}>
+          {/* LADO IZQUIERDO: FORMULARIO */}
+          <Col xs={24} md={12} className="form-section">
+            <div className="form-wrapper">
+              <Title level={2} className="login-title">Buen día!</Title>
+              <Text type="secondary" className="login-subtitle">
+                Por favor, ingresá tu mail y contraseña para iniciar sesión.
+              </Text>
 
-    return (
-        <div 
-        className="login-container" >
+              <Form
+                layout="vertical"
+                onFinish={handleLogin}
+                style={{ marginTop: 40 }}
+              >
+                <Form.Item name="email"
+                rules={[{ required: true, message: 'Por favor, ingresa tu email' }]}>
+                  <Input 
+                    placeholder="Email" 
+                    required={true}
+                    className="login-input" 
+                  />
+                </Form.Item>
 
-            <div className="login-form-wrapper">
-        <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600, backgroundColor: 'transparent' }}
-        initialValues={{ remember: true }}
-        onFinish={handleLogin}
-       // onFinishFailed={handleUser}
-        autoComplete="off"
-      >
-        <Form.Item<FieldType>
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: 'Por favor, ingresa tu email!' }]}
-        >
-          <Input />
-        </Form.Item>
-    
-        <Form.Item<FieldType>
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: 'Por favor, ingresa tu contraseña!' }]}
-        >
-          <Input.Password />
-        </Form.Item>
-      
-        <Form.Item label={null}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-      </div>
-</div>
-    );
+                <Form.Item name="password" 
+                rules={[{ required: true, message: 'Por favor, ingresa tu contraseña' }]}>
+                  <Input.Password
+                    placeholder="Password"
+                    className="login-input"
+                    required={true}
+                    iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                  />
+                </Form.Item>
+
+                <div style={{ textAlign: 'right', marginBottom: 24 }}>
+
+                </div>
+
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" className="sign-in-button" block>
+                    Ingresar
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Col>
+          {/* LADO DERECHO: IMAGEN DE FONDO Y TEXTO */}
+          <Col xs={0} md={10} className="image-section" 
+               style={{ backgroundImage: 'url(' + fondoImg + ')' }}>
+           <div className="overlay-content">
+            <Title 
+              level={1} 
+              style={{ 
+                color: '#dee5eb', 
+                fontWeight: 300,
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                padding: '20px',
+                borderRadius: '15px',
+                display: 'inline-block' // Para que el fondo no ocupe todo
+              }}
+            >
+              Tu trabajo, centralizado.
+            </Title>
+            </div>
+          </Col>
+        </Row>
+      </Card>
+    </div>
+  );
 };
 
 export default Login;
-
-/*        <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>*/

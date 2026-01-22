@@ -42,18 +42,88 @@
 .read-the-docs {
   color: #888;
 }
-.login-container {
-  background-image: url('./assets/fondo1.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  min-height: 100vh; /* Para que cubra toda la pantalla */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .login-form-wrapper {
   background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente para el formulario */
   padding: 30px;
   border-radius: 8px;
+}
+
+/* App.css */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #34165f;
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 1000px;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.form-section {
+    padding: 60px 40px;
+    background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-wrapper {
+    max-width: 350px;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+.login-title {
+    margin-bottom: 8px !important;
+    font-size: 32px !important;
+    font-weight: 600 !important;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.login-input {
+    height: 50px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    border: none;
+}
+
+.sign-in-button {
+    height: 50px;
+    border-radius: 10px;
+    background-color: #410fb6 !important;
+    border-color: #410fb6 !important;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 8px 15px rgba(65, 15, 182, 0.3);
+}
+
+.image-section {
+    background: linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    margin: 15px;
+    border-radius: 30px;
+}
+
+.overlay-content {
+    position: absolute;
+    bottom: 100px;
+    left: 40px;
+    right: 40px;
 }
