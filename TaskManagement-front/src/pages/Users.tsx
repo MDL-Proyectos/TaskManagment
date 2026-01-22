@@ -174,22 +174,20 @@ const Users = () => {
   ];
 
   return (
-    <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
+    <div style={{ width: '100%', padding: '20px' }}>
       <Title level={2} style={{ marginBottom: 30 }}>
        Usuarios
-      </Title>
-      
-      
-      <Button
-      //Botón de Creación  
-        type="primary" 
-        icon={<UserAddOutlined />}
-        onClick={handleCreate}
-        style={{ marginBottom: 16 }} // Espacio debajo del botón
-      >
-        Nuevo Usuario
-      </Button>
-      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'flex-end' }}>
+      </Title>    
+      <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
+              <Button
+              //Botón de Creación  
+                type="primary" 
+                icon={<UserAddOutlined />}
+                onClick={handleCreate}
+                style={{ marginBottom: 16 }} // Espacio debajo del botón
+              >
+                Nuevo Usuario
+              </Button>              
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar..."

@@ -75,16 +75,19 @@ function Teams() {
 
  
   return (
-    <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
-      <Title level={2} style={{ marginBottom: 50 }}>
-      Equipos
-      </Title>
-      <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end'}}>
-              <GlobalSearch 
-                onSearch={handleGlobalSearch} 
-                placeholder="Buscar por Nombre o Lider..."
-              />
-            </div>
+    <div style={{  width: '100%', padding: '60px', flexDirection: 'column', display: 'flex', alignItems: 'center' }}>
+         <Title level={2} style={{ marginBottom: 50 }}>
+            Equipos
+         </Title>
+         <div style={{ width: '80%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
+            <Button type="primary" onClick={handleCreate}>
+              Nuevo
+            </Button>      
+                <GlobalSearch 
+                  onSearch={handleGlobalSearch} 
+                  placeholder="Buscar por Nombre o Lider..."
+                />    
+          </div>
         {team.length === 0 ? (
           <p>...</p>
           ) : (
@@ -116,9 +119,6 @@ function Teams() {
           />
           )
         }
-         <Button type="primary" onClick={handleCreate}>
-        Nuevo
-      </Button>
       <TeamModal
         open={isModalOpen}
         initialTeamId={editingTeamId} 

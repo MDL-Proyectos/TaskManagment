@@ -42,8 +42,8 @@ function Home(){
   }
 
   return (
-    <div style={{ padding: '20px', width: '100%', maxWidth: '1200px' }}>
-      <Title level={3} >Hola, {user?.first_name}!</Title>
+    <div style={{ padding: '20px', width: '100%', maxWidth: '1200px', height: '70%' }}>
+      <Title level={2} >Hola, {user?.first_name}!</Title>
       <Title level={2} style={{ marginBottom: 30 }}>
         {isAdmin ? 'Resumen General de las Tareas' : 'Mi Resumen de Tareas'}
       </Title>

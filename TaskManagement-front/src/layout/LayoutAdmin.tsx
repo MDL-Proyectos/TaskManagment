@@ -98,7 +98,7 @@ function App() {
   }, [currentRole]);
 
   return (
-    <Layout style={{ minHeight: '100vh', height: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
         <Menu

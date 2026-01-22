@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button, Table, Modal, message } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Typography } from 'antd';
+const { Title } = Typography;
 import ProjectTaskModal from '../components/forms/ProjectTaskModal';
 import { TaskProjectData } from '../entities/TaskProject';
 import ProjectServices from '../routes/ProjectServices';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import Card from 'antd/es/card/Card';
 
 
 function TaskProjectPage() {
@@ -122,8 +125,8 @@ const handleDelete = (id: string) => {
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Gestión de Proyectos</h1>
+    <Card style={{ padding: '20px' }}>
+      <Title level={2} >Gestión de Proyectos</Title>
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
             <Button color="geekblue" variant="outlined" onClick={handleCreate} style={{ marginBottom: '20px' }}>
               Crear Proyecto
@@ -145,7 +148,7 @@ const handleDelete = (id: string) => {
           initialTaskId={editingProject?._id || null}
         />
       )}
-    </div>
+    </Card>
   );
 };
 

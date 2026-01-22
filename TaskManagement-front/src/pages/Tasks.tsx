@@ -258,7 +258,7 @@ useEffect(() => {
   ];
 
   return (
-    <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
+    <div style={{ width: '100%', padding: '10px', display: 'flex', flexDirection: 'column' }}>
       <Title level={3} style={{ marginBottom: 30 }}>
         Listado de Tareas
       </Title>

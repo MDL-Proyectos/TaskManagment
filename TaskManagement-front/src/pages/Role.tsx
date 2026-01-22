@@ -54,9 +54,12 @@ function Role() {
     });
 
   return (
-    <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
+    <div style={{ width: '90%', padding: '20px' }}>
         <Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>
-        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end'}}>
+        <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
+              <Button type="primary" onClick={handleCreate}>
+                  Nuevo Rol
+              </Button>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Nombre o Lider..."
@@ -93,9 +96,6 @@ function Role() {
           )}
         />
       )}
-      <Button type="primary" onClick={handleCreate}>
-        Nuevo Rol
-      </Button>
     </div>
   );
 }
