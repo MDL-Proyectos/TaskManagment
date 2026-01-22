@@ -37,6 +37,7 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
       open={open}
       onCancel={onClose}
       confirmLoading={confirmLoading}
+      width={900}
       onOk={() => {
         form.validateFields()
           .then(values => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, DatePicker, message, Select } from 'antd';
+import { Button, Form, Input, DatePicker, message, Select, Col, Row, Divider } from 'antd';
 import TaskServices from '../../routes/TaskServices';
 import dayjs from 'dayjs';
 import { UsuarioData } from '../../entities/User';
@@ -9,6 +9,7 @@ import TeamService from '../../routes/TeamServices';
 import ProjectServices from '../../routes/ProjectServices';
 import { TaskProjectData } from '../../entities/TaskProject';
 import useAuth from '../../hooks/useAuth';
+import GenericModal from './GenericModal';
 
 interface TaskModalProps {
   visible: boolean;
@@ -109,9 +110,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
     try {
       setConfirmLoading(true);
       const values = await form.validateFields();
-      
       if (idTask) {
         await TaskServices.updateTask(idTask, values);
+        console.log("Valores enviados:", values);
         message.success('Tarea actualizada');
       } else {
         await TaskServices.createTask(values);
@@ -128,176 +129,176 @@ const TaskModal: React.FC<TaskModalProps> = ({
   };
 
   return (
-    <Modal
+    <GenericModal
       title={idTask ? 'Editar Tarea' : 'Nueva Tarea'}
       open={visible}
-      onOk={handleOk}
+      onSubmit={handleOk}
       confirmLoading={confirmLoading}
-      onCancel={onClose}
+      isEditing={!!idTask}
+      onClose={onClose} 
+      form={form}
     >
-      <Form form={form} layout="vertical">
-        <Form.Item
-          label="Título"
-          name="title"
-          rules={[{ required: true, message: 'Por favor, ingresa el título' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-        label="Status"
-        name="status"
-        initialValue={"Nuevo"}
-        rules={[{ required: true, message: 'Por favor, selecciona un estado' }]}
-      >
-        <Select>
-          <Select.Option value="Nuevo">Nuevo</Select.Option>
-          <Select.Option value="En Progreso">En Progreso</Select.Option>
-          <Select.Option value="Completado">Completado</Select.Option>
-          <Select.Option value="Cancelado">Cancelado</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-          label="Prioridad"
-          name="priorityLevel"
-          rules={[{ required: true, message: 'Por favor, selecciona una prioridad' }]}
-          initialValue="Baja"
-        >
-          <Select>
-            <Select.Option value="Baja">Baja</Select.Option>
-            <Select.Option value="Media">Media</Select.Option>
-            <Select.Option value="Alta">Alta</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Descripción"
-          name="description"
-          rules={[{ required: true, message: 'Por favor, ingresa la descripción' }]}
-        >
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item
-          label="Fecha de creación"
-          name="created_at"
-          initialValue={dayjs()}
-        >
-          <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
-        </Form.Item>
-         <Form.Item
-        label="Fecha de Vencimiento"
-        name="due_date"
-        initialValue={dayjs()}
-        rules={[{ required: true, message: 'Por favor, selecciona la fecha de vencimiento' }]}
-      >
-        <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
-      </Form.Item>
+        <Row gutter={[24, 0]}>
+          
+          {/* COLUMNA COMPLETA: Título */}
+          <Col span={24}>
+            <Form.Item
+              label="Título de la Tarea"
+              name="title"
+              rules={[{ required: true, message: 'Por favor, ingresa el título' }]}
+            >
+              <Input placeholder="Ej: Actualizar base de datos" />
+            </Form.Item>
+          </Col>
 
-      <Form.Item
-        label="Fecha de Finalización"
-        name="completed_at"
-        initialValue={dayjs()}
-      >
-        <DatePicker 
-        format="DD-MM-YYYY" 
-      />
-      </Form.Item>
+          {/* COLUMNA IZQUIERDA */}
+          <Col span={12}>
+            <Form.Item
+              label="Status"
+              name="status"
+              initialValue={"Nuevo"}
+              rules={[{ required: true, message: 'Selecciona un estado' }]}
+            >
+              <Select>
+                <Select.Option value="Nuevo">Nuevo</Select.Option>
+                <Select.Option value="En Progreso">En Progreso</Select.Option>
+                <Select.Option value="Completado">Completado</Select.Option>
+                <Select.Option value="Cancelado">Cancelado</Select.Option>
+              </Select>
+            </Form.Item>
 
-      <Form.Item
-        label="Usuario Asignado"
-        name={['assigned_user', '_id']}
-        rules={[{ required: true, message: 'Por favor, selecciona un usuario' }]}
-        >
-        <Select placeholder="Selecciona un usuario">
-            {users.map((user) => (
-            <Select.Option key={user._id} value={user._id}>
-                {user.first_name} {user.last_name}
-            </Select.Option>
-            ))}
-        </Select>
-    </Form.Item>   
+            <Form.Item
+              label="Prioridad"
+              name="priorityLevel"
+              initialValue="Baja"
+              rules={[{ required: true }]}
+            >
+              <Select>
+                <Select.Option value="Baja">Baja</Select.Option>
+                <Select.Option value="Media">Media</Select.Option>
+                <Select.Option value="Alta">Alta</Select.Option>
+              </Select>
+            </Form.Item>
 
-    <Form.Item
-        label="Equipo"
-        name={['assigned_team', 'idTeam']}
-        rules={[{ required: true, message: 'Por favor, selecciona un Equipo' }]}
-        >
-        <Select placeholder="Selecciona un Equipo">
-            {teams.map((team) => (
-            <Select.Option key={team.idTeam} value={team.idTeam}>
-                {team.name} 
-            </Select.Option>
-            ))}
-        </Select>
-    </Form.Item>   
+            <Form.Item
+              label="Usuario Asignado"
+              name={['assigned_user', '_id']}
+              rules={[{ required: true }]}
+            >
+              <Select placeholder="Selecciona un usuario">
+                {users.map((user) => (
+                  <Select.Option key={user._id} value={user._id}>
+                    {user.first_name} {user.last_name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
 
+            <Form.Item label="Fecha de creación" name="created_at" initialValue={dayjs()}>
+              <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+            </Form.Item>
 
-      <Form.Item
-        label="Proyecto"
-        name="project"
-        rules={[{ required: true, message: 'Por favor, ingresa el proyecto' }]}
-      >
-        <Select placeholder="Selecciona un Proyecto">
-            {projects.map((project) => (
-            <Select.Option key={project._id} value={project._id}>
-                {project.name} 
-            </Select.Option>
-            ))}
-        </Select>
-      </Form.Item>
+            <Form.Item label="Fecha de Finalización" name="completed_at">
+              <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
 
-      <Form.Item
-        label="Observaciones"
-        name="observations"
-      >
-        <Input.TextArea placeholder="Observaciones" />
-      </Form.Item>
-      <Form.Item
-        label="Autorizó"
-        name={['authorized_by', '_id']}
-        rules={[{ required: true, message: 'Por favor, selecciona un usuario' }]}
-        initialValue={currentUser?._id}
-        >
-        <Select placeholder="Selecciona un usuario">
-            {users.map((user) => (
-            <Select.Option key={user._id} value={user._id}>
-                {user.first_name} {user.last_name}
-            </Select.Option>
-            ))}
-        </Select>
-    </Form.Item>  
+          {/* COLUMNA DERECHA */}
+          <Col span={12}>
+            <Form.Item label="Proyecto" name="project" rules={[{ required: true }]}>
+              <Select placeholder="Selecciona proyecto">
+                {projects.map((p) => (
+                  <Select.Option key={p._id} value={p._id}>{p.name}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-      <Form.List name="comments">
-        {(fields, { add, remove }) => (
-          <div>
-            {fields.map(({ key, name, ...restField }) => (
-              <div key={key} style={{ marginBottom: '20px' }}>
+            <Form.Item label="Equipo" name={['assigned_team', 'idTeam']} rules={[{ required: true }]}>
+              <Select placeholder="Selecciona equipo">
+                {teams.map((t) => (
+                  <Select.Option key={t.idTeam} value={t.idTeam}>{t.name}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Autorizado por" name={['authorized_by', '_id']} initialValue={currentUser?._id}>
+              <Select placeholder="Autorizante">
+                {users.map((u) => (
+                  <Select.Option key={u._id} value={u._id}>{u.first_name} {u.last_name}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Fecha de Vencimiento" name="due_date" rules={[{ required: true }]}>
+              <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+            </Form.Item>
+
+            <Form.Item label="Descripción" name="description" rules={[{ required: true }]}>
+              <Input.TextArea rows={1} placeholder="Breve descripción..." />
+            </Form.Item>
+          </Col>
+
+          {/* COLUMNA COMPLETA ABAJO: Observaciones y Comentarios */}
+          <Col span={24}>
+            <Form.Item label="Observaciones" name="observations">
+              <Input.TextArea placeholder="Observaciones adicionales" rows={2} />
+            </Form.Item>
+
+            <Divider orientation="horizontal">Comentarios</Divider>
+            
+           <Form.List name="comments">
+    {(fields, { add, remove }) => (
+      <>
+        {fields.map(({ key, name, ...restField }) => (
+          <div
+            key={key}
+            style={{
+              background: '#f9f9f9',
+              padding: '15px',
+              borderRadius: '8px',
+              marginBottom: '10px',
+              border: '1px solid #f0f0f0'
+            }}
+          >
+            <Row gutter={16} align="top">
+              <Col span={14}>
                 <Form.Item
                   {...restField}
                   label="Mensaje"
                   name={[name, 'message']}
-                  rules={[{ required: true, message: 'Por favor, ingresa el mensaje' }]}
+                  rules={[{ required: true, message: 'Ingresa el mensaje' }]}
                 >
-                  <Input.TextArea placeholder="Mensaje del comentario" />
+                  <Input.TextArea 
+                    placeholder="Escribe un comentario..." 
+                    rows={4} 
+                  />
                 </Form.Item>
-
+              </Col>
+              <Col span={8}>
                 <Form.Item
                   {...restField}
                   label="Fecha de Creación"
                   name={[name, 'created_at']}
                   initialValue={dayjs()}
                 >
-                  <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} 
-                  disabled={true} />
+                  <DatePicker 
+                    format="DD-MM-YYYY" 
+                    style={{ width: '100%' }} 
+                    disabled={true} 
+                  />
                 </Form.Item>
+
                 <Form.Item
                   {...restField}
                   label="Autor"
                   name={[name, 'author']}
                   initialValue={currentUser?._id}
-                  
                 >
                   <Select 
-                  disabled={true}
-                  placeholder="Selecciona un autor">
+                    disabled={true} 
+                    placeholder="Autor"
+                    style={{ width: '100%' }}
+                  >
                     {users.map((user) => (
                       <Select.Option key={user._id} value={user._id}>
                         {user.first_name} {user.last_name}
@@ -305,22 +306,29 @@ const TaskModal: React.FC<TaskModalProps> = ({
                     ))}
                   </Select>
                 </Form.Item>
-                <Button type="link" danger onClick={() => remove(name)}>
-                  Eliminar Comentario
-                </Button>
-              </div>
-            ))}
+              </Col>
 
-            <Form.Item>
-              <Button style={{ marginLeft: '1px' }} type="dashed" onClick={() => add()} block>
-                Agregar Comentario
-              </Button>
-            </Form.Item>
+              <Col span={2} style={{ textAlign: 'right', paddingTop: '30px' }}>
+                <Button 
+                  type="text" 
+                  danger 
+                  onClick={() => remove(name)} 
+                  title="Eliminar comentario"
+                >Eliminar
+                </Button>
+              </Col>
+            </Row>
           </div>
-        )}
-      </Form.List>
-      </Form>
-    </Modal>
+        ))}
+                  <Button type="dashed" onClick={() => add()} block style={{ marginTop: 10 }}>
+                    + Agregar Comentario
+                  </Button>
+                </>
+              )}
+            </Form.List>
+          </Col>
+        </Row>
+    </GenericModal>
   );
 };
 
