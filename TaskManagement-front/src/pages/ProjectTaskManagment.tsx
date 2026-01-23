@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Layout, Menu, theme, Spin, Empty, Button } from 'antd';
-import { FolderOutlined, ProfileOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { Layout, Menu, theme, Spin, Empty } from 'antd';
+import { FolderOutlined } from '@ant-design/icons';
 import ProjectServices from '../routes/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
 import Tasks from './Tasks'; // Importamos tu componente de tareas
-import useAuth from '../hooks/useAuth';
 import ProjectTaskModal from '../components/forms/ProjectTaskModal';
-
 const { Sider, Content } = Layout;
 
 function ProjectManagementPage() {
   const [projects, setProjects] = useState<TaskProjectData[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<TaskProjectData[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingProject, setEditingProject] = useState<TaskProjectData | null>(null);
-  const {user} = useAuth(); 
 
-  const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+  const { token: { colorBgContainer } } = theme.useToken();
   
   const fetchProject = async () => {
       try {
@@ -35,13 +31,8 @@ function ProjectManagementPage() {
   useEffect(() => {
     fetchProject();
   }, []);
-  
-  const handleCreate = () => {
-    setEditingProject(null);
-    setModalVisible(true);
-  };
 
-  // Mapeamos los proyectos a items del menú de AntD
+
   const menuItems = projects.map(p => ({
     key: p._id,
     icon: <FolderOutlined />,

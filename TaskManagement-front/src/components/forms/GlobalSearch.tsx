@@ -17,7 +17,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
   return (
     <Input.Search
       placeholder={placeholder}
-      enterButton={<SearchOutlined />}
+      enterButton={<SearchOutlined/>}
       size="large"
       loading={loading}
       onSearch={onSearch} 
