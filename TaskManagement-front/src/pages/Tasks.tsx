@@ -11,6 +11,7 @@ import { useAuth } from '../contexts/authContext.tsx';
 import { useDataFilter } from '../hooks/useDataFilter.tsx';
 const { confirm } = Modal;
 const { Title } = Typography;
+import AdminGuard from '../hooks/AdminGuard.tsx';
 
 interface TasksProps {
   projectId?: string; 
@@ -271,23 +272,29 @@ useEffect(() => {
                 placeholder="Buscar por Título, Usuario o Estado..."
               />
         <p>No hay tareas disponibles.</p>
-         <Button 
-                type="primary"
-                icon={<PlusOutlined />} 
-                onClick={handleCreate}
-              >Crear nueva tarea
-              </Button>
+        
+        <AdminGuard>
+          <Button 
+            type="primary"
+            icon={<PlusOutlined />} 
+            onClick={handleCreate}
+          >
+            Crear nueva tarea
+          </Button>
+        </AdminGuard>
         </div>
       ) : (
         <>
-            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
-              <Button 
-                type="primary"
-                icon={<PlusOutlined />} 
-                onClick={handleCreate}
-              >Crear nueva tarea
-              </Button>
-             {/* <p>Cantidad total de Tareas: {filteredTasks.length}</p> */}
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
+          <AdminGuard>
+          <Button 
+            type="primary"
+            icon={<PlusOutlined />} 
+            onClick={handleCreate}
+          >
+            Crear nueva tarea
+          </Button>
+        </AdminGuard>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Título, Usuario o Estado..."
