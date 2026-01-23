@@ -9,6 +9,8 @@ import ProjectServices from '../routes/ProjectServices';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import Card from 'antd/es/card/Card';
+import GlobalSearch from '../components/forms/GlobalSearch';
+import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 
 function TaskProjectPage() {
@@ -17,6 +19,7 @@ function TaskProjectPage() {
   const [editingProject, setEditingProject] = useState<TaskProjectData | null>(null);
   const {user} = useAuth(); 
   const navigate = useNavigate();
+  const [searchText, setSearchText] = useState('');
 
     const fetchProject = async () => {
     try {
@@ -124,9 +127,35 @@ const handleDelete = (id: string) => {
     },
   ];
 
+      const handleGlobalSearch = (value: string) => {
+        //Limpiar el texto (trim) y pasarlo a minusculas
+        setSearchText(value.toLowerCase().trim()); 
+      };
+  
+      const filteredProjects = useDataFilter(
+      data, 
+      searchText, 
+      // Función de mapeo específica para TaskData
+      (project: TaskProjectData) => 
+        [
+          project.name,
+          project.status,
+          project.idTeam?.name
+        ].join(' ')
+    );
+  
+
+
   return (
-    <Card style={{ padding: '20px' }}>
-      <Title level={2} >Gestión de Proyectos</Title>
+    <div>
+       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2}}>
+        <Title level={2} >Proyectos</Title>
+        <GlobalSearch 
+            onSearch={handleGlobalSearch} 
+            placeholder="Buscar por Nombre, Equipo o Estado..."
+          />
+        </div>
+        <Card style={{ padding: '20px' }}>
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
             <Button color="geekblue" variant="outlined" onClick={handleCreate} style={{ marginBottom: '20px' }}>
               Crear Proyecto
@@ -136,7 +165,11 @@ const handleDelete = (id: string) => {
               Tareas por Proyecto
             </Button>
             </div>
-      <Table dataSource={data} columns={columns} rowKey="_id" />
+      <Table dataSource={filteredProjects} columns={columns} rowKey="_id" 
+          pagination={{
+          pageSize: 6, 
+          showSizeChanger: false
+        }}/>
       {modalVisible && (
         <ProjectTaskModal
           open={modalVisible}
@@ -149,6 +182,7 @@ const handleDelete = (id: string) => {
         />
       )}
     </Card>
+        </div>
   );
 };
 
