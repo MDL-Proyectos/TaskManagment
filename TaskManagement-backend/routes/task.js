@@ -5,7 +5,7 @@ import logger from '../utils/logger.js'
 import Task from '../schemas/task.js'
 import Team from '../schemas/team.js'
 import User from '../schemas/user.js'
-
+import dayjs from 'dayjs';
 const router = express.Router()
 
 router.get('/', getAllTasks)
@@ -56,6 +56,8 @@ async function createTask(req, res, next) {
     if (!team) {
       res.status(404).send('Team not found')
     }
+
+    task.updated_at = dayjs().toDate();
 
     //Valido usuario asignado
     if (task.assigned_user) {
@@ -114,7 +116,6 @@ async function createTask(req, res, next) {
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
-    
   
     //if (!req.isAdmin() && req.params.id != req.user._id) {
     // return res.status(403).send('Unauthorized')
@@ -170,7 +171,7 @@ async function createTask(req, res, next) {
         logger.error('userAuthorized not found.')
         return res.status(400).end()
       }
-    
+      req.body.updated_at = dayjs().toDate();
   
       await taskToUpdate.updateOne(req.body)
       //logger.info(taskToUpdate)

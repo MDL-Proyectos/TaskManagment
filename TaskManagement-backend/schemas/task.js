@@ -45,7 +45,7 @@ const taskSchema = new Schema({
       type: String,
       default: Date.now,
       get: (date) => dayjs(date).format('DD-MM-YYYY'),
-      required: true  // Fecha de vencimiento de la tarea
+      required: true  // Fecha de vencimiento
     },
     completed_at: { //modificable
       type: String,
@@ -53,6 +53,12 @@ const taskSchema = new Schema({
       get: (date) => dayjs(date).format('DD-MM-YYYY'),
       default: null  // Fecha de finalización, por defecto es null si la tarea no ha sido completada
     },
+    updated_at: { 
+      type: String,
+      default: Date.now,
+      get: (date) => dayjs(date).format('DD-MM-YYYY'),
+      default: null  
+    },    
     comments: [
     {
         author: { 
