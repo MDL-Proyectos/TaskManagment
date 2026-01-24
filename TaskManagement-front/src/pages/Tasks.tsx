@@ -227,6 +227,21 @@ useEffect(() => {
     }      
       },
     {
+      title: 'Actualizado',
+      dataIndex: 'updated_at',
+      key: 'updated_at',
+      render: (updated_at: string | null | undefined) => {
+        if (!updated_at) {
+          return 'N/A';
+        }
+        // Usar dayjs para formatear la fecha ISO 8601
+        const formattedDate = dayjs(updated_at).isValid()
+          ? dayjs(updated_at).format('DD-MM-YYYY')
+          : 'Fecha inválida'; 
+          return formattedDate;
+    }      
+      },      
+    {
       title: 'Fecha de Vencimiento',
       dataIndex: 'due_date',
       key: 'due_date',
