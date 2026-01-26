@@ -185,21 +185,25 @@ const TaskModal: React.FC<TaskModalProps> = ({
               name={['assigned_user', '_id']}
               rules={[{ required: true }]}
             >
-              <Select placeholder="Selecciona un usuario">
-                {users.map((user) => (
-                  <Select.Option key={user._id} value={user._id}>
-                    {user.first_name} {user.last_name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select showSearch 
+            placeholder="Selecciona un usuario"
+            allowClear
+                options={users.map((user) => ({
+                  label: `${user.first_name} ${user.last_name}`,
+                  value: user._id,
+                }))}
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+              />
             </Form.Item>
 
             <Form.Item label="Fecha de creación" name="created_at" initialValue={dayjs()}>
               <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item label="Fecha de Finalización" name="completed_at">
-              <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+            <Form.Item label="Fecha de Finalización" name="completed_at" initialValue={dayjs()}>
+              <DatePicker format="DD-MM-YYYY"  style={{ width: '100%' }} />
             </Form.Item>
           </Col>
 
@@ -213,23 +217,34 @@ const TaskModal: React.FC<TaskModalProps> = ({
               </Select>
             </Form.Item>
 
-            <Form.Item label="Equipo" name={['assigned_team', 'idTeam']} rules={[{ required: true }]}>
-              <Select placeholder="Selecciona equipo">
-                {teams.map((t) => (
-                  <Select.Option key={t.idTeam} value={t.idTeam}>{t.name}</Select.Option>
-                ))}
-              </Select>
+            <Form.Item 
+              label="Equipo" 
+              name={['assigned_team', 'idTeam']} 
+              rules={[{ required: true, message: 'Por favor selecciona un equipo' }]}
+            >
+              <Select
+                showSearch
+                placeholder="Selecciona equipo"
+                allowClear
+                options={teams.map((team) => ({
+                  label: team.name,  
+                  value: team.idTeam,
+                }))}
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+              />
             </Form.Item>
 
             <Form.Item label="Autorizado por" name={['authorized_by', '_id']} initialValue={currentUser?._id}>
-              <Select placeholder="Autorizante">
+              <Select disabled={true} placeholder="Autorizante">
                 {users.map((u) => (
                   <Select.Option key={u._id} value={u._id}>{u.first_name} {u.last_name}</Select.Option>
                 ))}
               </Select>
             </Form.Item>
 
-            <Form.Item label="Fecha de Vencimiento" name="due_date" rules={[{ required: true }]}>
+            <Form.Item label="Fecha de Vencimiento" name="due_date"  initialValue={dayjs().add(1, 'day')} rules={[{ required: true }]}>
               <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
             </Form.Item>
 
