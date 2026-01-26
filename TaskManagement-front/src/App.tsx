@@ -17,6 +17,7 @@ import { AuthProvider, useAuth } from './contexts/authContext.tsx';
 import ProtectedRoute from './layout/ProtectedRoute.tsx';
 import UserPassForm from './components/forms/UserPassForm.tsx';
 import ProjectTaskManagment from './pages/ProjectTaskManagment.tsx';
+import About from './pages/About.tsx';
 
 function App() {
   return (
@@ -45,7 +46,8 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="users/p/" element={<UserPassForm />} />        
           <Route path="tasks" element={<Tasks />} />      
-          <Route path="tasks/new" element={<TaskForm />} />      
+          <Route path="tasks/new" element={<TaskForm />} />
+          <Route path="about" element={<About />} />        
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>

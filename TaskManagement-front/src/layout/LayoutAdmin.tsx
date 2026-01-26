@@ -46,8 +46,7 @@ const generateMenuItems = () => [
     // Sub-items
     getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN','LIDER', 'MANAGER']),
-    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),
-    
+    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
   ], ['ALL_USER']),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
   getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),  
