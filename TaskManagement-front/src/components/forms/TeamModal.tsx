@@ -57,8 +57,9 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
     try {
 
       const listUsers = await UserServices.getUsers(); 
+      const userLeaders = listUsers.filter(user => user.is_leader && !user.is_deleted);
       // Filtrar solo usuarios activos
-      setUsers(listUsers.filter(user => !user.is_deleted)); 
+      setUsers(userLeaders); 
     } catch (error) {
       console.error('Error al obtener la lista de usuarios:', error);
       message.error('Error al cargar la lista de usuarios.');
@@ -165,13 +166,17 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         name="liderTeam" 
         rules={[{ required: false, message: 'Por favor, selecciona un usuario' }]}
       >
-        <Select placeholder="Selecciona un usuario">
-          {users.map((user) => (
-            <Select.Option key={user._id} value={user._id}>
-              {user.first_name} {user.last_name}
-            </Select.Option>
-          ))}
-        </Select>
+        <Select showSearch 
+        placeholder="Selecciona un usuario"
+        allowClear
+            options={users.map((user) => ({
+              label: `${user.first_name} ${user.last_name}`,
+              value: user._id,
+            }))}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+          />
       </Form.Item>
 
       <Form.Item
