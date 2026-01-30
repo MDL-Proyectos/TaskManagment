@@ -161,7 +161,7 @@ const UserForm = () => {
       <Form.Item
         label="Team"
         name="team"
-        rules={[{ required: false}]}
+        rules={[{ required: true}]}
       >
         <Select placeholder="Selecciona un Equipo">
             {teams.map((team) => (
