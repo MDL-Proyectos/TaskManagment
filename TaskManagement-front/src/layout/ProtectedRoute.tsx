@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 
 interface ProtectedRouteProps {
-  allowedRoles?: ("lider" | "admin" | "normalUser")[];  
+  allowedRoles?: ("admin" | "normalUser")[];  
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   //console.log('ProtectedRoute user.admin:', user?.role?.is_admin);
   // Verificar si el rol del usuario está permitido
   if (user?.role?.is_admin && !allowedRoles?.includes("normalUser")) {
-   console.log('User role:', user?.role);
+   console.log('Usuario No autorizado: ', user?.role.is_admin);
 
     return <Navigate to="/" replace />;
   }

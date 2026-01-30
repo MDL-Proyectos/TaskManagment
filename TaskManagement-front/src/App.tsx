@@ -51,7 +51,7 @@ function AppRoutes() {
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>
-      <Route element={<ProtectedRoute allowedRoles={["admin", "lider"]}/>}>
+      <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
         <Route path="/" element={<Layout2 />}>
           <Route path="users" element={<Users />} />           
           <Route path="users/create" element={<UserForm />} />

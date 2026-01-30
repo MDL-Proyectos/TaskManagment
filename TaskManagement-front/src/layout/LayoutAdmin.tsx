@@ -35,7 +35,7 @@ export interface MenuItem {
   [dataKey: `data-${string}`]: any; // Agregar firma de índice para propiedades dinámicas
 }
 
-type Rol = 'ADMIN' | 'MANAGER' | 'ALL_USER' | 'LIDER';
+type Rol = 'ADMIN' | 'ALL_USER';
 
 //Defino los items del menu y los roles que pueden ver cada uno
 const generateMenuItems = () => [
@@ -44,12 +44,12 @@ const generateMenuItems = () => [
   // Ítem principal que requiere rol admin
   getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
     // Sub-items
-    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','LIDER', 'MANAGER']), 
-    getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN','LIDER', 'MANAGER']),
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN']), 
+    getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN']),
     getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
   ], ['ALL_USER']),
-  getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),
-  getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN', 'MANAGER','LIDER']),  
+  getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN']),
+  getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN']),  
   getItem(<Link to="/tasks"> Tareas </Link>, '7', <ProfileOutlined />, null, ['ALL_USER']),
   getItem(<Link to="/about"> About </Link>, '8', <QuestionCircleOutlined />, null, ['ALL_USER']), 
 ];
@@ -58,8 +58,8 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, user} = useAuth(); //acceso al usuario logueado
-  const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
-  
+  //const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
+  const currentRole = !user?.role?.is_admin ? 'ADMIN' : 'ALL_USER';
     const handleLogout = () => {
       logout();
       navigate('/login');
@@ -71,6 +71,7 @@ function App() {
 
   const filteredItems = useMemo(() => {
     const allItems = generateMenuItems();
+
 
     const filterMenu = (menuItems: MenuItem[]): ItemType<MenuItem>[] => {
       return menuItems
