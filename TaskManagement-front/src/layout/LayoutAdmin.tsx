@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useLocation } from 'react-router-dom'
 import {
   QuestionCircleOutlined,
   HomeOutlined,
@@ -10,7 +10,7 @@ import {
   FileDoneOutlined,
   ProfileOutlined
 } from '@ant-design/icons'
-import { Button, Layout, Menu, theme, Breadcrumb } from 'antd'
+import { Button, Layout, Menu, theme, Breadcrumb, Tag } from 'antd'
 import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout
 import { useAuth } from '../contexts/authContext.tsx';
@@ -56,6 +56,7 @@ const generateMenuItems = () => [
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, user} = useAuth(); //acceso al usuario logueado
   const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
   
@@ -96,6 +97,22 @@ function App() {
     return filterMenu(allItems);
   }, [currentRole]);
 
+  const currentItemLabel = useMemo(() => {
+    const allItems = generateMenuItems();
+    
+    for (const item of allItems) {
+      // Si es el item principal
+      if (item.label.props.to === location.pathname) return item.label.props.children;
+      
+      // Si tiene hijos, buscamos dentro
+      if (item.children) {
+        const child = item.children.find((c: any) => c.label.props.to === location.pathname);
+        if (child) return (child as any).label.props.children;
+      }
+    }
+    return 'Tareas'; // Texto por defecto
+  }, [location.pathname]);
+
   return (
     <Layout style={{ minHeight: '100vh', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -107,15 +124,16 @@ function App() {
           items={filteredItems}
           style={{ flex: 1, minWidth: 0 }}
         />
+        <Tag color={ 'green'} style={{  marginRight: 100, height: 32, width: 100, alignItems: 'center', justifyContent: 'center', display: 'flex', fontSize: 14 }} >{currentItemLabel} </Tag>
         <FileDoneOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24 }} />
-                  <Button
-                    type="primary"
-                    danger
-                    style={{ marginRight: 24 }}
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
+        <Button
+          type="primary"
+          danger
+          style={{ marginRight: 24 }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </Header>
        <Content
         style={{
