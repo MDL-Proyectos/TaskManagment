@@ -15,6 +15,7 @@ import { RoleData } from '../../entities/Role.tsx';
 import TeamService from '../../routes/TeamServices.tsx';
 import RoleServices from '../../routes/RoleServices.tsx';
 import { TeamData } from '../../entities/Team.tsx';
+import { useAuth } from '../../contexts/authContext';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -25,6 +26,7 @@ const UserForm = () => {
   const navigate = useNavigate();
   const [roles, setRoles] = useState<RoleData[]>([]); 
   const [teams, setTeams] = useState<TeamData[]>([]); 
+  const { user } = useAuth();
 
   const fetchUsers = async () => {
     try {
@@ -102,6 +104,30 @@ const UserForm = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      if (userid) {
+        // Verificar si el usuario tiene tareas asignadas
+        const hasTasks = await UserServices.getUserTask(userid);
+        if (hasTasks) {
+          message.error('No se puede eliminar el usuario porque tiene tareas asignadas.');
+          return;
+        }
+        //Validamos que el propio usuario no quiera eliminarse.
+        if (userid == user?._id){
+          message.error('No se puede autoeliminarse.');
+          return;
+        }
+        await UserServices.deleteUser(userid);
+        message.success('Usuario eliminado correctamente');
+        navigate('/users'); // Redirigir
+      }
+    }catch (error) {
+      console.error('Error al eliminar el usuario:', error);
+      message.error('No se pudo eliminar el usuario.');
+    }
+  };
+
   return (
     <Form
       form={form}
@@ -110,8 +136,7 @@ const UserForm = () => {
       layout="vertical"
       size={componentSize as SizeType}
       style={{ maxWidth: 1000 }}
-     onFinish={handleFinish} // Maneja el envío del formulario
-     
+     onFinish={handleFinish} // Maneja el envío del formulario     
     >
         <Row gutter={16}>
     <Col span={12}>
@@ -231,6 +256,9 @@ const UserForm = () => {
     </Form.Item>
         </Col>  
       <Col span={12} style={{ display: 'flex', justifyContent: 'right', marginTop: '20px' }}>
+        <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete()}>
+          Eliminar
+        </Button>
         <Button type="primary" htmlType="submit">
           Guardar Cambios
         </Button>

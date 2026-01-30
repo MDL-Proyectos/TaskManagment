@@ -39,6 +39,12 @@ const userService = {
   resetPassword: async (id: string) => {
     const response = await api.put(`/users/p/reset/${id}`);
     return response.data.valid;
-  }        
+  },
+    getUserTask: async (id: string): Promise<boolean> => {
+    const response = await api.get(`/users/taskUser/${id}`);
+    const data = response.data;
+    return data.hasTasks;
+  },        
 };
 export default userService;
+
