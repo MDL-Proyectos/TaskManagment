@@ -54,8 +54,8 @@ function Role() {
     });
 
   return (
-    <div style={{ width: '90%', padding: '20px' }}>
-        <Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>
+    <div style={{ width: '90%', height: '90%', padding: '20px' }}>
+        {/*<Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>*/}
         <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
               <Button type="primary" onClick={handleCreate}>
                   Nuevo Rol
