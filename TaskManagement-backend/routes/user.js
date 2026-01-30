@@ -18,6 +18,7 @@ router.put('/p/reset/:id', resetPassword)
 router.put('/p/validate/:id', validatePassword)
 router.put('/blockUser/:id', blockUser)
 router.delete('/delete/:id', deleteUser)
+router.get('/taskUser/:id', getUserTasks)
 
 const saltRounds = 10; // Define el número de rondas de hashing
 //prueba de hasheo
@@ -309,6 +310,25 @@ async function blockUser(req, res, next) {
   }
 }
 
+async function getUserTasks(req, res, next) {
+  try {
+    const tasks = await Task.find({ assigned_user: req.params.id });
+    // Si no hay tareas, mandamos false
+    if (!tasks || tasks.length === 0) {
+      logger.info('User does not have tasks assigned.');
+      return res.status(200).json({ hasTasks: false });
+    }
+    
+    // Hay tareas, mandamos true
+    res.status(200).json({ hasTasks: true });
+    logger.info('User has tasks assigned.');
+
+  } catch (error) {
+    logger.error('Error fetching getUserTasks:', error);
+    res.status(500).json({ error: 'Internal Server Error', hasTasks: false });
+  }
+}
+
 async function deleteUser(req, res, next) {
 
   if (!req.params.id) {
@@ -322,16 +342,19 @@ async function deleteUser(req, res, next) {
 
   try {    
     const userDeleted = await User.findById(req.params.id);
-   
+    
     if (!userDeleted) {
       res.status(404).send('User not found');
       return res.status(400).send('User not found');
     }
     const listTask = await Task.find({assigned_user : userDeleted});
 
-    if (listTask.length > 0) {
+    const listTaskAuth = await Task.find({authorized_by : userDeleted});
+
+    if (listTask.length > 0 || listTaskAuth.length > 0) {
       logger.error(listTask);
-      return res.status(400).send('The user cannot be deleted. Related tasks exist.');
+      logger.error(listTaskAuth);
+      return res.status(400).send('El usuario tiene tareas asignadas o autorizadas y no puede ser eliminado.');
     }
 
    // await User.deleteOne({ _id: user._id })
