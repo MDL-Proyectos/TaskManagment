@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Table, Modal, message } from 'antd';
+import { Button, Table, Modal, message, Skeleton } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title } = Typography;
@@ -16,23 +16,27 @@ import { useDataFilter } from '../hooks/useDataFilter.tsx';
 function TaskProjectPage() {
   const [data, setData] = useState<TaskProjectData[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [initLoading, setInitLoading] = useState(true); 
   const [editingProject, setEditingProject] = useState<TaskProjectData | null>(null);
   const {user} = useAuth(); 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
 
     const fetchProject = async () => {
+      setInitLoading(true);
     try {
       const data = await ProjectServices.getAllProjects(); // Llama directamente al método del servicio
       
       if (!Array.isArray(data)) {
         console.error('La respuesta de equipos no es un array:', data);
+        setInitLoading(false);
         return;
       }
       setData(data); // Actualiza el estado con los datos recibidos
-      //console.log(await TeamService.getAllTeams());
+      setInitLoading(false);
     } catch (error) {
       console.error('Error fetching teams:', error);
+      setInitLoading(false);
     }
   };
 
@@ -148,18 +152,27 @@ const handleDelete = (id: string) => {
 
   return (
     <div>
-       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2}}>
-        <Title level={2} >Proyectos</Title>
+       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right', marginBottom: 2}}>
         <GlobalSearch 
             onSearch={handleGlobalSearch} 
             placeholder="Buscar por Nombre, Equipo o Estado..."
           />
         </div>
-        <Card style={{ padding: '20px' }}>
-          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
+        <div>{initLoading ? (
+        <Skeleton active paragraph={{ rows: 4 }} />
+      ) : filteredProjects.length === 0 ? (
+            <div>
+            <p>No hay proyectos disponibles.</p>
             <Button color="geekblue" variant="outlined" onClick={handleCreate} style={{ marginBottom: '20px' }}>
               Crear Proyecto
             </Button>
+            </div>
+          ) : (
+            <Card style={{ padding: '20px' }}>
+              <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>              
+                <Button color="geekblue" variant="outlined" onClick={handleCreate} style={{ marginBottom: '20px' }}>
+                  Crear Proyecto
+                </Button>
              {/* <p>Cantidad total de Tareas: {filteredTasks.length}</p> */}
             <Button color="geekblue" variant="solid" onClick={() => navigate('/taskProjectManagment')} style={{ marginBottom: '20px' }}>
               Tareas por Proyecto
@@ -182,6 +195,8 @@ const handleDelete = (id: string) => {
         />
       )}
     </Card>
+          )}
+    </div>
         </div>
   );
 };

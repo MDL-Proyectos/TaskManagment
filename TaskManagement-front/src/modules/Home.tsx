@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, Col, Row, Statistic, Spin, Alert, Typography } from 'antd';
+import { Card, Col, Row, Statistic, Spin, Alert, Typography, Skeleton } from 'antd';
 import { useTaskStats } from '../hooks/useTaskStats';
 import { HomeOutlined, CheckCircleOutlined, SettingOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext';
@@ -32,7 +32,8 @@ function Home(){
   if (loading) {
     return (
       <div style={{ padding: '50px', textAlign: 'center' }}>
-        <Spin size="large" tip="Cargando estadísticas..." />
+        {/*<Spin size="large" tip="Cargando estadísticas..." />*/}
+        <Skeleton active paragraph={{ rows: 4 }} />
       </div>
     );
   }

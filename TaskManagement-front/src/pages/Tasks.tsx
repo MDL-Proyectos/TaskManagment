@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table, Space, Modal, TableProps, Typography} from 'antd';
+import { Skeleton, Button, message, Table, Space, Modal, TableProps, Typography, Spin} from 'antd';
 import TaskServices from '../routes/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 import TaskModal from '../components/forms/TaskModal.tsx';
@@ -25,16 +25,19 @@ const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 const [searchText, setSearchText] = useState('');
 const {user} = useAuth(); 
 
+
 const fetchTasks = async () => {
     try {
-      setInitLoading(true);
+     setInitLoading(true);
       const data = await TaskServices.getAllTask();
+              setInitLoading(false);
       if (Array.isArray(data)) {
         // FILTRADO: Si hay projectId, filtramos las tareas
         const filtered = projectId 
           ? data.filter(t => t.project?._id === projectId) 
           : data;
         setTasks(filtered);
+
       }
     } catch (error) {
       console.error(error);
@@ -274,10 +277,10 @@ useEffect(() => {
   ];
 
   return (
-    <div style={{ width: '100%', padding: '10px', display: 'flex', flexDirection: 'column' }}>
-      <Title level={3} style={{ marginBottom: 30 }}>
+    <div style={{ width: '100%', height: '100%', padding: '10px', display: 'flex', flexDirection: 'column' }}>
+      {/*<Title level={3} style={{ marginBottom: 30 }}>
         Listado de Tareas
-      </Title>
+      </Title>*/}
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : filteredTasks.length === 0 ? (
@@ -319,7 +322,7 @@ useEffect(() => {
             dataSource={filteredTasks}
             columns={columns}
             pagination={{
-              pageSize: 8, // Mostrar 10 registros por página
+              pageSize: 10, // Mostrar 10 registros por página
               showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
             }}
           />

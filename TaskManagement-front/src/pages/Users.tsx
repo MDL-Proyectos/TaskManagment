@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, Space, Modal, message, Typography} from 'antd'; // Importamos Table y Space
+import { Button, Table, Space, Modal, message, Typography, Skeleton} from 'antd'; // Importamos Table y Space
 import type { TableProps } from 'antd'; // Importamos tipos si usas TypeScript
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../routes/UserServices.tsx';
@@ -16,7 +16,6 @@ const Users = () => {
   const [initLoading, setInitLoading] = useState(true);
   const [data, setData] = useState<UsuarioData[]>([]);
   const [searchText, setSearchText] = useState('');
-  // 'list' ya no es necesario; usamos 'data' directamente en la Table
   const navigate = useNavigate();
   const {user} = useAuth(); 
 
@@ -28,7 +27,7 @@ const Users = () => {
       setData(response); 
     } catch (error) {
       console.error('Error fetching users:', error);
-      setInitLoading(false); // Es importante detener la carga incluso en error
+      setInitLoading(false); 
     }
   };
 
@@ -174,10 +173,32 @@ const Users = () => {
   ];
 
   return (
-    <div style={{ width: '100%', padding: '20px' }}>
-      <Title level={2} style={{ marginBottom: 30 }}>
+    
+    <div style={{ width: '100%', height: '100%', padding: '20px' }}>
+     {/* <Title level={2} style={{ marginBottom: 30 }}>
        Usuarios
-      </Title>    
+      </Title>    */}
+      {initLoading ? (
+        <Skeleton active paragraph={{ rows: 4 }} />
+      ) : filteredUsers.length === 0 ? (
+            <div>
+                <GlobalSearch 
+                    onSearch={handleGlobalSearch} 
+                    placeholder="Buscar por Nombre, Apellido o Email..."
+                  />
+                <p>No hay usuarios.</p>
+                  <Button
+                //Botón de Creación  
+                  type="primary" 
+                  icon={<UserAddOutlined />}
+                  onClick={handleCreate}
+                  style={{ marginBottom: 16 }} // Espacio debajo del botón
+                >
+                  Nuevo Usuario
+                </Button> 
+            </div>
+        ) : (
+          <div>
       <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
               <Button
               //Botón de Creación  
@@ -205,6 +226,8 @@ const Users = () => {
         // Paginación (opcional, Antd la incluye por defecto)
         pagination={{ pageSize: 10 }}
       />
+    </div>
+    )}
     </div>
   );
 };

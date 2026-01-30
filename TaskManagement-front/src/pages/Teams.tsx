@@ -75,10 +75,10 @@ function Teams() {
 
  
   return (
-    <div style={{  width: '100%', padding: '60px', flexDirection: 'column', display: 'flex', alignItems: 'center' }}>
-         <Title level={2} style={{ marginBottom: 50 }}>
+    <div style={{  width: '100%', height: '100%', padding: '60px', flexDirection: 'column', display: 'flex', alignItems: 'center' }}>
+        {/* <Title level={2} style={{ marginBottom: 50 }}>
             Equipos
-         </Title>
+         </Title>*/}
          <div style={{ width: '80%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
             <Button type="primary" onClick={handleCreate}>
               Nuevo
@@ -88,8 +88,8 @@ function Teams() {
                   placeholder="Buscar por Nombre o Lider..."
                 />    
           </div>
-        {team.length === 0 ? (
-          <p>...</p>
+        {filteredTeams.length === 0 ? (
+          <p>No existen Equipos</p>
           ) : (
           <List
             grid={{ gutter: 20, column: 4 }}
