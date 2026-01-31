@@ -44,7 +44,7 @@ const generateMenuItems = () => [
   // Ítem principal que requiere rol admin
   getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
     // Sub-items
-    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN']), 
+    getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','ALL_USER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN']),
     getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
   ], ['ALL_USER']),
@@ -111,7 +111,7 @@ function LayoutAdmin() {
         if (child) return (child as any).label.props.children;
       }
     }
-    return 'Tareas'; // Texto por defecto
+    return '...'; // Texto por defecto
   }, [location.pathname]);
 
   return (

@@ -16,6 +16,7 @@ import TeamService from '../../services/TeamServices.tsx';
 import RoleServices from '../../services/RoleServices.tsx';
 import { TeamData } from '../../entities/Team.tsx';
 import { useAuth } from '../../contexts/authContext';
+import AdminGuard from '../../contexts/AdminGuard.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -163,7 +164,9 @@ const UserForm = () => {
         name="team"
         rules={[{ required: true}]}
       >
-        <Select placeholder="Selecciona un Equipo">
+        <Select 
+        disabled={user?.role.is_admin}
+        placeholder="Selecciona un Equipo">
             {teams.map((team) => (
             <Select.Option key={team.idTeam} value={team.idTeam} >
                 {team.name} 
@@ -179,7 +182,9 @@ const UserForm = () => {
         name="role" // Debe coincidir con el campo en el objeto del backend
         rules={[{ required: true, message: 'Por favor, selecciona un rol' }]}
       >
-        <Select placeholder="Selecciona un Equipo">
+        <Select 
+        disabled={user?.role.is_admin}
+        placeholder="Selecciona un Equipo">
             {roles.map((rol) => (
             <Select.Option key={rol.name} value={rol.name}>
                 {rol.name} 
@@ -233,32 +238,38 @@ const UserForm = () => {
         <Input placeholder="Telefono / Celular" />
       </Form.Item>
         </Col>
-      <Col span={12}>
-    <Form.Item
-        label="Activo"
-        name="is_deleted"
-        valuePropName="checked"
-        
-        getValueFromEvent={(checked) => !checked} // Invierte el valor al cambiar el switch
-        getValueProps={(value) => ({ checked: !value })} // Invierte el valor al cargar
-        >
-        <Switch />
-    </Form.Item>
-    <Form.Item
-        label="Team Lider"
-        name="is_leader"
-        valuePropName="checked"
-        
-        getValueFromEvent={(checked) => checked} // Invierte el valor al cambiar el switch
-        getValueProps={(value) => ({ checked: value })} // Invierte el valor al cargar
-        >
-        <Switch />
-    </Form.Item>
+
+      <Col span={12}>      
+      <AdminGuard>
+        <Form.Item
+            label="Activo"
+            name="is_deleted"
+            valuePropName="checked"
+            
+            getValueFromEvent={(checked) => !checked} // Invierte el valor al cambiar el switch
+            getValueProps={(value) => ({ checked: !value })} // Invierte el valor al cargar
+            >
+            <Switch />
+        </Form.Item>
+        <Form.Item
+            label="Team Lider"
+            name="is_leader"
+            valuePropName="checked"
+            
+            getValueFromEvent={(checked) => checked} // Invierte el valor al cambiar el switch
+            getValueProps={(value) => ({ checked: value })} // Invierte el valor al cargar
+            >
+            <Switch />
+        </Form.Item>
+      </AdminGuard>
         </Col>  
+
       <Col span={12} style={{ display: 'flex', justifyContent: 'right', marginTop: '20px' }}>
+      <AdminGuard>
         <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete()}>
           Eliminar
-        </Button>
+        </Button>       
+      </AdminGuard>
         <Button type="primary" htmlType="submit">
           Guardar Cambios
         </Button>

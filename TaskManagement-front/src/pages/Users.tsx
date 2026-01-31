@@ -8,6 +8,7 @@ import { UsuarioData } from '../entities/User.tsx';
 import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/GlobalSearch.tsx';
 import { useAuth } from '../contexts/authContext.tsx';
+import AdminGuard from '../contexts/AdminGuard.tsx';
 
 const { confirm } = Modal;
 //const { Title } = Typography;
@@ -57,16 +58,14 @@ const Users = () => {
       onOk: async () => {
         try {
           if (id) {
-            const userPassUpdated = await UserServices.getUserById(id);
+           // const userPassUpdated = await UserServices.getUserById(id);
 
               await UserServices.resetPassword(id);
               message.success('Reseteo realizado correctamente');
               return; 
-            
-            console.error('La la pass no puede restablecerse:', userPassUpdated._id);
-            message.error('Password no pudo ser reseteada');
+
           } else {
-            console.error('No se encuentra ID del elemento.');
+            console.error('No se encuentra ID del elemento: ');
             message.error('No se encuentra ID del elemento');
           }
         } catch (error) {
@@ -80,10 +79,8 @@ const Users = () => {
     });
   };
     const handleGlobalSearch = (value: string) => {
-      // 1. Limpiar el texto (trim) y pasarlo a minúsculas
+      // Limpiar el texto (trim) y pasarlo a minúsculas
       setSearchText(value.toLowerCase().trim()); 
-      // 2. Opcional: Si implementas paginación, puedes resetear la página a 1 aquí.
-      // setPagination(prev => ({...prev, current: 1}));
     };
 
     const filteredUsers = data.filter(data => {
@@ -102,7 +99,7 @@ const Users = () => {
         data.last_name,
         data.email,
         data.role.name,
-        data.team?.name // Búsqueda anidada
+        data.team?.name 
       ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
 
       return searchTerms.includes(searchText);
@@ -178,42 +175,29 @@ const Users = () => {
      {/* <Title level={2} style={{ marginBottom: 30 }}>
        Usuarios
       </Title>    */}
+      <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}> 
+                <AdminGuard>
+                    <Button
+                  //Botón de Creación  
+                    type="primary" 
+                    icon={<UserAddOutlined />}
+                    onClick={handleCreate}
+                    style={{ marginBottom: 16 }} // Espacio debajo del botón
+                  > Nuevo Usuario
+                  </Button>                  
+                </AdminGuard>
+                <GlobalSearch 
+                    onSearch={handleGlobalSearch} 
+                    placeholder="Buscar por Nombre, Apellido o Email..."/>                
+                </div>
       {initLoading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : filteredUsers.length === 0 ? (
             <div>
-                <GlobalSearch 
-                    onSearch={handleGlobalSearch} 
-                    placeholder="Buscar por Nombre, Apellido o Email..."
-                  />
                 <p>No hay usuarios.</p>
-                  <Button
-                //Botón de Creación  
-                  type="primary" 
-                  icon={<UserAddOutlined />}
-                  onClick={handleCreate}
-                  style={{ marginBottom: 16 }} // Espacio debajo del botón
-                >
-                  Nuevo Usuario
-                </Button> 
             </div>
         ) : (
           <div>
-      <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
-              <Button
-              //Botón de Creación  
-                type="primary" 
-                icon={<UserAddOutlined />}
-                onClick={handleCreate}
-                style={{ marginBottom: 16 }} // Espacio debajo del botón
-              >
-                Nuevo Usuario
-              </Button>              
-              <GlobalSearch 
-                onSearch={handleGlobalSearch} 
-                placeholder="Buscar..."
-              />
-       </div>
       <Table
         // El dataSource es la lista de datos a renderizar
         dataSource={filteredUsers}

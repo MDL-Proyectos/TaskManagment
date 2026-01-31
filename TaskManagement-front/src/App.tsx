@@ -47,15 +47,15 @@ function AppRoutes() {
           <Route path="users/p/" element={<UserPassForm />} />        
           <Route path="tasks" element={<Tasks />} />      
           <Route path="tasks/new" element={<TaskForm />} />
-          <Route path="about" element={<About />} />        
+          <Route path="about" element={<About />} />
+          <Route path="users" element={<Users />} />   
+          <Route path="users/:userid" element={<UserForm />} />                  
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>
       <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
-        <Route path="/" element={<Layout2 />}>
-          <Route path="users" element={<Users />} />           
+        <Route path="/" element={<Layout2 />}>      
           <Route path="users/create" element={<UserForm />} />
-          <Route path="users/:userid" element={<UserForm />} />
           <Route path="teams" element={<Teams />} />
           <Route path="teams/create" element={<TeamForm />} />
           <Route path="teams/:idTeam" element={<TeamForm />} />
