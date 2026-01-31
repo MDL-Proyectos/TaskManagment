@@ -171,7 +171,7 @@ async function createUser(req, res, next) {
     // 3. Verificar si el usuario ya existe por email (código de estado 409 Conflict es más apropiado)
     const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
-      logger.error('El usuario ya existe.');
+      logger.error('El mail ya existe.');
       return res.status(409).send('El usuario con este email ya existe.');
     }
 
@@ -251,6 +251,13 @@ async function updateUser(req, res, next) {
       }
       req.body.role = newRole._id
     }
+    // Verifico si el usuario ya existe por email
+    const existingUser = await User.findOne({ email: userToUpdate.email });
+    const sameUser = existingUser._id.equals(userToUpdate._id) ;
+    if (existingUser && !sameUser) {
+      logger.error('El mail ya existe.');
+      return res.status(409).send('El usuario con este email ya existe.');
+    }    
 
     if (req.body.team) {
       const newTeam = await Team.findOne({ idTeam: userNewData.team })
