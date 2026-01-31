@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, DatePicker, message, Select, Col, Row, Divider } from 'antd';
-import TaskServices from '../../routes/TaskServices';
+import TaskServices from '../../services/TaskServices';
 import dayjs from 'dayjs';
 import { UsuarioData } from '../../entities/User';
 import { TeamData } from '../../entities/Team';
-import UserServices from '../../routes/UserServices';
-import TeamService from '../../routes/TeamServices';
-import ProjectServices from '../../routes/ProjectServices';
+import UserServices from '../../services/UserServices';
+import TeamService from '../../services/TeamServices';
+import ProjectServices from '../../services/ProjectServices';
 import { TaskProjectData } from '../../entities/TaskProject';
 import useAuth from '../../hooks/useAuth';
 import GenericModal from './GenericModal';

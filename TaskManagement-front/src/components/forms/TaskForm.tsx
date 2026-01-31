@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, DatePicker, Form, Input, message, Select } from 'antd';
-import TaskServices from '../../routes/TaskServices.tsx';
-import UserServices from '../../routes/UserServices.tsx';
+import TaskServices from '../../services/TaskServices.tsx';
+import UserServices from '../../services/UserServices.tsx';
 import dayjs from 'dayjs'; //esto me permite ajustar los formatos de fechas y corregirlos en el momento de visualizarlo
 import { UsuarioData } from '../../entities/User.tsx';
-import TeamService from '../../routes/TeamServices.tsx';
+import TeamService from '../../services/TeamServices.tsx';
 import { TeamData } from '../../entities/Team.tsx';
 import utc from 'dayjs/plugin/utc';
 type SizeType = Parameters<typeof Form>[0]['size']; 

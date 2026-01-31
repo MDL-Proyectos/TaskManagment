@@ -7,8 +7,8 @@ import {
   Switch,
   message,
 } from 'antd';
-import RoleServices from '../../routes/RoleServices.tsx';
-import userService from '../../routes/UserServices.tsx';
+import RoleServices from '../../services/RoleServices.tsx';
+import userService from '../../services/UserServices.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 

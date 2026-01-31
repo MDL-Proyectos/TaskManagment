@@ -1,4 +1,4 @@
-import useAuth from './useAuth';
+import useAuth from '../hooks/useAuth';
 
 const AdminGuard = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();

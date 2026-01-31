@@ -1,8 +1,7 @@
 
 export interface RoleData {
-  //_id: string;
   name: string;         // Nombre del usuario (obligatorio)
-  is_admin?: boolean;    // Indica si el rol tiene privilegios de administrador (opcional, por defecto `false`)
+  is_admin?: boolean;    // Indica si el rol tiene privilegios de administrador. Está invertido. (opcional, por defecto `True`)
   is_deleted?: boolean;       // Eliminación lógica (opcional, por defecto `false`)
 }
 

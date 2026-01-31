@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { TeamData } from '../entities/Team';
-import TeamService from '../routes/TeamServices';
-import { Button, Card, List, Typography } from 'antd';
-import GlobalSearch from '../components/forms/GlobalSearch';
+import TeamService from '../services/TeamServices';
+import { Button, Card, List } from 'antd';
+import GlobalSearch from '../components/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
-import TeamModal from '../components/forms/TeamModal';
-const { Title } = Typography;
+import TeamModal from '../components/modals/TeamModal';
+//const { Title } = Typography;
 
 function Teams() {
   const [team, setTeam] = useState<TeamData[]>([]);

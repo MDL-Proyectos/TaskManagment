@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, Space, Modal, message, Typography, Skeleton} from 'antd'; // Importamos Table y Space
+import { Button, Table, Space, Modal, message, Skeleton} from 'antd'; // Importamos Table y Space
 import type { TableProps } from 'antd'; // Importamos tipos si usas TypeScript
 import { useNavigate } from 'react-router-dom';
-import UserServices from '../routes/UserServices.tsx';
+import UserServices from '../services/UserServices.tsx';
 import { UsuarioData } from '../entities/User.tsx';
 // importamos los iconos que podrías necesitar para las acciones (opcional)
 import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import GlobalSearch from '../components/forms/GlobalSearch';
+import GlobalSearch from '../components/GlobalSearch.tsx';
 import { useAuth } from '../contexts/authContext.tsx';
 
 const { confirm } = Modal;
-const { Title } = Typography;
+//const { Title } = Typography;
 
 const Users = () => {
   const [initLoading, setInitLoading] = useState(true);

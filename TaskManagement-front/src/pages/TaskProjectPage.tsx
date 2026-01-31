@@ -3,13 +3,13 @@ import { Button, Table, Modal, message, Skeleton } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 const { Title } = Typography;
-import ProjectTaskModal from '../components/forms/ProjectTaskModal';
+import ProjectTaskModal from '../components/modals/ProjectTaskModal.tsx';
 import { TaskProjectData } from '../entities/TaskProject';
-import ProjectServices from '../routes/ProjectServices';
+import ProjectServices from '../services/ProjectServices.tsx';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import Card from 'antd/es/card/Card';
-import GlobalSearch from '../components/forms/GlobalSearch';
+import GlobalSearch from '../components/GlobalSearch.tsx';
 import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 

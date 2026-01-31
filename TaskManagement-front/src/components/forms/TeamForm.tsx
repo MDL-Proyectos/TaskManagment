@@ -8,10 +8,10 @@ import {
   message,
   Select
 } from 'antd';
-import TeamServices from '../../routes/TeamServices.tsx';
+import TeamServices from '../../services/TeamServices.tsx';
 import { TeamData } from '../../entities/Team.tsx';
-import TeamService from '../../routes/TeamServices.tsx';
-import UserServices from '../../routes/UserServices.tsx';
+import TeamService from '../../services/TeamServices.tsx';
+import UserServices from '../../services/UserServices.tsx';
 import { UsuarioData } from '../../entities/User.tsx';
 
 type SizeType = Parameters<typeof Form>[0]['size'];

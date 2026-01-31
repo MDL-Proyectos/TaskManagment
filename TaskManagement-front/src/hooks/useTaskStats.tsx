@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../contexts/authContext';
-import TaskServices from '../routes/TaskServices.tsx';
+import TaskServices from '../services/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 
 // estados

@@ -10,10 +10,10 @@ import {
   Row,
   Col
 } from 'antd';
-import UserServices from '../../routes/UserServices.tsx';
+import UserServices from '../../services/UserServices.tsx';
 import { RoleData } from '../../entities/Role.tsx';
-import TeamService from '../../routes/TeamServices.tsx';
-import RoleServices from '../../routes/RoleServices.tsx';
+import TeamService from '../../services/TeamServices.tsx';
+import RoleServices from '../../services/RoleServices.tsx';
 import { TeamData } from '../../entities/Team.tsx';
 import { useAuth } from '../../contexts/authContext';
 

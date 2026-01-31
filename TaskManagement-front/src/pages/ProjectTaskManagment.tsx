@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Layout, Menu, theme, Spin, Empty } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
-import ProjectServices from '../routes/ProjectServices';
+import ProjectServices from '../services/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
 import Tasks from './Tasks'; // Importamos tu componente de tareas
-import ProjectTaskModal from '../components/forms/ProjectTaskModal';
+import ProjectTaskModal from '../components/modals/ProjectTaskModal';
 const { Sider, Content } = Layout;
 
 function ProjectManagementPage() {

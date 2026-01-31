@@ -13,7 +13,7 @@ import {
 import { Button, Layout, Menu, theme, Breadcrumb, Tag } from 'antd'
 import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout
-import { useAuth } from '../contexts/authContext.tsx';
+import { useAuth } from '../../contexts/authContext.tsx';
 import { ItemType } from 'antd/es/menu/interface';
 
 function getItem(label: any, key: any, icon: any, children?: any, roles?: Rol[]) {
@@ -54,7 +54,7 @@ const generateMenuItems = () => [
   getItem(<Link to="/about"> About </Link>, '8', <QuestionCircleOutlined />, null, ['ALL_USER']), 
 ];
 
-function App() {
+function LayoutAdmin() {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, user} = useAuth(); //acceso al usuario logueado
@@ -169,4 +169,4 @@ function App() {
   );
 };
 
-export default App;
+export default LayoutAdmin;

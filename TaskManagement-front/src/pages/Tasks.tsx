@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table, Space, Modal, TableProps, Typography, Spin} from 'antd';
-import TaskServices from '../routes/TaskServices.tsx';
+import { Skeleton, Button, message, Table, Space, Modal, TableProps} from 'antd';
+import TaskServices from '../services/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
-import TaskModal from '../components/forms/TaskModal.tsx';
+import TaskModal from '../components/modals/TaskModal.tsx';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import GlobalSearch from '../components/forms/GlobalSearch';
+import GlobalSearch from '../components/GlobalSearch.tsx';
 import dayjs from 'dayjs'; // Importar dayjs
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext.tsx';
 import { useDataFilter } from '../hooks/useDataFilter.tsx';
 const { confirm } = Modal;
-const { Title } = Typography;
-import AdminGuard from '../hooks/AdminGuard.tsx';
+//const { Title } = Typography;
+import AdminGuard from '../contexts/AdminGuard.tsx';
 
 interface TasksProps {
   projectId?: string; 

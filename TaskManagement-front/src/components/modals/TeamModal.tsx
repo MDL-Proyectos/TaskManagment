@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, message, Switch } from 'antd';
 // Asegúrate que los imports de tus servicios y entidades sean correctos
-import TeamServices from '../../routes/TeamServices';
-import UserServices from '../../routes/UserServices';
+import TeamServices from '../../services/TeamServices';
+import UserServices from '../../services/UserServices';
 import { TeamData } from '../../entities/Team';
 import { UsuarioData } from '../../entities/User';
-import GenericFormModal from './GenericModal'; // Asume esta ruta
-import userService from '../../routes/UserServices';
+import GenericFormModal from '../modals/GenericModal'; // Asume esta ruta
+import userService from '../../services/UserServices';
 
 interface TeamFormModalProps {
   initialTeamId?: string | null;

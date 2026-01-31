@@ -4,7 +4,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import fondoImg from '../assets/fondo1.jpg';
 const { Title, Text } = Typography;
 import { useAuth } from '../contexts/authContext.tsx'; 
-import AuthServices from '../routes/LoginRoute.tsx';
+import AuthServices from '../services/LoginRoute.tsx';
 import '../App.css';
 
 type FieldType = {

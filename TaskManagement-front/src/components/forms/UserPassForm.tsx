@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -6,18 +6,11 @@ import {
   Input,
   message,
 } from 'antd';
-import UserServices from '../../routes/UserServices.tsx';
-
-type SizeType = Parameters<typeof Form>[0]['size'];
+import UserServices from '../../services/UserServices.tsx';
 
 const UserPassForm = () => {
-  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); // Instancia del formulario
   const navigate = useNavigate();
-
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
-  };
 
   // Función para obtener los datos del usuario desde el backend
   const fetchUsers = async () => {
@@ -86,7 +79,6 @@ const UserPassForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      onFinish={handleFinish} // Maneja el envío del formulario
     >

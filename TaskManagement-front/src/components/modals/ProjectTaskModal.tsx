@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, Switch, message } from 'antd';
 import { TaskProjectData } from '../../entities/TaskProject';
-import ProjectServices from '../../routes/ProjectServices';
-import TeamService from '../../routes/TeamServices';
+import ProjectServices from '../../services/ProjectServices';
+import TeamService from '../../services/TeamServices';
 import { TeamData } from '../../entities/Team';
 import GenericFormModal from './GenericModal';
 
@@ -90,7 +90,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
       setLoading(false);
     }
   };
-
+  
   return (
     <GenericFormModal
       open={open}
