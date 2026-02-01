@@ -5,7 +5,7 @@ const { ObjectId } = mongodb
 const initialProjects = [
   {
   _id: new ObjectId('000000000000000000000001'),
-  idTeam: new ObjectId('673d17b971ace271c5de6372'),
+  assigned_team: new ObjectId('673d17b971ace271c5de6372'),
   name: "sin asignar",
   status: "Abierto",
   is_deleted: false,

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const { ObjectId } = Schema.Types
 
 const taskProject = new Schema({
-    idTeam: {
+    assigned_team: {
     type: ObjectId,
     ref: 'tm-team',
     required: false, 

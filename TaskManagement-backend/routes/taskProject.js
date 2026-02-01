@@ -17,8 +17,7 @@ router.delete('/:id', deleteTaskProject)
 async function getAllTaskProjects(req, res, next) {  
     try {
       const taskProject = await TaskProject.find({})
-      .populate('idTeam')
-     // logger.info("taskProject %s", taskProject)
+      .populate('assigned_team')
       res.send(taskProject)
     } catch (err) {
       next(err)
@@ -28,9 +27,9 @@ async function getAllTaskProjects(req, res, next) {
 async function getTaskProjectById(req, res, next) {
 
   try {
-    logger.info('getTaskProjectById')
+    //logger.info('getTaskProjectById')
     const taskProject = await TaskProject.findOne({ _id: req.params.id })
-    .populate('idTeam')
+    .populate('assigned_team')
     res.send(taskProject)
   } catch (err) {
     next(err)
@@ -43,15 +42,14 @@ async function createTaskProject(req, res, next) {
     try {
       logger.info('CREATE TASK PROJECT')
     
-      const team = await Team.findOne({ idTeam: taskProject.idTeam });
-     
+      const team = await Team.findOne({ idTeam: taskProject.assigned_team })
       if (!team) {
         return res.status(400).send('Equipo no encontrado.'); // Código 400 porque el cliente envió un team inválido
       }
-
+      
       const taskProjectCreate = await TaskProject.create({
         ...taskProject,
-        idTeam: team._id
+        assigned_team: team._id
       })
       res.send(taskProjectCreate)
     } catch (err) {
@@ -70,14 +68,15 @@ async function createTaskProject(req, res, next) {
     try {
       const taskProjectUpdated = await TaskProject.findOne({ _id: req.params.id });
       
-      if (req.body.idTeam) {
-        const teamSelected = await Team.findOne({ idTeam: req.body.idTeam })
+      if (req.body.assigned_team) {
+        const asignedTeam = await Team.findOne({ idTeam: req.body.assigned_team })
 
-        if (!teamSelected) {
+        if (!asignedTeam) {
           logger.error('teamSelected not found.')
           return res.status(400).end()
         }
-        req.body.idTeam = teamSelected._id
+  
+        req.body.assigned_team = asignedTeam._id
       }
 
       if (!taskProjectUpdated) {
