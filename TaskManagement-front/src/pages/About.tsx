@@ -15,7 +15,7 @@ const About = () => {
     {
       title: 'Home',
       icon: <HomeOutlined style={{ color: '#1890ff' }} />,
-      description: 'Landing page principal con dashboard dinámico. Muestra datos estadísticos y resumen de tareas en tiempo real.',
+      description: 'Landing page principal con dashboard dinámico. Muestra datos estadísticos y resumen de tareas en tiempo real. Los Admin visualizan datos globales.',
       permiso: 'Todos los usuarios'
     },
     {
@@ -27,14 +27,14 @@ const About = () => {
     {
       title: 'Proyectos',
       icon: <ProjectOutlined style={{ color: '#722ed1' }} />,
-      description: 'Agrupación lógica de tareas por objetivos. Facilita el seguimiento de metas complejas.',
-      permiso: 'Solo Líderes/Admin'
+      description: 'Agrupación lógica de tareas por objetivos. Los Líderes solo pueden acceder a los datos de su Equipo, y los Admin tienen permisos para eliminar Proyectos.',
+      permiso: 'Solo Líderes/Admin.'
     },
     {
       title: 'Usuarios',
       icon: <UserOutlined style={{ color: '#fa8c16' }} />,
-      description: 'Administración de cuentas (ABM) y función crítica de reseteo de contraseñas.',
-      permiso: 'Solo Administradores'
+      description: 'Administración de cuentas (ABM) y función crítica de reseteo de contraseñas. Los Líderes solo pueden acceder a los datos de su Equipo.',
+      permiso: 'Solo Líderes/Admin.'
     },
     {
       title: 'Equipos',
