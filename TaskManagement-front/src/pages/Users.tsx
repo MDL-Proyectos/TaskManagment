@@ -9,6 +9,7 @@ import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined
 import GlobalSearch from '../components/GlobalSearch.tsx';
 import { useAuth } from '../contexts/authContext.tsx';
 import AdminGuard from '../contexts/AdminGuard.tsx';
+import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 const { confirm } = Modal;
 //const { Title } = Typography;
@@ -87,7 +88,7 @@ const Users = () => {
 
        if (user?.role.is_admin && user?._id) {
         // Si es Lider, podrá ver a su equipo.
-        if (data.team?._id == user?.team){
+        if (user.is_leader && data.team?._id == user?.team){
           return true;
         }
         // Solo su propia cuenta
