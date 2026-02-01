@@ -24,14 +24,14 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const isEditMode = !!initialTaskId;
-  const [teams, setTeams] = useState<TeamData[]>([]); 
+  const [teams, setTeams] = useState<TeamData[]>([]);
 
   const fetchProject = async () => {
     try {    
       const response = await ProjectServices.getTaskById(initialTaskId as string); 
       const mappedResponse = {
         ...response,
-        idTeam: response.idTeam ? response.idTeam.idTeam : undefined,
+        assigned_team: response.assigned_team ? response.assigned_team.idTeam : undefined,
       };
      
       // Actualiza los campos del formulario con los datos recibidos
@@ -123,7 +123,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
 
       <Form.Item
         label="Equipo"
-        name="idTeam"
+        name="assigned_team"
         rules={[{ required: true , message: 'Por favor, selecciona un equipo' }]}
       >
         <Select placeholder="Selecciona un Equipo">
@@ -133,7 +133,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
             </Select.Option>
             ))}
         </Select>
-      </Form.Item>
+      </Form.Item>      
 
       <Form.Item
         label="Activo"

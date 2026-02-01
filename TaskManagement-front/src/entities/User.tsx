@@ -4,7 +4,7 @@ export interface UsuarioData {
   first_name: string;         // Nombre del usuario (obligatorio)
   last_name: string;          // Apellido del usuario (obligatorio)
   password: string;           // Contraseña (obligatoria, mínimo 6 caracteres)
-  team?: { idTeam: string; name: string };
+  team?: { _id:string; idTeam: string; name: string };
   role: { _id: string; name: string };
   observations?: string;      // Observaciones adicionales (opcional)
   email: string;              // Correo del usuario (obligatorio, único, validado por regex)

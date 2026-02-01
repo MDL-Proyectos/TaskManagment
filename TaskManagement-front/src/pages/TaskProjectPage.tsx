@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Table, Modal, message, Skeleton } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Typography } from 'antd';
-const { Title } = Typography;
 import ProjectTaskModal from '../components/modals/ProjectTaskModal.tsx';
 import { TaskProjectData } from '../entities/TaskProject';
 import ProjectServices from '../services/ProjectServices.tsx';
@@ -105,10 +103,10 @@ const handleDelete = (id: string) => {
     },    
     {
       title: 'Equipo',
-      dataIndex: ['idTeam'],
-      key: 'idTeam',
-      render: (idTeam: { name: string } | undefined) => idTeam?.name.toUpperCase() || 'No asignado',
-    },
+      dataIndex: ['assigned_team'],
+      key: 'assigned_team',
+      render: (assigned_team: { name: string } | undefined) => assigned_team?.name.toUpperCase() || 'No asignado',
+    },    
     {
       title: 'Activo',
       dataIndex: 'is_deleted',
@@ -144,7 +142,7 @@ const handleDelete = (id: string) => {
         [
           project.name,
           project.status,
-          project.idTeam?.name
+          project.assigned_team?.name
         ].join(' ')
     );
   
