@@ -53,7 +53,7 @@ function AppRoutes() {
           <Route path="*" element={<NotFound />} />               
           </Route>
       </Route>
-      <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+      <Route element={<ProtectedRoute allowedRoles={["admin","leader"]}/>}>
         <Route path="/" element={<Layout2 />}>      
           <Route path="users/create" element={<UserForm />} />
           <Route path="teams" element={<Teams />} />

@@ -165,7 +165,7 @@ const UserForm = () => {
         rules={[{ required: true}]}
       >
         <Select 
-        disabled={user?.role.is_admin}
+        disabled={user?.role.is_admin && !user?.is_leader}
         placeholder="Selecciona un Equipo">
             {teams.map((team) => (
             <Select.Option key={team.idTeam} value={team.idTeam} >
@@ -183,7 +183,7 @@ const UserForm = () => {
         rules={[{ required: true, message: 'Por favor, selecciona un rol' }]}
       >
         <Select 
-        disabled={user?.role.is_admin}
+        disabled={user?.role.is_admin && !user?.is_leader}
         placeholder="Selecciona un Equipo">
             {roles.map((rol) => (
             <Select.Option key={rol.name} value={rol.name}>

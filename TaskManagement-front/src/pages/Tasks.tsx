@@ -62,7 +62,7 @@ useEffect(() => {
   };
 
   const handleDelete = (id: string) => {
-    if (user?.role.is_admin) {
+    if (user?.role.is_admin && !user?.is_leader) {
       message.error('No tienes permisos para eliminar tareas.');
       return;
     }

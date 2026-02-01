@@ -86,6 +86,10 @@ const Users = () => {
     const filteredUsers = data.filter(data => {
 
        if (user?.role.is_admin && user?._id) {
+        // Si es Lider, podrá ver a su equipo.
+        if (data.team?._id == user?.team){
+          return true;
+        }
         // Solo su propia cuenta
         if (data._id !== user?._id) {
             return false; 

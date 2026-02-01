@@ -35,7 +35,7 @@ export interface MenuItem {
   [dataKey: `data-${string}`]: any; // Agregar firma de índice para propiedades dinámicas
 }
 
-type Rol = 'ADMIN' | 'ALL_USER';
+type Rol = 'ADMIN' | 'ALL_USER' | 'LEADER';
 
 //Defino los items del menu y los roles que pueden ver cada uno
 const generateMenuItems = () => [
@@ -49,7 +49,7 @@ const generateMenuItems = () => [
     getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
   ], ['ALL_USER']),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN']),
-  getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN']),  
+  getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN','LEADER']),  
   getItem(<Link to="/tasks"> Tareas </Link>, '7', <ProfileOutlined />, null, ['ALL_USER']),
   getItem(<Link to="/about"> About </Link>, '8', <QuestionCircleOutlined />, null, ['ALL_USER']), 
 ];
@@ -59,7 +59,8 @@ function LayoutAdmin() {
   const location = useLocation();
   const { logout, user} = useAuth(); //acceso al usuario logueado
   //const currentRole = user?.role.name.toUpperCase() || 'ALL_USER';
-  const currentRole = !user?.role?.is_admin ? 'ADMIN' : 'ALL_USER';
+  const currentRole = !user?.role?.is_admin ? 'ADMIN' : user?.is_leader? 'LEADER' : 'ALL_USER';
+
     const handleLogout = () => {
       logout();
       navigate('/login');

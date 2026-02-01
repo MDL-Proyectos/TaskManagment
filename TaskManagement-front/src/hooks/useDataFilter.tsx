@@ -33,7 +33,6 @@ export const useDataFilter = <T extends userAssigned>(
   const isLeader = user?.is_leader || false;
   const currentUserId = user?._id;
   const currentUserTeamId = user?.team;
-
   const lowerSearchText = searchText.toLowerCase().trim();
 
   const filteredData = useMemo(() => {
@@ -44,12 +43,12 @@ export const useDataFilter = <T extends userAssigned>(
         if (isLeader && item.assigned_team?._id === currentUserTeamId) {
           return true;
         }
-        //Si no es admin, tampoco es admin, es usuario normal
+        //Si no es admin, tampoco es lider, es usuario normal
         if (item.assigned_user?._id !== currentUserId) {
           return false;
         }
       }
-      //para los admin 
+      //Si es admin, ve todo. 
        if (!searchText && !user?.role.is_admin) return true;
     
       if (!lowerSearchText) return true;
