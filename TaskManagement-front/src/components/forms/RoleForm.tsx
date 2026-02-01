@@ -1,20 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Input,
-  Switch,
-  message,
-} from 'antd';
+import {Button,Form,Input,Switch,message} from 'antd';
 import RoleServices from '../../services/RoleServices.tsx';
 import userService from '../../services/UserServices.tsx';
 
-type SizeType = Parameters<typeof Form>[0]['size'];
-
 const RoleForm = () => {
   const { name } = useParams<{ name: string }>(); // ID desde la URL
-  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default'); //Antd
   const [isEditMode, setIsEditMode] = useState<boolean>(!!name);
   const [form] = Form.useForm(); 
   const navigate = useNavigate();
@@ -49,12 +40,11 @@ const validaNombre = async (name: string): Promise<boolean> => {
   };
 
     // Función para validar si el rol esta siendo utilizado
-const validacionUsuarios = async (name: string): Promise<boolean> => {
+const validacionUsuarios = async (): Promise<boolean> => {
   try {
     const userList = await userService.getUsers();
-      // Busca si algún usuario tiene asignado el rol con el nombre 
-      const isRoleUsed = userList.some((user: any) => user.role === name);
-
+      // Busca si algún usuario tiene asignado el rol con el nombre
+      const isRoleUsed = userList.some((user: any) => user.role?.name === name);
       return isRoleUsed; 
     } catch (error) {
       console.error('Error al validar el nombre del Rol:', error);
@@ -95,10 +85,10 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
   const handleDelete = async (values: any) => {
   
     try {
-   //   console.log('Valores enviados:', values);
   
       if (values) {
-        const validoUso = await validacionUsuarios(values.name);
+        console.log('value ', values.name)
+        const validoUso = await validacionUsuarios();
   
         if (!validoUso) {
           await RoleServices.deleteRole(values); 
@@ -122,7 +112,6 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
      onFinish={handleFinish} // Maneja el envío del formulario
     >
@@ -155,14 +144,14 @@ const validacionUsuarios = async (name: string): Promise<boolean> => {
     </Form.Item>
 
       <Form.Item wrapperCol={{ span: 24 }}>
+        <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete(name)}>
+          Eliminar
+        </Button>        
         <Button type="primary" htmlType="submit">
         {isEditMode ? 'Guardar Cambios' : 'Crear Rol'}
         </Button>
         <Button style={{ marginLeft: '10px' }} onClick={() => navigate('/users/role')}>
           Cancelar
-        </Button>
-        <Button type="default" style={{ marginLeft: '10px' }} onClick={() => handleDelete(name)}>
-          Eliminar
         </Button>
       </Form.Item>
     </Form>
