@@ -33,6 +33,9 @@ api.interceptors.response.use(
     error => {
         if (error.response?.status === 401) {
             message.error('Error en credenciales. Verificá tu usuario y contraseña.');
+        }
+        else if (error.response?.status === 423) {
+            message.error('Usuario con acceso denegado.');
         } else {
             message.error('Ocurrió un error inesperado.');
         }

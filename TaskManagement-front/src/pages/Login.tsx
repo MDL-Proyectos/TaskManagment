@@ -1,4 +1,3 @@
-import React from 'react';
 import { Form, Input, Button, Typography, Card, Row, Col } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import fondoImg from '../assets/fondo1.jpg';
@@ -14,16 +13,17 @@ type FieldType = {
   };
   const Login = () => {
   const { login} = useAuth();  
+
   const handleLogin = async (values: FieldType) => {
     const { email, password } = values;
     if (!email || !password) return;
-
     try {
       const response = await AuthServices.logIn({ email, password });
+
       //console.log('Respuesta del login:', response);
        login(response.token, response.user);
     } catch (error) {
-      console.error('Error al loguear.');
+      console.error('Error para validar Usuario.');
     }
   };
 
