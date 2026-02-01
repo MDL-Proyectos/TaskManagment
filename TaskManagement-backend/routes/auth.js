@@ -34,7 +34,8 @@ async function createUserToken(req, res, next) {
 
     if (result.isLocked) {
       logger.error('User is locked. Sending 400 (Locked) to client')
-      return res.status(400).end()
+     return res.status(423).json({ token: '', user: 'isLocked' })
+      //return res.status(400).end()
     }
 
     if (!result.isOk) {
