@@ -187,7 +187,7 @@ async function createTask(req, res, next) {
       return res.status(404).send('Parameter id not found')
     }
     try {
-       if (req.user.role.is_admin) {
+       if (req.user.role.is_admin && !req.user.is_leader) {
         logger.error('User is not admin.')
         return res.status(403).end()
       }

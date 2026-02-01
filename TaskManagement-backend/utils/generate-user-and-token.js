@@ -7,9 +7,10 @@ import logger from '../utils/logger.js'
 
 async function generateUserToken(req, user) {
   const role = await Role.findById(user.role).exec()
-  logger.info('User role:', role)
+  //logger.info('User role:', role)
   const payload = {
     _id: user._id,
+    is_leader: user.is_leader,
     role: role,
   }
 

@@ -342,7 +342,7 @@ async function deleteUser(req, res, next) {
     res.status(500).send('The param id is not defined');
   }
 
-  if (req.user.role.is_admin) {
+  if (req.user.role.is_admin && !req.user.is_leader) {
     logger.error('User is not admin.')
     return res.status(403).end()
   }  

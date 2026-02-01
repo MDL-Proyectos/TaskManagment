@@ -43,9 +43,25 @@ async function getAllTeams(req, res, next) {
 async function createTeam(req, res, next) {
     //console.log('getAllUsers by user ', req.user._id)
     const team = req.body
-    delete req.body.liderTeam    
+
+      if (team.liderTeam) {    
+        try{
+          const liderSelected = await User.findById(team.liderTeam);
+          if (!liderSelected) {
+            logger.error('teamSelected not found.')
+            return res.status(404).send('LiderTeam not found')
+          }
+            team.liderTeam = liderSelected;
+        }catch (err) {
+          return res.status(404).send('LiderTeam not found')
+        }
+             
+      }else{
+        delete team.liderTeam
+      }        
+
     try {
-    
+        team.is_deleted = !req.body.is_deleted
         const teamCreate = await Team.create({
           ...team
         })
