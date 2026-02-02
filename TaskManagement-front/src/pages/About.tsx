@@ -52,8 +52,8 @@ const About = () => {
 
   return (
     <div style={{ margin: '0 auto' }}>
-      <header style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <Title level={1}>Sobre TaskManagement</Title>
+      <header style={{ textAlign: 'center', marginBottom: '5px' }}>
+        <Title level={2} style={{ color: '#32167d'}}>Sobre TaskManagement</Title>
         <Paragraph style={{ fontSize: '16px' }}>
           Una solución integral de gestión organizacional construida con 
           <Text code>Vite</Text>, <Text code>React</Text>, <Text code>Node.js</Text> y <Text code>MongoDB</Text>.
@@ -81,7 +81,7 @@ const About = () => {
         ))}
       </Row>
 
-      <Divider orientation="horizontal" style={{ marginTop: '50px' }}>Seguridad y Tecnología</Divider>
+      <Divider orientation="horizontal" style={{ marginTop: '10px' }}>Seguridad y Tecnología</Divider>
       
       <Card style={{ background: '#f0f2f5', border: 'none' }}>
         <Row gutter={32}>
