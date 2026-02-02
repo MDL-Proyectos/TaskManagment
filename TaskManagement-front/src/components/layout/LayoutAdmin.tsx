@@ -139,7 +139,7 @@ function LayoutAdmin() {
       </Header>
        <Content
         style={{
-          margin: '20px 16px',
+          margin: '0',
           flex: 1, // Hace que el contenido crezca
           display: 'flex',
           justifyContent: 'center',
@@ -147,7 +147,7 @@ function LayoutAdmin() {
           flexDirection: 'column',
         }}>
         <Breadcrumb
-          style={{ margin: '16px 0' }}        
+          style={{ margin: '5px 0' }}        
         />
         <div
           style={{
