@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, Col, Row, Statistic, Spin, Alert, Typography, Skeleton } from 'antd';
+import { Card, Col, Row, Statistic, Alert, Typography, Skeleton, Divider } from 'antd';
 import { useTaskStats } from '../hooks/useTaskStats';
 import { HomeOutlined, CheckCircleOutlined, SettingOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext';
@@ -46,9 +46,11 @@ function Home(){
     <div style={{ padding: '20px', width: '100%', maxWidth: '1200px', height: '70%' }}>
       <Title level={2} >Hola, {user?.first_name}!</Title>
       <Title level={2} style={{ marginBottom: 30 }}>
-        {isAdmin ? 'Resumen General de las Tareas' : 'Mi Resumen de Tareas'}
+        
       </Title>
-
+<Divider orientation="horizontal">
+  {isAdmin ? 'Resumen General de las Tareas' : 'Mi Resumen de Tareas'}
+</Divider>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <StatCard
@@ -85,6 +87,7 @@ function Home(){
             color="#00a854" 
           />
         </Col>
+  
       </Row>
     
     </div>
