@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Layout, Menu, theme, Spin, Empty } from 'antd';
+import { Layout, Menu, theme, Empty, Skeleton } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 import ProjectServices from '../services/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
@@ -39,11 +39,21 @@ function ProjectManagementPage() {
     label: p.name.toUpperCase(),
   }));
 
-  if (loading) return <Spin size="large" style={{ marginTop: 50 }} />;
-//<div style={{ padding: '0 16px 16px', fontWeight: 'bold' }}>Proyectos</div>
+  if (loading) return <Skeleton style={{ marginTop: 50 }} />;
   return (
-    <Layout style={{ padding: '24px 0', background: colorBgContainer, width: '100%', height: '100%' }}>
-      <Sider width={250} style={{ background: colorBgContainer }}>
+    <Layout style={{ padding: '24px 0', background: colorBgContainer, width: '100%', 
+      height: 'calc(100vh - 64px)', // Ajusta según el alto del header
+      overflow: 'hidden' // Evita que el layout principal haga scroll
+     }}>
+      <Sider 
+        width={250} 
+        style={{ 
+          background: colorBgContainer,
+          overflowY: 'auto', // Habilita el scroll interno en el Sider
+          height: '100%',
+          scrollbarColor: '#888 transparent', 
+        }}
+      >
         <Menu
           mode="inline"
           selectedKeys={selectedProjectId ? [selectedProjectId] : []}
