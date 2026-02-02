@@ -24,6 +24,7 @@ const UserForm = () => {
   const { userid } = useParams<{ userid: string }>(); // ID del usuario desde la URL
   const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); 
+  const [isEditMode, setIsEditMode] = useState<boolean>(!!userid);
   const navigate = useNavigate();
   const [roles, setRoles] = useState<RoleData[]>([]); 
   const [teams, setTeams] = useState<TeamData[]>([]); 
@@ -266,9 +267,9 @@ const UserForm = () => {
 
       <Col span={12} style={{ display: 'flex', justifyContent: 'right', marginTop: '20px' }}>
       <AdminGuard>
-        <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete()}>
+       {(isEditMode && <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete()}>
           Eliminar
-        </Button>       
+        </Button>)}      
       </AdminGuard>
         <Button type="primary" htmlType="submit">
           Guardar Cambios

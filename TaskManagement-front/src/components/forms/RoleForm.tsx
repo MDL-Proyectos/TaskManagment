@@ -144,9 +144,16 @@ const validacionUsuarios = async (): Promise<boolean> => {
     </Form.Item>
 
       <Form.Item wrapperCol={{ span: 24 }}>
-        <Button color="danger" variant="solid" style={{ marginRight: '10px' }} onClick={() => handleDelete(name)}>
-          Eliminar
-        </Button>        
+      {isEditMode && (
+          <Button 
+            color="danger" 
+            variant="solid" 
+            style={{ marginRight: '10px' }} 
+            onClick={() => handleDelete(name)}
+          >
+            Eliminar
+          </Button>
+        )}     
         <Button type="primary" htmlType="submit">
         {isEditMode ? 'Guardar Cambios' : 'Crear Rol'}
         </Button>
