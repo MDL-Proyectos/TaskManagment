@@ -112,7 +112,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
           label="Estado"
           name="status"
           rules={[{ required: true, message: 'Por favor, selecciona una prioridad' }]}
-          
+          initialValue={"Abierto"}
         >
           <Select>
             <Select.Option value="Abierto">Abierto</Select.Option>
