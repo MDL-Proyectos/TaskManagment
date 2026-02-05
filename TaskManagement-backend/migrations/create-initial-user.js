@@ -20,11 +20,11 @@ const initialUsers = [
 ]
 
 export const up = async (db) => {
-  await db.collection('tm-user').insertMany(initialUsers)
+  await db.collection('tm-users').insertMany(initialUsers)
 }
 
 export const down = async (db) => {
-  await db.collection('tm-user').deleteMany({
+  await db.collection('tm-users').deleteMany({
     _id: {
       $in: initialUsers.map((user) => user._id),
     },

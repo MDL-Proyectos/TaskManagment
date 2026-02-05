@@ -13,11 +13,11 @@ const initialRoles = [
 ]
 
 export const up = async (db) => {
-  await db.collection('Role').insertMany(initialRoles)
+  await db.collection('roles').insertMany(initialRoles)
 }
 
 export const down = async (db) => {
-  await db.collection('Role').deleteMany({
+  await db.collection('roles').deleteMany({
     _id: {
       $in: initialRoles.map((role) => role._id),
     },
