@@ -29,7 +29,7 @@ initDatabase()
   .catch((err) => logger.error(err))
 
 async function initDatabase() {
-  await mongoose.connect(db_url)
+  await mongoose.connect(db_url + db_name)
 }
 
 // Listen on provided port, on all network interfaces.
