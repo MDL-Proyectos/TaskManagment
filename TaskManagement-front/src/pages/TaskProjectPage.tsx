@@ -71,7 +71,7 @@ const handleDelete = (id: string) => {
         try {
           if (id) {           
               await ProjectServices.deleteProject(id);
-              message.success('Tarea eliminada correctamente');
+              message.success('Proyecto eliminado correctamente');
               await fetchProject();
               return; 
           } else {
@@ -79,8 +79,8 @@ const handleDelete = (id: string) => {
             message.error('No se encuentra ID del elemento');
           }
         } catch (error) {
-          console.error('Error al eliminar tarea:', error);
-          message.error('No se pudo eliminar la tarea.');
+          console.error('Error al eliminar proyecto:', error);
+          message.error('No se pudo eliminar el proyecto.');
         }
       },
     
