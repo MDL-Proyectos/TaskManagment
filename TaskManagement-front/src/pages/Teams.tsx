@@ -75,7 +75,7 @@ function Teams() {
 
  
   return (
-    <div style={{  width: '100%', height: '100%', padding: '60px', flexDirection: 'column', display: 'flex', alignItems: 'center' }}>
+    <div style={{ width: '90%', height: '90%', padding: '20px' }}>
         {/* <Title level={2} style={{ marginBottom: 50 }}>
             Equipos
          </Title>*/}
