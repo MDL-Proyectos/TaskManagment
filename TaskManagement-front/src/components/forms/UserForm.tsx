@@ -18,11 +18,9 @@ import { TeamData } from '../../entities/Team.tsx';
 import { useAuth } from '../../contexts/authContext';
 import AdminGuard from '../../contexts/AdminGuard.tsx';
 
-type SizeType = Parameters<typeof Form>[0]['size'];
 
 const UserForm = () => {
   const { userid } = useParams<{ userid: string }>(); // ID del usuario desde la URL
-  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
   const [form] = Form.useForm(); 
   const [isEditMode, setIsEditMode] = useState<boolean>(!!userid);
   const navigate = useNavigate();
@@ -136,7 +134,6 @@ const UserForm = () => {
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
       layout="vertical"
-      size={componentSize as SizeType}
       style={{ maxWidth: 1000 }}
      onFinish={handleFinish} // Maneja el envío del formulario     
     >
