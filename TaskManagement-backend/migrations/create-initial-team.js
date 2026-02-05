@@ -14,11 +14,11 @@ const initialTeams = [
 ]
 
 export const up = async (db) => {
-  await db.collection('tm-teams').insertMany(initialTeams)
+  await db.collection('tm-team').insertMany(initialTeams)
 }
 
 export const down = async (db) => {
-  await db.collection('tm-teams').deleteMany({
+  await db.collection('tm-team').deleteMany({
     _id: {
       $in: initialTeams.map((team) => team._id),
     },

@@ -14,11 +14,11 @@ const initialProjects = [
 ]
 
 export const up = async (db) => {
-  await db.collection('tm-projects').insertMany(initialProjects)
+  await db.collection('tm-taskproject').insertMany(initialProjects)
 }
 
 export const down = async (db) => {
-  await db.collection('tm-projects').deleteMany({
+  await db.collection('tm-taskproject').deleteMany({
     _id: {
       $in: initialProjects.map((project) => project._id),
     },

@@ -1,4 +1,5 @@
 import mongodb from 'mongodb'
+import dayjs from 'dayjs'
 
 
 const { ObjectId } = mongodb
@@ -25,11 +26,11 @@ const initialTasks = [
 ]
 
 export const up = async (db) => {
-  await db.collection('tm-tasks').insertMany(initialTasks)
+  await db.collection('tm-task').insertMany(initialTasks)
 }
 
 export const down = async (db) => {
-  await db.collection('tm-tasks').deleteMany({
+  await db.collection('tm-task').deleteMany({
     _id: {
       $in: initialTasks.map((task) => task._id),
     },
