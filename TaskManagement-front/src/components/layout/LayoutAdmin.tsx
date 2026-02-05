@@ -8,9 +8,10 @@ import {
   BookOutlined,
   IdcardOutlined,
   FileDoneOutlined,
-  ProfileOutlined
+  ProfileOutlined,
+  SettingOutlined
 } from '@ant-design/icons'
-import { Button, Layout, Menu, theme, Breadcrumb, Tag } from 'antd'
+import { Button, Layout, Menu, theme, Breadcrumb, Tag, Dropdown } from 'antd'
 import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer } = Layout
 import { useAuth } from '../../contexts/authContext.tsx';
@@ -46,7 +47,7 @@ const generateMenuItems = () => [
     // Sub-items
     getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','ALL_USER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN']),
-    getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
+    //getItem(<Link to="/users/p">Password</Link>, '2-3', <IdcardOutlined />, null, ['ALL_USER']),    
   ], ['ALL_USER']),
   getItem(<Link to="/teams"> Equipos </Link>, '3', <TeamOutlined />, null, ['ADMIN']),
   getItem(<Link to="/taskProject"> Proyectos </Link>, '6', <BookOutlined />, null, ['ADMIN','LEADER']),  
@@ -119,6 +120,7 @@ function LayoutAdmin() {
     <Layout style={{ minHeight: '100vh', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
         <div className="demo-logo" />
+        <FileDoneOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24 }} />
         <Menu
           theme="dark"
           mode="horizontal"
@@ -127,7 +129,20 @@ function LayoutAdmin() {
           style={{ flex: 1, minWidth: 0 }}
         />
         <Tag color={ 'green'} style={{  marginRight: 100, height: 32, width: 100, alignItems: 'center', justifyContent: 'center', display: 'flex', fontSize: 14 }} >{currentItemLabel} </Tag>
-        <FileDoneOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24 }} />
+        <Dropdown
+          menu={{
+            items: [
+              { 
+                key: '1',
+                label: <Link to="/users/p">Configurar contraseña</Link>,
+                icon: <IdcardOutlined />,
+              },
+            ],
+          }}
+          placement="bottomRight"
+        >
+          <SettingOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24, cursor: 'pointer' }} />
+        </Dropdown>
         <Button
           type="primary"
           danger
