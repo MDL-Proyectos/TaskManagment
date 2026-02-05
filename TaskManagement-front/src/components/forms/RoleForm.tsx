@@ -110,17 +110,17 @@ const validacionUsuarios = async (): Promise<boolean> => {
     <Form
       form={form}
       labelCol={{ span: 10 }}
-      wrapperCol={{ span: 14 }}
+      wrapperCol={{ span: 20 }}
       layout="horizontal"
-      style={{ maxWidth: 600 }}
-     onFinish={handleFinish} // Maneja el envío del formulario
+      style={{ maxWidth: 500, width: '100%' }}
+     onFinish={handleFinish} 
     >
-      <Form.Item
+      <Form.Item 
         label="Titulo"
         name="name"
         rules={[{ required: true, message: 'Por favor, ingresa el nombre' }]}
       > 
-        <Input placeholder="Nombre" disabled={false}/>
+        <Input placeholder="Nombre" size="large" disabled={false}/>
       </Form.Item>
 
       <Form.Item
