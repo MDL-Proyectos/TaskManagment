@@ -44,6 +44,7 @@ function TaskProjectPage() {
     }, []);
 
   const handleCreate = () => {
+    console.log('Crear nuevo proyecto');
     setEditingProject(null);
     setModalVisible(true);
   };
@@ -181,7 +182,10 @@ const handleDelete = (id: string) => {
           pageSize: 6, 
           showSizeChanger: false
         }}/>
-      {modalVisible && (
+
+    </Card>
+          )}
+                {modalVisible && (
         <ProjectTaskModal
           open={modalVisible}
           onClose={() => setModalVisible(false)}
@@ -192,8 +196,6 @@ const handleDelete = (id: string) => {
           initialTaskId={editingProject?._id || null}
         />
       )}
-    </Card>
-          )}
     </div>
         </div>
   );
