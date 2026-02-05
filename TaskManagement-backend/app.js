@@ -10,7 +10,6 @@ import taskRouter from './routes/task.js'
 import taskProjectRouter from './routes/taskProject.js'
 import teamsRouter from './routes/team.js'
 import roleRouter from './routes/roles.js'
-import taskStatusRouter from './routes/TaskStatus.js'
 import authentication from './middlewares/authentication.js'
 import authorization from './middlewares/authorization.js'
 const app = express()
@@ -33,7 +32,6 @@ app.use('/taskProject',authentication, taskProjectRouter)
 app.use('/users',authentication, userRouter)
 app.use('/teams', authentication, teamsRouter)
 app.use('/roles', authentication, roleRouter)
-app.use('/taskStatus',authentication, taskStatusRouter)
 
 
 export default app
