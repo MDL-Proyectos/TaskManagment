@@ -43,7 +43,10 @@ El proyecto separa las configuraciones mediante archivos `.env`. Es fundamental 
 ```env
 PORT=4000
 MONGO_URI=tu_conexion_mongodb
-JWT_SECRET=tu_clave_secreta_jwt
+MONGO_DB=db_task
+NODE_ENV = development
+DEFAULT_PASSWORD=1
+JWT_SECRET=tu_clave_secreta_jwt (para iniciar con el primer usuario deberán ingresar 'base-api-express-generator')
 ```
 
 ### **Frontend (`/TASKMANAGEMENT-FRONT/.env`)**
@@ -52,4 +55,32 @@ Para que el Frontend se comunique con el Backend, es obligatorio crear un archiv
 ### Archivo: `.env.local`
 ```env
 # Importante: Vite requiere que las variables inicien con el prefijo VITE_
-VITE_API_URL=http://localhost:
+VITE_API_URL=http://localhost:4000
+```
+
+### Primera Ejecución
+```consola
+# 1. Inicialización de backend
+./TaskManagement-backend npm install
+
+# 1.2. configurar el .env.local
+
+# 1.3. validamos que la conexión esté establecida
+./TaskManagement-backend npm run migrate status
+
+# 1.4. migración de datos
+./TaskManagement-backend npm run migrate up
+
+# 1.5.  Ejecución del proyecto
+./TaskManagement-backend npm run dev
+
+# 2. Inicialización de Front
+
+./TaskManagement-front npm install
+
+# 2.1. configurar el .env.local
+
+# 2.2. Ejecución del proyecto
+./TaskManagement-front npm run dev
+
+```
