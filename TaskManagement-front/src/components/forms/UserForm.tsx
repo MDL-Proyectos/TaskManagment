@@ -160,7 +160,7 @@ const UserForm = () => {
       <Form.Item
         label="Team"
         name="team"
-        rules={[{ required: true}]}
+        rules={[{ required: true, message: 'Por favor, selecciona un equipo' }]}
       >
         <Select 
         disabled={user?.role.is_admin && !user?.is_leader}

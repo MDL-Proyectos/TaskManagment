@@ -171,7 +171,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               label="Prioridad"
               name="priorityLevel"
               initialValue="Baja"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: 'Selecciona un nivel de prioridad' }]}
             >
               <Select>
                 <Select.Option value="Baja">Baja</Select.Option>
@@ -248,7 +248,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item label="Descripción" name="description" rules={[{ required: true }]}>
+            <Form.Item label="Descripción" name="description" rules={[{ required: true, message: 'Por favor ingresa una descripción' }]}>
               <Input.TextArea rows={1} placeholder="Breve descripción..." />
             </Form.Item>
           </Col>
