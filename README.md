@@ -84,3 +84,10 @@ VITE_API_URL=http://localhost:4000
 ./TaskManagement-front npm run dev
 
 ```
+
+### Primer registro:
+
+``` login base
+Usuario: admin@tm.com
+Password: 1
+```
