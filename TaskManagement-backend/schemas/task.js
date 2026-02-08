@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dayjs from 'dayjs';
 
 const Schema = mongoose.Schema
-const { ObjectId } = Schema.Types //usar en el usuario. EJ: role: { type: ObjectId, ref: 'Role', required: true },
+const { ObjectId } = Schema.Types //usar en el usuario, equipo, proyecto
 
 // Definir el esquema de la tarea (task)
 const taskSchema = new Schema({

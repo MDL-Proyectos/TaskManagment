@@ -78,10 +78,6 @@ async function createTeam(req, res, next) {
     }
     
   
-    //if (!req.isAdmin() && req.params.id != req.user._id) {
-    // return res.status(403).send('Unauthorized')
-    //}      
-  
     try {
       const teamToUpdate = await  Team.findOne({ idTeam: req.params.id })
       const teamNewData = req.body

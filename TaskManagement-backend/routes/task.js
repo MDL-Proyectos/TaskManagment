@@ -116,15 +116,6 @@ async function createTask(req, res, next) {
     if (!req.params.id) {
       return res.status(404).send('Parameter id not found')
     }
-  
-    //if (!req.isAdmin() && req.params.id != req.user._id) {
-    // return res.status(403).send('Unauthorized')
-    //}      
-    /*delete req.body.created_at
-    delete req.body.due_date
-    delete req.body.comments.author
-    delete req.body.comments.created_at
-    delete req.body.project*/
 
     try {
       //Valido tarea
