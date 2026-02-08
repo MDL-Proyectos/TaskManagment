@@ -148,6 +148,7 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         rules={[{ required: true, message: 'Por favor, ingresa el ID' }]}
       >
         <Input 
+        
           placeholder="ID del Equipo" 
           disabled={isEditMode} // Deshabilitar si se está editando
         /> 
@@ -158,7 +159,14 @@ const TeamFormModal: React.FC<TeamFormModalProps> = ({
         name="name"
         rules={[{ required: true, message: 'Por favor, ingresa un nombre' }]}
       >
-        <Input placeholder="Nombre del Equipo" />
+        <Input placeholder="Nombre del Equipo" 
+                  onChange={(e) => { 
+                    if (isEditMode) return; // No modificar el ID si se edita
+            const valor = e.target.value;
+            form.setFieldsValue({ idTeam: valor.replace(/\s+/g, '-').toUpperCase() }); //Modifico el ID reemplazando espacios por guiones
+          }} 
+        />
+        
       </Form.Item>
 
       <Form.Item
