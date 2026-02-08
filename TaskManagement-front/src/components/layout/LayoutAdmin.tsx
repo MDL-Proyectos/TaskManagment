@@ -43,7 +43,7 @@ const generateMenuItems = () => [
   getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />, null, ['ALL_USER']), 
   
   // Ítem principal que requiere rol admin
-  getItem(<Link to="/users">Personal</Link>, '2', <UserOutlined />, [
+  getItem(<Link to="/users" style={{color:'whitesmoke'}}>Personal</Link>, '2', <UserOutlined />, [
     // Sub-items
     getItem(<Link to="/users">Usuarios</Link>, '2-1', <UserOutlined />, null, ['ADMIN','ALL_USER']), 
     getItem(<Link to="/users/role">Roles</Link>, '2-2', <IdcardOutlined />, null, ['ADMIN']),
@@ -124,7 +124,7 @@ function LayoutAdmin() {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['1']}
           items={filteredItems}
           style={{ flex: 1, minWidth: 0 }}
         />
