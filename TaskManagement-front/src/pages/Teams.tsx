@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { TeamData } from '../entities/Team';
 import TeamService from '../services/TeamServices';
-import { Button, Card, List } from 'antd';
+import { Button, Card, List, Skeleton } from 'antd';
 import GlobalSearch from '../components/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
 import TeamModal from '../components/modals/TeamModal';
@@ -13,8 +13,10 @@ function Teams() {
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null); 
   // Estado para controlar la visibilidad del modal
   const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [initLoading, setInitLoading] = useState(true);
 
   const fetchTeams = async () => {
+    setInitLoading(true);
     try {
       const data = await TeamService.getAllTeams(); // Llama directamente al método del servicio
      
@@ -25,6 +27,8 @@ function Teams() {
       setTeam(data); 
     } catch (error) {
       console.error('Error fetching teams:', error);
+    }finally {
+      setInitLoading(false);
     }
   };
 
@@ -88,7 +92,9 @@ function Teams() {
                   placeholder="Buscar por Nombre o Lider..."
                 />    
           </div>
-        {filteredTeams.length === 0 ? (
+        {initLoading ? (
+        <Skeleton active paragraph={{ rows: 4 }} />
+      ) : filteredTeams.length === 0 ? (
           <p>No existen Equipos</p>
           ) : (
           <List
