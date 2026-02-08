@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, Space, Modal, message, Skeleton} from 'antd'; // Importamos Table y Space
-import type { TableProps } from 'antd'; // Importamos tipos si usas TypeScript
+import { Button, Table, Space, Modal, message, Skeleton} from 'antd'; 
+import type { TableProps } from 'antd'; 
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../services/UserServices.tsx';
 import { UsuarioData } from '../entities/User.tsx';
-// importamos los iconos que podrías necesitar para las acciones (opcional)
 import { AlertOutlined, EditOutlined, UserAddOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/GlobalSearch.tsx';
 import { useAuth } from '../contexts/authContext.tsx';
 import AdminGuard from '../contexts/AdminGuard.tsx';
-import { useDataFilter } from '../hooks/useDataFilter.tsx';
 
 const { confirm } = Modal;
 //const { Title } = Typography;
@@ -177,9 +175,6 @@ const Users = () => {
   return (
     
     <div style={{ width: '100%', height: '100%', padding: '20px' }}>
-     {/* <Title level={2} style={{ marginBottom: 30 }}>
-       Usuarios
-      </Title>    */}
       <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}> 
                 <AdminGuard>
                     <Button
@@ -208,11 +203,11 @@ const Users = () => {
         dataSource={filteredUsers}
         // El array de columns define la estructura de la tabla
         columns={columns}
-        // loading usa el estado que ya tienes
+        // loading usa el estado initLoading para mostrar un spinner mientras se cargan los datos
         loading={initLoading}
-        // Key de la fila (Antd prefiere 'key' pero 'rowKey' es más flexible)
+        // Key de la fila 
         rowKey="_id"
-        // Paginación (opcional, Antd la incluye por defecto)
+        // Paginación 
         pagination={{ pageSize: 10 }}
       />
     </div>

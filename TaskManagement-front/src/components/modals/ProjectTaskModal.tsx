@@ -77,7 +77,7 @@ const ProjectTaskModal: React.FC<ProjectTaskModalProps> = ({
         message.success('Equipo actualizado correctamente');        
         message.success('Proyecto actualizado correctamente');
       } else {
-        // Lógica para crear un nuevo proyecto
+        // para crear un nuevo proyecto
         await ProjectServices.createProject(values);
         message.success('Proyecto creado correctamente');
       }

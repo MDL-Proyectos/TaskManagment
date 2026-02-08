@@ -20,13 +20,7 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error) 
 )
-/*
-api.interceptors.response.use(
-  (response) => response.data, // Do something with response data
-  (error) =>
-    // Do something with response error
-    Promise.reject(console.log(error))
-)*/
+
 
 api.interceptors.response.use(
   response => response,

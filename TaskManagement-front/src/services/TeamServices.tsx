@@ -4,7 +4,7 @@ import { TeamData } from '../entities/Team';
 const TeamService = {
   getAllTeams: async (): Promise<TeamData[]> => {
     const response = await api.get('/teams');
-    return response.data; // Aquí sí es el array
+    return response.data; 
   },
   getTeamById: async (id: string): Promise<TeamData> => {
     const response = await api.get(`/teams/${id}`);

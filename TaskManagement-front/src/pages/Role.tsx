@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import RoleServices from '../services/RoleServices';
 import { RoleData } from '../entities/Role';
-//import userService from '../../services/users'
 import { Card, List } from 'antd';
 import { Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
@@ -17,7 +16,6 @@ function Role() {
     try {
       const data = await RoleServices.getAllRole(); // Llama directamente al método del servicio
       setRole(data); // Actualiza el estado con los datos recibidos
-      //console.log(await TeamService.getAllTeams());
     } catch (error) {
       console.error('Error fetching teams:', error);
     }

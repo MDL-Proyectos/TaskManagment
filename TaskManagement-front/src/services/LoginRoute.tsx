@@ -7,7 +7,7 @@ interface dataLog {
 
   interface LoginResponse {
     token: string;
-    user: any; // O un tipo más específico para tu objeto de usuario
+    user: any;
   }
 
   const LoginRoute = {

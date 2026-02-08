@@ -40,7 +40,6 @@ function TaskProjectPage() {
 
      useEffect(() => {
       fetchProject(); // Llama a fetch cuando el componente se monta
-      //fetchTeams();
     }, []);
 
   const handleCreate = () => {

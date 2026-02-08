@@ -3,7 +3,7 @@ import { Layout, Menu, theme, Empty, Skeleton } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 import ProjectServices from '../services/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
-import Tasks from './Tasks'; // Importamos tu componente de tareas
+import Tasks from './Tasks'; 
 import ProjectTaskModal from '../components/modals/ProjectTaskModal';
 const { Sider, Content } = Layout;
 

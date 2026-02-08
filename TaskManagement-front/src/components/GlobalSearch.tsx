@@ -21,7 +21,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
       size="large"
       loading={loading}
       onSearch={onSearch} 
-      // Opcional: Para buscar mientras se escribe (ejecutar en onChange)
+      // Para buscar mientras se escribe (ejecutar en onChange)
       // onChange={(e) => onSearch(e.target.value)} 
       style={{ width: 300 }}
     />

@@ -33,7 +33,7 @@ export interface MenuItem {
   children?: ItemType<MenuItem>[]; // Mantener el tipo esperado
   label: React.ReactNode;
   roles?: Rol[];
-  [dataKey: `data-${string}`]: any; // Agregar firma de índice para propiedades dinámicas
+  [dataKey: `data-${string}`]: any; // Agregar índice para propiedades dinámicas
 }
 
 type Rol = 'ADMIN' | 'ALL_USER' | 'LEADER';

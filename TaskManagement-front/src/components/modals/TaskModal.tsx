@@ -13,7 +13,7 @@ import GenericModal from './GenericModal';
 
 interface TaskModalProps {
   visible: boolean;
-  idTask?: string | null; // <-- así acepta string o null
+  idTask?: string | null; 
   onClose: () => void;
   onSuccess?: () => void;
 }
@@ -48,8 +48,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           created_at: comment.created_at ? dayjs(comment.created_at) : null,
         })),
       };
-      // Verificar los valores mapeados
-    //  console.log('Datos mapeados para el formulario:', mappedData);
+     
       // Actualiza los campos del formulario con los datos recibidos
       form.setFieldsValue(mappedData);
     } catch (error) {
