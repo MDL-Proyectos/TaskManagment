@@ -27,14 +27,23 @@ type FieldType = {
     }
   };
 
+  //cambio el título del login dependiendo la hora del día
+  const getTimeDay = () => {
+    const hour = new Date().getHours();
+    if (hour <= 12) return "Buen día!";
+    if (hour < 20) return "Buenas tardes!";
+    
+    return "¡Buenas noches!";
+  };
+
   return (
     <div className="login-container">
       <Card className="login-card" bodyStyle={{ padding: 0 }} bordered={false}>
-        <Row style={{ height: '100%' }}>
+        <Row style={{ height: '100%', margin: 0 }}>
           {/* LADO IZQUIERDO: FORMULARIO */}
           <Col xs={24} md={12} className="form-section">
             <div className="form-wrapper">
-              <Title level={2} className="login-title">Buen día!</Title>
+              <Title level={2} className="login-title">{getTimeDay()}</Title>
               <Text type="secondary" className="login-subtitle">
                 Por favor, ingresá tu mail y contraseña para iniciar sesión.
               </Text>
@@ -76,8 +85,8 @@ type FieldType = {
             </div>
           </Col>
           {/* LADO DERECHO: IMAGEN DE FONDO Y TEXTO */}
-          <Col xs={0} md={10} className="image-section" 
-               style={{ backgroundImage: 'url(' + fondoImg + ')' }}>
+          <Col xs={0} md={11} className="image-section" 
+               style={{ marginRight:'0', backgroundImage: 'url(' + fondoImg + ')' }}>
            <div className="overlay-content">
             <Title 
               level={1} 

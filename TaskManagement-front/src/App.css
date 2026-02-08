@@ -117,7 +117,8 @@
     background-size: cover;
     background-position: center;
     position: relative;
-    margin: 15px;
+    margin: 20px;
+    margin-right: 0;
     border-radius: 30px;
 }
 
