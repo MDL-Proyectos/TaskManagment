@@ -26,7 +26,6 @@ async function generateUserToken(req, user) {
 
   // const privateKey = fs.readFileSync(path.join(__dirname, `../keys/base-api-express-generator.pem`))
 
-  // Unsecure alternative
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     subject: user._id.toString(),
     issuer: process.env.JWT_SECRET,

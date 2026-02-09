@@ -148,7 +148,7 @@ async function updatePassword(req, res, next) {
     } catch (error) {
         logger.error('Error al actualizar la contraseña:', error);
         res.status(500).json({ error: 'Error al actualizar la contraseña.' });
-        next(err); // Pasar el error al siguiente middleware de manejo de errores
+        next(err); 
     }
 }
 
@@ -157,41 +157,41 @@ async function createUser(req, res, next) {
   const user = req.body;
 
   try {
-    // 1. Validar que los campos obligatorios estén presentes
+    // Validar que los campos obligatorios estén presentes
     if (!user.email || !user.role || !user.team) {
       return res.status(400).send('Faltan campos obligatorios (email, password, role, team).');
     }
 
-    // 2. Validar el formato del email (opcional, pero recomendado)
+    // Validar el formato del email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(user.email)) {
       return res.status(400).send('Formato de email inválido.');
     }
 
-    // 3. Verificar si el usuario ya existe por email (código de estado 409 Conflict es más apropiado)
+    // Verificar si el usuario ya existe por email (código de estado 409 Conflict)
     const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
       logger.error('El mail ya existe.');
       return res.status(409).send('El usuario con este email ya existe.');
     }
 
-    // 4. Buscar el rol
+    // Buscar el rol
     const role = await Role.findOne({ name: user.role });
     if (!role) {
       return res.status(400).send('Role no encontrado.'); // Código 400 porque el cliente envió un rol inválido
     }
 
-    // 5. Buscar el equipo
+    // Buscar el equipo
     const team = await Team.findOne({ idTeam: user.team });
     if (!team) {
       return res.status(400).send('Equipo no encontrado.'); // Código 400 porque el cliente envió un team inválido
     }
 
-    // 6. Hashear la contraseña ANTES de crear el usuario
+    // Hashear la contraseña ANTES de crear el usuario
     user.password = '1'; // Contraseña por defecto
     const passEncrypted = await bcrypt.hash(user.password, saltRounds);
 
-    // 7. Crear el nuevo usuario
+    // Crear el nuevo usuario
     const userCreated = await User.create({
       ...user,
       password: passEncrypted, // Usar la contraseña hasheada
@@ -199,7 +199,7 @@ async function createUser(req, res, next) {
       role: role._id,
     });
 
-    // 8. Responder con el usuario creado (no enviar la contraseña hasheada)
+    //  Responder con el usuario creado (no enviar la contraseña hasheada)
     const { password: removedPassword, ...userWithoutPassword } = userCreated.toObject();
     res.status(201).send(userWithoutPassword); // Código 201 Created para indicar creación exitosa
 
@@ -227,12 +227,6 @@ async function updateUser(req, res, next) {
     return res.status(404).send('Parameter id not found')
   }
 
-  //if (!req.isAdmin() && req.params.id != req.user._id) {
-  // return res.status(403).send('Unauthorized')
-  //}
-
-  // The email can't be updated
-  //delete req.body.email
 
   try {
     const userToUpdate = await User.findById(req.params.id)
@@ -269,23 +263,9 @@ async function updateUser(req, res, next) {
       req.body.team = newTeam._id
     }
 
-    /*if (req.body.password && false) { //descativado
-      const passEncrypted = await bcrypt.hash(req.body.password, 10)
-      req.body.password = passEncrypted
-    }*/
-
-    // This will return the previous status
     await userToUpdate.updateOne(req.body)
     res.send(userToUpdate)
 
-    // This return the current status
-    // userToUpdate.password = req.body.password
-    // userToUpdate.role = req.body.role
-    // userToUpdate.firstName = req.body.firstName
-    // userToUpdate.lastName = req.body.lastName
-    // userToUpdate.phone = req.body.phone
-    // userToUpdate.bornDate = req.body.bornDate
-    //userToUpdate.isActive = req.body.isActive
      //await userToUpdate.save()
      //res.send(userToUpdate)
   } catch (err) {

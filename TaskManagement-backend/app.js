@@ -24,7 +24,6 @@ app.use(cookieParser())
 app.use('/', statusRouter)
 app.use('/auth', authRouter)
 app.use(authorization)
-//app.use('/users', authentication, userRouter)
 
 //app.use('/auth')
 app.use('/task',authentication, taskRouter)
