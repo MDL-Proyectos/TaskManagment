@@ -4,15 +4,12 @@ import { FolderOutlined } from '@ant-design/icons';
 import ProjectServices from '../services/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
 import Tasks from './Tasks'; 
-import ProjectTaskModal from '../components/modals/ProjectTaskModal';
 const { Sider, Content } = Layout;
 
 function ProjectManagementPage() {
   const [projects, setProjects] = useState<TaskProjectData[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editingProject, setEditingProject] = useState<TaskProjectData | null>(null);
 
   const { token: { colorBgContainer } } = theme.useToken();
   
@@ -69,17 +66,7 @@ function ProjectManagementPage() {
         ) : (
           <Empty description="Selecciona un proyecto para ver sus tareas" />
         )},
-        {modalVisible && (
-        <ProjectTaskModal
-          open={modalVisible}
-          onClose={() => setModalVisible(false)}
-          onSaveSuccess={() =>{ 
-            setModalVisible(false);
-          fetchProject();
-        }}
-          initialTaskId={editingProject?._id || null}
-        />
-      )}
+
       </Content>
     </Layout>
   );

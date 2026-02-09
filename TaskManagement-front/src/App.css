@@ -1,10 +1,10 @@
 #root {
   width: 100%;
-  max-width: 100%; /* Elimina el max-width para que ocupe el 100% */
+  max-width: 100%;
   margin: 0 auto;
   padding: 0;
   text-align: center;
-  box-sizing: border-box; /* Asegura que el padding no cause desbordamiento */
+  box-sizing: border-box; 
 }
 
 .logo {

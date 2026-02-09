@@ -66,7 +66,7 @@ const About = () => {
         {modules.map((item, index) => (
           <Col xs={24} sm={12} lg={8} key={index}>
             <Card 
-              hoverable 
+              hoverable={false}
               style={{ height: '100%', borderRadius: '8px' }}
               title={<span>{item.icon} {item.title}</span>}
             >

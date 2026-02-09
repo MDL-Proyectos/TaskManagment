@@ -43,7 +43,6 @@ function TaskProjectPage() {
     }, []);
 
   const handleCreate = () => {
-    console.log('Crear nuevo proyecto');
     setEditingProject(null);
     setModalVisible(true);
   };
