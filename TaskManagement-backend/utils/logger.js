@@ -7,6 +7,9 @@ const logger = createLogger({
     format.errors({ stack: true }), // Captura el stack trace de los errores
     format.splat(),
     //format.json() // Formato ideal para producción
+    format.printf(({ timestamp, level, message, service, stack }) => {
+      return `[${timestamp}] [${service}] ${level.toUpperCase()}: ${stack || message}`;
+    })
   ),
   defaultMeta: { service: 'task-management-api' },
   transports: [
