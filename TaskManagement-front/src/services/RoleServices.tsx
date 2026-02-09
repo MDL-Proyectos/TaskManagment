@@ -11,8 +11,13 @@ const RoleServices = {
     return response.data;
   },
   createRole: async (RoleData: any) => {
+    try{
     const response = await api.post('/roles', RoleData);
     return response.data;
+  } catch (error) {
+      console.error('Error al crear el rol:', error);
+      throw error; 
+    }
   },
   updateRole: async (name: any, values: RoleData) => {
     try {

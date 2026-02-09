@@ -22,12 +22,22 @@ const userService = {
     }
   },
   createTask: async (data: any) => {
+    try{
     const response = await api.post('/task', data);
     return response.data;
+    } catch (error) {
+      console.error('Error al crear la tarea:', error);
+      throw error; 
+    }
   },
   deleteTask: async (id: string) => {
+    try{
     const response = await api.delete(`/task/delete/${id}`);
     return response.data;
+  } catch (error) {
+      console.error('Error al eliminar la tarea:', error);
+      throw error; 
+    }
   }   
 };
 export default userService;
