@@ -71,7 +71,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         const fectchProjects = async () => {
           try {
             const listProjects = await ProjectServices.getAllProjects();  
-            const activeProjects = listProjects.filter(project => project.status !== 'Cancelado');
+            const activeProjects = listProjects.filter(project => project.status == 'Abierto');
             
             setProjects(activeProjects); 
           } catch (error) {
