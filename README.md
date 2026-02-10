@@ -60,10 +60,10 @@ VITE_API_URL=http://localhost:4000
 
 ### Primera Ejecución
 ```consola
-# 1. Inicialización de backend
+# 1. Inicialización de Backend
 ./TaskManagement-backend npm install
 
-# 1.2. configurar el .env.local
+# 1.2. configurar el .env
 
 # 1.3. validamos que la conexión esté establecida
 ./TaskManagement-backend npm run migrate status
@@ -74,7 +74,7 @@ VITE_API_URL=http://localhost:4000
 # 1.5.  Ejecución del proyecto
 ./TaskManagement-backend npm run dev
 
-# 2. Inicialización de Front
+# 2. Inicialización de Frontend
 
 ./TaskManagement-front npm install
 
