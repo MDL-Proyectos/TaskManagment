@@ -9,6 +9,13 @@ const initialRoles = [
   is_admin: false,
   is_deleted: false,
   __v: 0
+  },
+  {
+  _id: new ObjectId('697f3a71093d120b01aa0081'),
+  name: "funcional",
+  is_admin: true,
+  is_deleted: false,
+  __v: 0
   }
 ]
 

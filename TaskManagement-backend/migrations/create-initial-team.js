@@ -10,6 +10,14 @@ const initialTeams = [
   is_deleted: false,
   __v: 0,
   liderTeam: new ObjectId('6974ea1bddd3f64c26fe981f'),
+  },
+  {
+  _id: new ObjectId('6746f00194367c58fadffe1f'),
+  idTeam: "00002",
+  name: "team qa-ux",
+  is_deleted: false,
+  __v: 0,
+  liderTeam: new ObjectId('6974ea1bddd3f64c26fe981f'),
   }
 ]
 

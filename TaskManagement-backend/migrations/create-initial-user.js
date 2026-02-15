@@ -16,6 +16,20 @@ const initialUsers = [
   is_deleted: false,
   is_leader: true,
   __v: 0
+  },
+  {
+  _id: new ObjectId('6738c58c10fbfe5da7002dca'),
+  first_name: "Lucia",
+  last_name: "Fernandez",
+  password: "$2b$10$lvPlfX6iBlTZsIzwNEsi7.rlorfIikDIXlXGAygkXZx5oA4fMqeue",
+  team: new ObjectId('6746f00194367c58fadffe1f'),
+  role: new ObjectId('697f3a71093d120b01aa0081'),
+  observations: "Usuario default normal.",
+  email: "lucia.fernandez@example.com",
+  phone: "555-123-7890",
+  is_deleted: false,
+  is_leader: false,
+  __v: 0
   }
 ]
 
