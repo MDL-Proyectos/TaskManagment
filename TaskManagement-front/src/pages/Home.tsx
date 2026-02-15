@@ -4,6 +4,7 @@ import { Card, Col, Row, Statistic, Alert, Typography, Skeleton, Divider } from 
 import { useTaskStats } from '../hooks/useTaskStats';
 import { HomeOutlined, CheckCircleOutlined, SettingOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/authContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const { Title } = Typography;
@@ -13,10 +14,15 @@ interface StatCardProps {
   value: number;
   icon: React.ReactNode;
   color: string;
+  onClick?: () => void;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
-  <Card style={{ textAlign: 'center', borderColor: color, borderLeft: `5px solid ${color}` }}>
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color,onClick }) => (
+  <Card 
+    hoverable={true} 
+    style={{ textAlign: 'center', borderColor: color, borderLeft: `5px solid ${color}` }}
+    onClick={onClick}
+  >
     <Statistic
       title={title}
       value={value}
@@ -29,6 +35,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
 function Home(){
   const { stats, loading, error, isAdmin } = useTaskStats();
   const { user } = useAuth();
+  const navigate = useNavigate();
   if (loading) {
     return (
       <div style={{ padding: '50px', textAlign: 'center' }}>
@@ -58,6 +65,7 @@ function Home(){
             value={stats.total}
             icon={<HomeOutlined />}
             color="#108ee9"
+            onClick={() => navigate('/tasks')}
           />
         </Col>
 
@@ -67,6 +75,7 @@ function Home(){
             value={stats.Nuevo}
             icon={<ClockCircleOutlined />}
             color="#faad14" 
+            onClick={() => navigate('/tasks', { state: { filterStatus: 'Nuevo' } })}
           />
         </Col>
 
@@ -76,6 +85,7 @@ function Home(){
             value={stats['En Progreso']}
             icon={<SettingOutlined />}
             color="#52c41a" 
+            onClick={() => navigate('/tasks', { state: { filterStatus: 'En Progreso' } })}
           />
         </Col>
 
@@ -85,6 +95,7 @@ function Home(){
             value={stats.Completado}
             icon={<CheckCircleOutlined />}
             color="#00a854" 
+            onClick={() => navigate('/tasks', { state: { filterStatus: 'Completado' } })}
           />
         </Col>
   

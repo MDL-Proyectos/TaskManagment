@@ -12,9 +12,10 @@ import { useDataFilter } from '../hooks/useDataFilter.tsx';
 const { confirm } = Modal;
 //const { Title } = Typography;
 import AdminGuard from '../contexts/AdminGuard.tsx';
+import { useLocation } from 'react-router-dom'; 
 
 interface TasksProps {
-  projectId?: string; 
+  projectId?: string;
 }
 
 function Tasks({ projectId }: TasksProps) {
@@ -24,6 +25,7 @@ function Tasks({ projectId }: TasksProps) {
 const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 const [searchText, setSearchText] = useState('');
 const {user} = useAuth(); 
+const location = useLocation();
 
 
 const fetchTasks = async () => {
@@ -37,7 +39,6 @@ const fetchTasks = async () => {
           ? data.filter(t => t.project?._id === projectId) 
           : data;
         setTasks(filtered);
-
       }
     } catch (error) {
       console.error(error);
@@ -45,6 +46,13 @@ const fetchTasks = async () => {
       setInitLoading(false);
     }
   };
+  
+useEffect(() => {
+    if (location.state?.filterStatus) {
+      // Si venimos del Home, filtramos el texto en el buscador 
+      setSearchText(location.state.filterStatus.toLowerCase());
+    }
+  }, [location.state]);
 
 useEffect(() => {
     fetchTasks();
