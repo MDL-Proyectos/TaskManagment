@@ -17,6 +17,7 @@ interface StatCardProps {
   onClick?: () => void;
 }
 
+//Subcomponente para las tarjetas de estadísticas
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color,onClick }) => (
   <Card 
     hoverable={true} 
