@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Skeleton, Button, message, Table, Space, Modal, TableProps} from 'antd';
+import { Skeleton, Button, message, Table, Space, Modal, TableProps, Select} from 'antd';
 import TaskServices from '../services/TaskServices.tsx';
 import { TaskData } from '../entities/Task.tsx';
 import TaskModal from '../components/modals/TaskModal.tsx';
@@ -112,6 +112,32 @@ useEffect(() => {
       },
     });
   };
+
+  // Función para manejar el cambio de estado de la tarea
+  const handleStatusChange = async (newStatus: string, idTask: string) => {
+    try {
+      //obtengo los atos de la tarea
+      const taskToUpdate = await TaskServices.getTaskById(idTask); 
+
+      //Valido que el estado actual y el nuevo estado no sean "Completado".
+      if (taskToUpdate.status === 'Completado' && newStatus !== 'Completado') {
+        message.error('No se puede cambiar el estado de una tarea completada a otro estado.');
+        return;
+      }
+      
+      //los datos de la task se mantienen pero alteno solo el estado
+      taskToUpdate.status = newStatus as 'Nuevo' | 'En progreso' | 'Completado' | 'Cancelado';
+      
+      await TaskServices.updateTask(idTask, taskToUpdate);
+      message.success('Estado de la tarea actualizado correctamente');
+      
+      await fetchTasks(); 
+    
+    } catch (error) {
+      console.error('Error al actualizar el estado de la tarea:', error);
+      message.error('No se pudo actualizar el estado de la tarea.');
+    } 
+  };
   
   const handleGlobalSearch = (value: string) => {
       //Limpiar el texto (trim) y pasarlo a minusculas
@@ -177,28 +203,21 @@ useEffect(() => {
       title: 'Estado',
       dataIndex: 'status',
       key: 'status',
-      render: (status: 'Nuevo' | 'En Progreso' | 'Completado' | 'Cancelado') => {
-        let color = '';
-        switch (status) {
-          case 'Nuevo':
-            color = 'grey';
-            break;
-          case 'En Progreso':
-            color = 'green';
-            break;
-          case 'Completado':
-            color = 'purple';
-            break;
-          case 'Cancelado':
-            color = 'orange';
-            break;
-          default:
-            color = 'blue';
-        }
-        return <span style={{ fontWeight: 'bold', color }}>{status.toUpperCase()}</span>;
-      },
-      sorter: (a, b) => a.status.localeCompare(b.status),
-    },
+      render: (status: string, record: TaskData) => (
+      <Select
+        value={status}
+        style={{ width: 140}}
+        onChange={(value) => handleStatusChange(value, record._id)}
+        onClick={(e) => e.stopPropagation()} // Evita que se propaguen los eventos en los componentes padres e hijos.
+        options={[
+          { value: 'Nuevo', label: <span style={{color: 'green', fontWeight: 'bold'}} >Nuevo</span>},
+          { value: 'En Progreso', label: <span style={{color: 'blue'}} >En Progreso</span>},
+          { value: 'Completado', label: <span style={{color: 'purple'}} >Completado</span>},
+          { value: 'Cancelado', label: <span style={{color: 'red'}} >Cancelado</span>},
+        ]}
+      />
+  ),
+},
     {
       title: 'Prioridad',
       dataIndex: 'priorityLevel',
