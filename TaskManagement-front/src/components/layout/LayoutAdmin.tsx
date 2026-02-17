@@ -9,7 +9,8 @@ import {
   IdcardOutlined,
   FileDoneOutlined,
   ProfileOutlined,
-  SettingOutlined
+  SettingFilled,
+
 } from '@ant-design/icons'
 import { Button, Layout, Menu, theme, Breadcrumb, Tag, Dropdown } from 'antd'
 import { useNavigate } from 'react-router-dom';
@@ -125,6 +126,7 @@ function LayoutAdmin() {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['1']}
+          selectedKeys={[]} //desmarco la casilla porque implemento un Tag de página actual.
           items={filteredItems}
           style={{ flex: 1, minWidth: 0 }}
         />
@@ -137,11 +139,17 @@ function LayoutAdmin() {
                 label: <Link to="/users/p">Configurar contraseña</Link>,
                 icon: <IdcardOutlined />,
               },
+            /* { 
+                key: '2',
+                label: <Link to="/login" onClick={handleLogout}>Logout</Link>,
+                icon: <LogoutOutlined />,
+              },        */      
             ],
           }}
           placement="bottomRight"
         >
-          <SettingOutlined style={{ fontSize: 32, color: '#fff', marginRight: 24, cursor: 'pointer' }} />
+          
+          <SettingFilled style={{ fontSize: 32, color: '#fff', marginRight: 24, cursor: 'pointer' }} />
         </Dropdown>
         <Button
           type="primary"
