@@ -102,7 +102,8 @@ const Users = () => {
         data.last_name,
         data.email,
         data.role.name,
-        data.team?.name 
+        data.team?.name,
+        data.is_leader ? 'Lider de Equipo' : 'no Lider'
       ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
 
       return searchTerms.includes(searchText);
@@ -134,6 +135,12 @@ const Users = () => {
       key: 'team',
       render: (team) => team?.name.toUpperCase() || 'No asignado',
     },
+    {
+      title: 'Lider de Equipo',
+      dataIndex: 'is_leader',
+      key: 'is_leader',
+      render: (isLeader) => isLeader ? 'Sí' : 'No',
+    },    
     {
       title: 'Email',
       dataIndex: 'email',
