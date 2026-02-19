@@ -162,15 +162,20 @@ const UserForm = () => {
         name="team"
         rules={[{ required: true, message: 'Por favor, selecciona un equipo' }]}
       >
-        <Select 
+      <Select
+        showSearch
         disabled={user?.role.is_admin && !user?.is_leader}
-        placeholder="Selecciona un Equipo">
-            {teams.map((team) => (
-            <Select.Option key={team.idTeam} value={team.idTeam} >
-                {team.name} 
-            </Select.Option>
-            ))}
-        </Select>
+        placeholder="Selecciona equipo"
+        allowClear
+        options={teams.map((team) => ({
+          label: team.name,  
+          value: team.idTeam,
+          key: team.idTeam 
+        }))}
+        filterOption={(input, option) =>
+          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+        }
+      />
       </Form.Item>
       </Col>
       <Col span={12}>
@@ -180,15 +185,20 @@ const UserForm = () => {
         name="role" // Debe coincidir con el campo en el objeto del backend
         rules={[{ required: true, message: 'Por favor, selecciona un rol' }]}
       >
-        <Select 
-        disabled={user?.role.is_admin && !user?.is_leader}
-        placeholder="Selecciona un Equipo">
-            {roles.map((rol) => (
-            <Select.Option key={rol.name} value={rol.name}>
-                {rol.name} 
-            </Select.Option>
-            ))}
-        </Select>
+        <Select
+          showSearch
+          placeholder="Selecciona rol"
+          allowClear
+          disabled={user?.role.is_admin && !user?.is_leader}
+          options={roles.map((rol) => ({
+            label: rol.name,  
+            value: rol.name,
+            key: rol.name
+          }))}
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
+        />
       </Form.Item>
       </Col>
       <Col span={12}>
