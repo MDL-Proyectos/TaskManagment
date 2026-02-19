@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { TeamData } from '../entities/Team';
 import TeamService from '../services/TeamServices';
-import { Button, Card, List, Skeleton } from 'antd';
+import { Button, Card, List, Skeleton, Table, TableProps } from 'antd';
 import GlobalSearch from '../components/GlobalSearch';
 import { EditOutlined } from '@ant-design/icons';
 import TeamModal from '../components/modals/TeamModal';
@@ -77,6 +77,36 @@ function Teams() {
       return searchTerms.includes(searchText);
     });
 
+    const columns: TableProps<TeamData>['columns'] = [
+      {
+        title: 'ID',
+        dataIndex: 'idTeam',
+        key: 'idTeam',
+      },
+      {
+        title: 'Nombre',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Líder',
+        dataIndex: 'liderTeam',
+        key: 'liderTeam',
+        render: (liderTeam) => (
+          liderTeam ? `${liderTeam.first_name} ${liderTeam.last_name}` : 'Sin Asignación'
+        ),
+      },
+      {
+        title: 'Acciones',
+        key: 'actions',
+        render: (_, record) => (
+          <a onClick={() => handleEdit(record.idTeam)}>
+            <EditOutlined style={{ marginRight: 4 }} /> Editar
+          </a>
+        ),
+      },
+    ];
+
  
   return (
     <div style={{ width: '90%', height: '90%', padding: '20px' }}>
@@ -97,7 +127,7 @@ function Teams() {
       ) : filteredTeams.length === 0 ? (
           <p>No existen Equipos</p>
           ) : (
-          <List
+        /*  <List
             grid={{ gutter: 20, column: 4 }}
             dataSource={filteredTeams}
             renderItem={(item) => (
@@ -120,9 +150,17 @@ function Teams() {
                   Team: {item.idTeam},
                   Lider: {item.liderTeam?.first_name || "Sin Asignación"} {item.liderTeam?.last_name}
                   </Card>
-              </List.Item>
-            )}
+              </List.Item>*/
+              <Table
+
+                dataSource={filteredTeams}
+                columns={columns}
+                pagination={{
+                  pageSize: 10, // Mostrar 10 registros por página
+                  showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
+                }}
           />
+
           )
         }
       <TeamModal
