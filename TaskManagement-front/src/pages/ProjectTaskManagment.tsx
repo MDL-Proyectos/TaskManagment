@@ -4,20 +4,39 @@ import { FolderOutlined } from '@ant-design/icons';
 import ProjectServices from '../services/ProjectServices';
 import { TaskProjectData } from '../entities/TaskProject';
 import Tasks from './Tasks'; 
+import userService from '../services/UserServices';
+import { useAuth } from '../contexts/authContext.tsx';
+import RoleServices from '../services/RoleServices.tsx';
+
 const { Sider, Content } = Layout;
 
 function ProjectManagementPage() {
   const [projects, setProjects] = useState<TaskProjectData[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   const { token: { colorBgContainer } } = theme.useToken();
   
   const fetchProject = async () => {
       try {
         const data = await ProjectServices.getAllProjects();
-        setProjects(data);
-        if (data.length > 0) setSelectedProjectId(data[0]._id); // Selecciona el primero por defecto
+        const userLogged = await userService.getUserById(user?._id  || '');
+        const userRoleAdmin = await RoleServices.getRoleByName(userLogged.role.name);
+
+        //Acá filtro los proyectos según rol del usuario.
+        //Solo tienen acceso los usuarios líderes o admin a este componente.
+        if (userLogged && userLogged.is_leader && userRoleAdmin.is_admin) {
+         // console.log('Usuario es líder pero no admin, mostrando solo proyectos del equipo');
+          const dataLeader = data.filter((project) => project.assigned_team?._id === userLogged.team?._id);
+          setProjects(dataLeader);
+          if (dataLeader.length > 0) setSelectedProjectId(dataLeader[0]._id); // Selecciona el primero por defecto
+        } else {
+         // console.log('Usuario es admin, mostrando todos los proyectos');
+          setProjects(data);
+          if (data.length > 0) setSelectedProjectId(data[0]._id); // Selecciona el primero por defecto
+        }
+
       } catch (error) {
         console.error("Error cargando proyectos", error);
       } finally {
