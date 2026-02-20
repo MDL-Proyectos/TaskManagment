@@ -60,7 +60,7 @@ function Role() {
         title: 'Administrador',
         dataIndex: 'is_admin',
         key: 'is_admin',
-        render: (is_admin: boolean) => (is_admin ? 'Si' : 'No'),
+        render: (is_admin: boolean) => (!is_admin ? 'Si' : 'No'),
       },
       {
         title: 'Acciones',
