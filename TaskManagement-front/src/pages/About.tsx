@@ -51,7 +51,7 @@ const About = () => {
   ];
 
   return (
-    <div style={{ margin: '0 auto' }}>
+    <div style={{ margin: '0 auto', paddingTop: '60px'}}>
       <header style={{ textAlign: 'center', marginBottom: '5px' }}>
         <Title level={2} style={{ color: '#32167d'}}>Sobre TaskManagement</Title>
         <Paragraph style={{ fontSize: '16px' }}>
