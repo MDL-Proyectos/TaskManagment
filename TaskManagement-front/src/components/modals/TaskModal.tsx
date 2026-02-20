@@ -327,8 +327,10 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   type="text" 
                   danger 
                   onClick={() => remove(name)} 
+                  //Solo podrán quitar sus comentarios los autores.
+                  disabled={users.find(u => u._id === form.getFieldValue(['comments', name, 'author']))?._id !== currentUser?._id}
                   title="Eliminar comentario"
-                >Eliminar
+                >Quitar
                 </Button>
               </Col>
             </Row>
