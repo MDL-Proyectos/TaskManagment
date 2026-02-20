@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import RoleServices from '../services/RoleServices';
 import { RoleData } from '../entities/Role';
-import { Card, List } from 'antd';
+import { Card, List, Table, TableProps } from 'antd';
 import { Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import GlobalSearch from '../components/GlobalSearch';
@@ -50,6 +50,29 @@ function Role() {
       return searchTerms.includes(searchText);
     });
 
+    const columns: TableProps<RoleData>['columns'] = [
+      {
+        title: 'Nombre del Rol',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Administrador',
+        dataIndex: 'is_admin',
+        key: 'is_admin',
+        render: (is_admin: boolean) => (is_admin ? 'Si' : 'No'),
+      },
+      {
+        title: 'Acciones',
+        key: 'actions',
+        render: (_: any, record: RoleData) => (
+          <a key="edit" onClick={() => handleEdit(record.name)}>
+            <EditOutlined style={{ marginRight: 4 }} /> Editar
+          </a>
+        ),
+      },
+    ];
+
   return (
     <div style={{ width: '90%', height: '90%', padding: '20px' }}>
         {/*<Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>*/}
@@ -65,7 +88,7 @@ function Role() {
       {roles.length === 0 ? (
         <p>No hay roles disponibles.</p>
       ) : (
-        <List
+        /*<List
           grid={{ gutter: 20, column: 4 }}
           dataSource={filteredRoles}
           renderItem={(role) => (
@@ -89,8 +112,14 @@ function Role() {
                 Nombre del Rol: {role.name}<br/>
                 Administrador: {role.is_admin? 'No' : 'Si'}
               </Card>
-            </List.Item>
-          )}
+            </List.Item>*/
+            <Table
+            dataSource={filteredRoles}
+            columns={columns}
+            pagination={{
+              pageSize: 10, // Mostrar 10 registros por página
+              showSizeChanger: false, // Deshabilitar el cambio de tamaño de página
+            }}
         />
       )}
     </div>
