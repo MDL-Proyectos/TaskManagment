@@ -71,6 +71,7 @@ function Teams() {
       const searchTerms = [
         team.liderTeam?.first_name,
         team.liderTeam?.last_name,
+        team.idTeam,
         team.name
       ].join(' ').toLowerCase(); // Unir todos los campos importantes en una sola cadena para buscar
 
@@ -82,11 +83,13 @@ function Teams() {
         title: 'ID',
         dataIndex: 'idTeam',
         key: 'idTeam',
+        sorter: (a, b) => a.idTeam.localeCompare(b.idTeam),
       },
       {
         title: 'Nombre',
         dataIndex: 'name',
         key: 'name',
+        sorter: (a, b) => a.name.localeCompare(b.name),
       },
       {
         title: 'Líder',
@@ -95,6 +98,11 @@ function Teams() {
         render: (liderTeam) => (
           liderTeam ? `${liderTeam.first_name} ${liderTeam.last_name}` : 'Sin Asignación'
         ),
+        sorter: (a, b) => {
+          const liderA = a.liderTeam ? `${a.liderTeam.first_name} ${a.liderTeam.last_name}` : '';
+          const liderB = b.liderTeam ? `${b.liderTeam.first_name} ${b.liderTeam.last_name}` : '';
+          return liderA.localeCompare(liderB);
+        }
       },
       {
         title: 'Acciones',
@@ -109,11 +117,11 @@ function Teams() {
 
  
   return (
-    <div style={{ width: '90%', height: '90%', padding: '20px' }}>
+    <div style={{ width: '90%', height: '100%', padding: '20px' }}>
         {/* <Title level={2} style={{ marginBottom: 50 }}>
             Equipos
          </Title>*/}
-         <div style={{ width: '80%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
+         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}> 
             <Button type="primary" onClick={handleCreate}>
               Nuevo
             </Button>      

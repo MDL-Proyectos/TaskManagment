@@ -128,18 +128,29 @@ const Users = () => {
       dataIndex: 'role',
       key: 'role',
       render: (role) => role.name.toUpperCase()|| 'No asignado',
+      sorter: (a, b) => a.role.name.localeCompare(b.role.name),
     },
     {
       title: 'Equipo',
       dataIndex: 'team',
       key: 'team',
       render: (team) => team?.name.toUpperCase() || 'No asignado',
+      sorter: (a, b) => {
+        const teamA = a.team ? a.team.name : '';
+        const teamB = b.team ? b.team.name : '';
+        return teamA.localeCompare(teamB);
+      },
     },
     {
       title: 'Lider de Equipo',
       dataIndex: 'is_leader',
       key: 'is_leader',
       render: (isLeader) => isLeader ? 'Sí' : 'No',
+      sorter: (a, b) => {
+        const leaderA = a.is_leader ? 'Sí' : 'No';
+        const leaderB = b.is_leader ? 'Sí' : 'No';
+        return leaderA.localeCompare(leaderB);
+      }
     },    
     {
       title: 'Email',
@@ -182,7 +193,7 @@ const Users = () => {
   return (
     
     <div style={{ width: '100%', height: '100%', padding: '20px' }}>
-      <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}> 
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}> 
                 <AdminGuard>
                     <Button
                   //Botón de Creación  
@@ -215,7 +226,7 @@ const Users = () => {
         // Key de la fila 
         rowKey="_id"
         // Paginación 
-        pagination={{ pageSize: 10 }}
+        pagination={{ pageSize: 9 }}
       />
     </div>
     )}

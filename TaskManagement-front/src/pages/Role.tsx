@@ -55,12 +55,20 @@ function Role() {
         title: 'Nombre del Rol',
         dataIndex: 'name',
         key: 'name',
+        sorter: (a, b) => a.name.localeCompare(b.name),
+       },
+      {
       },
       {
         title: 'Administrador',
         dataIndex: 'is_admin',
         key: 'is_admin',
         render: (is_admin: boolean) => (!is_admin ? 'Si' : 'No'),
+        sorter: (a, b) => {
+          const adminA = a.is_admin ? 'No' : 'Si';
+          const adminB = b.is_admin ? 'No' : 'Si';
+          return adminA.localeCompare(adminB);
+        }
       },
       {
         title: 'Acciones',
@@ -74,7 +82,7 @@ function Role() {
     ];
 
   return (
-    <div style={{ width: '90%', height: '90%', padding: '20px' }}>
+    <div style={{ width: '90%', height: '100%', padding: '20px' }}>
         {/*<Title level={2} style={{ marginBottom: 50 }}>Roles en sistema</Title>*/}
         <div style={{ width: '100%', marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>   
               <Button type="primary" onClick={handleCreate}>

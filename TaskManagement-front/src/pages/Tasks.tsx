@@ -156,7 +156,10 @@ useEffect(() => {
         task.assigned_user?.first_name, 
         task.assigned_user?.last_name, 
         task.assigned_team?.name,
-        task.project?.name
+        task.project?.name,
+        task.created_at,
+        task.updated_at,
+        task.due_date
       ].join(' ')
   );
 
@@ -217,6 +220,7 @@ useEffect(() => {
         ]}
       />
   ),
+  sorter : (a, b) => a.status.localeCompare(b.status),
 },
     {
       title: 'Prioridad',
@@ -254,6 +258,11 @@ useEffect(() => {
           ? dayjs(created_at).format('DD-MM-YYYY')
           : 'Fecha inválida'; 
           return formattedDate;
+    },
+      sorter: (a, b) => {
+      const timeA = a.created_at ? dayjs(a.created_at).valueOf() : 0;
+      const timeB = b.created_at ? dayjs(b.created_at).valueOf() : 0;
+      return timeA - timeB;
     }      
       },
     {
@@ -269,7 +278,12 @@ useEffect(() => {
           ? dayjs(updated_at).format('DD-MM-YYYY')
           : 'Fecha inválida'; 
           return formattedDate;
-    }      
+       },
+        sorter: (a, b) => {
+        const timeA = a.updated_at ? dayjs(a.updated_at).valueOf() : 0;
+        const timeB = b.updated_at ? dayjs(b.updated_at).valueOf() : 0;
+        return timeA - timeB;
+      }      
       },      
     {
       title: 'Fecha de Vencimiento',
@@ -287,6 +301,11 @@ useEffect(() => {
 
         return formattedDate;
       },
+      sorter: (a, b) => {
+        const timeA = a.due_date ? dayjs(a.due_date).valueOf() : 0;
+        const timeB = b.due_date ? dayjs(b.due_date).valueOf() : 0;
+        return timeA - timeB;
+      }
     },
 
     {
