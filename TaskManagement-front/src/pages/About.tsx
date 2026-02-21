@@ -21,7 +21,7 @@ const About = () => {
     {
       title: 'Tareas',
       icon: <FileTextOutlined style={{ color: '#52c41a' }} />,
-      description: 'Gestión del ciclo de vida de tareas. Permite creación, modificación y baja.',
+      description: 'Gestión del ciclo de vida de tareas. Permite creación, modificación y baja. Los lideres pueden crear y modificar tareas dentro de su equipo, mientras que los Admin tienen acceso total a todas las tareas.',
       permiso: 'Todos los usuarios'
     },
     {
