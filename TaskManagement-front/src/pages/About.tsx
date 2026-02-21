@@ -39,7 +39,7 @@ const About = () => {
     {
       title: 'Equipos',
       icon: <TeamOutlined style={{ color: '#eb2f96' }} />,
-      description: 'Organización de colaboradores en células de trabajo con asignación de líderes.',
+      description: 'Organización de colaboradores en células de trabajo con referencia de líderes.',
       permiso: 'Solo Administradores'
     },
     {
@@ -50,30 +50,37 @@ const About = () => {
     },
   ];
 
-  return (
-    <div style={{ margin: '0 auto', paddingTop: '60px'}}>
-      <header style={{ textAlign: 'center', marginBottom: '5px' }}>
-        <Title level={2} style={{ color: '#32167d'}}>Sobre TaskManagement</Title>
-        <Paragraph style={{ fontSize: '16px' }}>
-          Una solución integral de gestión organizacional construida con 
-          <Text code>Vite</Text>, <Text code>React</Text>, <Text code>Node.js</Text> y <Text code>MongoDB</Text>.
+return (
+    <div style={{ 
+      maxWidth: '1400px', 
+      margin: '0 auto', 
+      padding: '0 20px', 
+      paddingTop: '0px' 
+    }}>
+      <header style={{ textAlign: 'center', marginBottom: '15px' }}>
+        <Title level={2} style={{ color: '#32167d', marginBottom: '0px' }}>
+          Sobre TaskManagement
+        </Title>
+        <Paragraph style={{ fontSize: '14px', marginTop: '20px' }}>
+          Solución integral con <Text code>Vite</Text>, <Text code>React</Text>, <Text code>Node.js</Text> y <Text code>MongoDB</Text>.
         </Paragraph>
       </header>
 
-      <Divider orientation="horizontal">Módulos del Sistema</Divider>
+      <Divider orientation="horizontal" style={{ margin: '15px 0' }}>Módulos del Sistema</Divider>
 
-      <Row gutter={[24, 24]}>
+      <Row gutter={[16, 16]}> {/* Gutter para compactar */}
         {modules.map((item, index) => (
           <Col xs={24} sm={12} lg={8} key={index}>
             <Card 
+              size="small"
               hoverable={false}
               style={{ height: '100%', borderRadius: '8px' }}
-              title={<span>{item.icon} {item.title}</span>}
+              title={<span style={{ fontSize: '14px' }}>{item.icon} {item.title}</span>}
             >
-              <Paragraph ellipsis={{ rows: 3 }}>
+              <Paragraph style={{ fontSize: '13px', marginBottom: '10px' }}>
                 {item.description}
               </Paragraph>
-              <Tag color={item.permiso.includes('Solo') ? 'volcano' : 'green'}>
+              <Tag color={item.permiso.includes('Solo') ? 'volcano' : 'green'} style={{ fontSize: '11px' }}>
                 {item.permiso}
               </Tag>
             </Card>
@@ -81,29 +88,26 @@ const About = () => {
         ))}
       </Row>
 
-      <Divider orientation="horizontal" style={{ marginTop: '10px' }}>Seguridad y Tecnología</Divider>
+      <Divider orientation="horizontal" style={{ margin: '20px 0 10px 0' }}>Seguridad y Tecnología</Divider>
       
-      <Card style={{ background: '#f0f2f5', border: 'none' }}>
-        <Row gutter={32}>
-          <Col span={24}>
-            <List
-              itemLayout="horizontal"
-              dataSource={[
-                { t: 'Autenticación', d: 'Protección de rutas y sesiones mediante JSON Web Tokens (JWT).' },
-                { t: 'Variables de Entorno', d: 'Configuración segura de API Keys y endpoints mediante archivos .env.' },
-                { t: 'Gestión de Fechas', d: 'Sincronización horaria precisa utilizando DayJS.' }
-              ]}
-              renderItem={item => (
-                <List.Item>
-                  <List.Item.Meta
-                    title={<Text strong>{item.t}</Text>}
-                    description={item.d}
-                  />
-                </List.Item>
-              )}
-            />
-          </Col>
-        </Row>
+      <Card size="small" style={{ background: '#f0f2f5', border: 'none' }}>
+        <List
+          size="small" 
+          itemLayout="horizontal"
+          dataSource={[
+            { t: 'Autenticación', d: 'Protección mediante JWT.' },
+            { t: 'Variables de Entorno', d: 'Configuración mediante .env.' },
+            { t: 'Gestión de Fechas', d: 'Sincronización con DayJS.' }
+          ]}
+          renderItem={item => (
+            <List.Item style={{ padding: '4px 0' }}> {/* Espacio entre items */}
+              <List.Item.Meta
+                title={<Text strong style={{ fontSize: '13px' }}>{item.t}</Text>}
+                description={<span style={{ fontSize: '12px' }}>{item.d}</span>}
+              />
+            </List.Item>
+          )}
+        />
       </Card>
     </div>
   );
