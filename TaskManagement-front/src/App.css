@@ -49,8 +49,6 @@
   border-radius: 8px;
 }
 
-/* App.css */
-
 .login-container {
     display: flex;
     justify-content: center;
@@ -127,4 +125,11 @@
     bottom: 100px;
     left: 40px;
     right: 40px;
+}
+/* Estilos para la tabla de tareas */
+
+.ant-table-thead > tr > th {
+  background-color: #f0f5ff !important; 
+  color: #1890ff !important;
+  font-weight: bold;
 }
