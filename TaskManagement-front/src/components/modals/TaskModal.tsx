@@ -182,7 +182,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             <Form.Item
               label="Usuario Asignado"
               name={['assigned_user', '_id']}
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: 'Selecciona un usuario asignado' }]}
             >
               <Select showSearch 
             placeholder="Selecciona un usuario"
@@ -208,7 +208,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
 
           {/* COLUMNA DERECHA */}
           <Col span={12}>
-            <Form.Item label="Proyecto" name="project" rules={[{ required: true }]}>
+            <Form.Item label="Proyecto" name="project" rules={[{ required: true, message: 'Por favor selecciona un proyecto' }]}>
               <Select placeholder="Selecciona proyecto">
                 {projects.map((p) => (
                   <Select.Option key={p._id} value={p._id}>{p.name}</Select.Option>
