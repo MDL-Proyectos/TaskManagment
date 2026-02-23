@@ -56,6 +56,7 @@
     min-height: 100vh;
     background-color: #34165f;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .login-card {
