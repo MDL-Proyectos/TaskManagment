@@ -93,6 +93,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         };
 
           useEffect(() => {
+            if(visible){
             fetchUsers();
             fetchTeams();
             fectchProjects();
@@ -103,7 +104,10 @@ const TaskModal: React.FC<TaskModalProps> = ({
             } else {
               form.resetFields(); 
             }
-          }, [idTask, form]);
+          }else{
+            form.resetFields(); 
+          }
+          }, [idTask, form, visible]);
 
   const handleOk = async () => {
     try {
