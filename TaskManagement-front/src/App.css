@@ -29,6 +29,22 @@
   }
 }
 
+
+
+.body-container {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(241, 233, 233, 0.281)), url('../public/fondo-app.png.png'); 
+  /* CAMBIO CLAVE: cover obliga a la imagen a llenar todo el espacio */
+  background-size: cover; 
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat; /* No necesitas que repita si usas cover */
+  
+  /* Asegura que el contenedor siempre ocupe todo el alto disponible */
+  min-height: 80vh; 
+  width: 100%;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;

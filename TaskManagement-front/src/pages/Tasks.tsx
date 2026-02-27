@@ -323,7 +323,7 @@ useEffect(() => {
   ];
 
   return (
-    <div style={{ width: '100%', height: '100%', padding: '10px', display: 'flex', flexDirection: 'column' }}>
+    <div className="body-container" style={{ width: '100%', height: '100%', padding: '10px', display: 'flex', flexDirection: 'column' }}>
       {/*<Title level={3} style={{ marginBottom: 30 }}>
         Listado de Tareas
       </Title>*/}
@@ -359,10 +359,12 @@ useEffect(() => {
             Crear nueva tarea
           </Button>
         </AdminGuard>
+        <div style={{ marginLeft: 'auto' }}>
               <GlobalSearch 
                 onSearch={handleGlobalSearch} 
                 placeholder="Buscar por Título, Usuario o Estado..."
               />
+              </div>
             </div>
           <Table
             dataSource={filteredTasks}
