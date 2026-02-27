@@ -23,6 +23,10 @@ async function getAllTasks(req, res, next) {
       .populate('assigned_user')
       .populate('authorized_by')
       .populate('project')
+      if (req.user.role.is_admin && !req.user.is_leader) {
+        //filtro los datos de las tareas si no es admin ni leader, para que solo vea las tareas asignadas a su equipo o a él mismo
+        return res.send(task.filter(task => ((task.assigned_user && task.assigned_user._id.equals(req.user._id)))))
+      }
       res.send(task)
     } catch (err) {
       next(err)

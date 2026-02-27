@@ -41,6 +41,10 @@ async function getAllUsers(req, res, next) {
   //logger.info('getAllUsers by user: %s ', req.user._id)
   try {
     const users = await User.find({}).populate('role').populate('team')
+    if (req.user.role.is_admin && !req.user.is_leader) {
+      //filtro los datos de los usuarios si no es admin ni leader, para que solo vea su propio usuario
+      return res.send(users.filter(user => user._id.equals(req.user._id)))
+    }
     res.send(users)
   } catch (err) {
     next(err)
