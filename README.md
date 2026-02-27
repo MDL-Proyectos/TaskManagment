@@ -32,7 +32,8 @@ La aplicación es parte del proyecto final de la materia Progración III - INSPT
 * **Express:** Framework minimalista para la API REST.
 * **MongoDB:** Base de datos NoSQL para persistencia de datos.
 * **DayJS:** Manipulación eficiente de fechas (almacenamiento en ISO y visualización personalizada).
-
+* **Winston Logger**: Implementación de logs personalizados para monitorear errores y eventos del sistema en archivos externos (`error.log` y `combined.log`).
+* **Mongoose**: Modelado de datos y validación de esquemas.
 ---
 
 ## Configuración de Entorno
@@ -106,6 +107,9 @@ Password: 1
 # Modulos: Tareas
 
 ![Tareas](/TaskManagement-front/public/tasks.png)
+
+![Tareas-Editacion](/TaskManagement-front/public/task-create.png)
+
 
 # Modulos: Usuarios
 ![Usuarios](/TaskManagement-front/public/users.png)
