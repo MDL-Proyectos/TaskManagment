@@ -3,8 +3,9 @@
 **TaskManagement** es una aplicación robusta para la gestión de tareas y equipos. Diseñada con una arquitectura desacoplada (Front-end y Back-end), permite a los usuarios organizar su flujo de trabajo, mientras que los perfiles de **Management** tienen herramientas avanzadas para administrar proyectos, usuarios y roles. 
 La aplicación es parte del proyecto final de la materia Progración III - INSPT - UTN.
 
----
+![Login](/TaskManagement-front/public/login.png)
 
+---
 ## Características Principales
 
 * **Home-Dashboard:** Resumen visual en la Home con indicadores clave (Tareas totales, Completadas, Pendientes y En Progreso).
@@ -91,3 +92,20 @@ VITE_API_URL=http://localhost:4000
 Usuario: admin@tm.com
 Password: 1
 ```
+
+# Modulos: Home
+
+![Home-Dash](/TaskManagement-front/public/home.png)
+
+# Modulos: Equipos
+![Equipos](/TaskManagement-front/public/Teams.png)
+
+# Modulos: Tareas Por Proyectos
+![Tareas por Proyectos](/TaskManagement-front/public/projects.png)
+
+# Modulos: Tareas
+
+![Tareas](/TaskManagement-front/public/tasks.png)
+
+# Modulos: Usuarios
+![Usuarios](/TaskManagement-front/public/users.png)
